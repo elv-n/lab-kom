@@ -1,0 +1,2204 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial Data Cleaning Dataset Titanic — Menggunakan Excel</title>
+    <meta
+      name="description"
+      content="Panduan lengkap 12 tahapan data cleaning pada dataset Titanic menggunakan Microsoft Excel. Mulai dari memeriksa missing values hingga feature engineering." />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header class="header" id="header">
+      <div class="header__brand">
+        <span class="header__brand-icon"><i data-lucide="ship"></i></span>
+        <span>Titanic Data Cleaning</span>
+      </div>
+      <div class="header__actions">
+        <span class="theme-toggle__label" id="theme-label">Light</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========== OVERLAY (mobile) ========== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ========== LAYOUT ========== -->
+    <div class="layout">
+      <!-- ========== LEFT SIDEBAR ========== -->
+      <aside class="sidebar-left" id="sidebar-left">
+        <p class="sidebar__title">Tahapan Tutorial</p>
+        <ul class="sidebar__nav" id="sidebar-nav">
+          <li>
+            <a class="sidebar__link" href="#dataset-preview">
+              <span
+                class="sidebar__link-number"
+                style="
+                  background-color: var(--color-foreground);
+                  color: var(--color-background);
+                  border: none;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                ">
+                <i data-lucide="table-2" style="width: 14px; height: 14px"></i>
+              </span>
+              <span class="sidebar__link-text">Preview Dataset</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-0">
+              <span
+                class="sidebar__link-number"
+                style="background-color: var(--color-secondary); color: var(--color-background)">
+                0
+              </span>
+              <span class="sidebar__link-text">Persiapan CSV</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-1">
+              <span class="sidebar__link-number">1</span>
+              <span class="sidebar__link-text">Missing Values</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-2">
+              <span class="sidebar__link-number">2</span>
+              <span class="sidebar__link-text">Tangani Missing</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-3">
+              <span class="sidebar__link-number">3</span>
+              <span class="sidebar__link-text">Cek Duplikat</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-4">
+              <span class="sidebar__link-number">4</span>
+              <span class="sidebar__link-text">Hapus Duplikat</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-5">
+              <span class="sidebar__link-number">5</span>
+              <span class="sidebar__link-text">Tipe Data</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-6">
+              <span class="sidebar__link-number">6</span>
+              <span class="sidebar__link-text">Format Data</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-7">
+              <span class="sidebar__link-number">7</span>
+              <span class="sidebar__link-text">Karakter Khusus</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-8">
+              <span class="sidebar__link-number">8</span>
+              <span class="sidebar__link-text">Outlier</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-9">
+              <span class="sidebar__link-number">9</span>
+              <span class="sidebar__link-text">Rentang Nilai</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-10">
+              <span class="sidebar__link-number">10</span>
+              <span class="sidebar__link-text">Data Kategorikal</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-11">
+              <span class="sidebar__link-number">11</span>
+              <span class="sidebar__link-text">Kolom Tak Relevan</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-12">
+              <span class="sidebar__link-number">12</span>
+              <span class="sidebar__link-text">Feature Engineering</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- ========== MAIN CONTENT ========== -->
+      <main class="main" id="main-content">
+        <!-- HERO -->
+        <section class="hero">
+          <span class="hero__badge">
+            <i data-lucide="book-open" style="width: 14px; height: 14px; margin-right: 4px"></i>
+            Tutorial Lengkap
+          </span>
+          <h1 class="hero__title">
+            Data Cleaning
+            <br />
+            <span class="hero__title-accent">Dataset Titanic</span>
+          </h1>
+          <p class="hero__subtitle">Panduan tahapan data cleaning menggunakan Microsoft Excel.</p>
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <span class="hero__stat-value">891</span>
+              <span class="hero__stat-label">Total Baris</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">12</span>
+              <span class="hero__stat-label">Kolom Awal</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">13</span>
+              <span class="hero__stat-label">Tahapan</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">Excel</span>
+              <span class="hero__stat-label">Tool Utama</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DATASET PREVIEW -->
+        <section class="dataset-preview" id="dataset-preview">
+          <h2 class="dataset-preview__title">
+            <i data-lucide="table"></i>
+            Preview Dataset
+          </h2>
+          <p>
+            Berikut adalah 5 baris pertama dari dataset Titanic yang akan kita bersihkan. Perhatikan kolom-kolom yang
+            memiliki nilai kosong (ditandai merah).
+          </p>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>PassengerId</th>
+                  <th>Survived</th>
+                  <th>Pclass</th>
+                  <th>Name</th>
+                  <th>Sex</th>
+                  <th>Age</th>
+                  <th>SibSp</th>
+                  <th>Parch</th>
+                  <th>Ticket</th>
+                  <th>Fare</th>
+                  <th>Cabin</th>
+                  <th>Embarked</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>Braund, Mr. Owen Harris</td>
+                  <td>male</td>
+                  <td>22</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>A/5 21171</td>
+                  <td>7.25</td>
+                  <td class="cell-missing">(kosong)</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>Cumings, Mrs. John Bradley</td>
+                  <td>female</td>
+                  <td>38</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>PC 17599</td>
+                  <td>71.28</td>
+                  <td>C85</td>
+                  <td>C</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>Heikkinen, Miss. Laina</td>
+                  <td>female</td>
+                  <td>26</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>STON/O2. 3101282</td>
+                  <td>7.925</td>
+                  <td class="cell-missing">(kosong)</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>Futrelle, Mrs. Jacques Heath</td>
+                  <td>female</td>
+                  <td>35</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>113803</td>
+                  <td>53.1</td>
+                  <td>C123</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>Allen, Mr. William Henry</td>
+                  <td>male</td>
+                  <td>35</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>373450</td>
+                  <td>8.05</td>
+                  <td class="cell-missing">(kosong)</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>Moran, Mr. James</td>
+                  <td>male</td>
+                  <td class="cell-missing">(kosong)</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>330877</td>
+                  <td>8.46</td>
+                  <td class="cell-missing">(kosong)</td>
+                  <td>Q</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 0: Persiapan — Membuka CSV di Excel -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-0">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div
+                class="step-card__number"
+                style="background-color: var(--color-secondary); color: var(--color-background)">
+                00
+              </div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Persiapan: Membuka File CSV di Excel</h2>
+                <p class="step-card__subtitle">Memastikan data CSV terpisah dengan benar ke dalam kolom</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Mengapa Ini Penting?
+                </h3>
+                <p class="step-card__desc">
+                  File CSV (
+                  <em>Comma-Separated Values</em>
+                  ) menyimpan data dengan pemisah koma (
+                  <strong>,</strong>
+                  ). Saat dibuka langsung di Excel, ada kemungkinan
+                  <strong>semua data masuk ke satu kolom saja</strong>
+                  — terutama jika pengaturan regional komputer Anda menggunakan titik koma (
+                  <strong>;</strong>
+                  ) sebagai pemisah default (seperti di Indonesia/Eropa). Oleh karena itu, kita perlu memastikan data
+                  terpisah dengan benar menggunakan fitur
+                  <strong>Text to Columns</strong>
+                  atau
+                  <strong>Import Data</strong>
+                  .
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Cara 1: Import melalui Menu Data (Direkomendasikan)
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Buka Excel → buat workbook baru (kosong).</p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Klik tab
+                        <strong>Data</strong>
+                        → pilih
+                        <strong>From Text/CSV</strong>
+                        (atau
+                        <strong>Get Data → From File → From Text/CSV</strong>
+                        di versi baru).
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Pilih file
+                        <strong>Titanic-Dataset.csv</strong>
+                        dan klik
+                        <strong>Import</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Pada dialog preview yang muncul, pastikan pengaturan berikut:</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Pengaturan Import</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy="Delimiter: Comma | File Origin: UTF-8 | Data Type Detection: Based on entire dataset">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">Pengaturan yang perlu diperhatikan:</span>
+
+<span class="function">Delimiter</span>      : <span class="string">Comma</span>  <span class="keyword">(pemisah koma)</span>
+<span class="function">File Origin</span>   : <span class="string">UTF-8</span>  <span class="keyword">(atau 65001: Unicode UTF-8)</span>
+<span class="function">Data Type</span>     : <span class="string">Based on entire dataset</span>
+
+<span class="keyword">→ Preview di bawah harus menunjukkan data terpisah</span>
+<span class="keyword">  ke dalam 12 kolom yang berbeda.</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Klik
+                        <strong>Load</strong>
+                        (atau
+                        <strong>Transform Data</strong>
+                        jika ingin melihat di Power Query terlebih dahulu). Data akan termuat ke sheet baru dengan semua
+                        kolom terpisah rapi.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Cara 2: Text to Columns (Jika Sudah Terlanjur Buka)
+                </h3>
+                <p class="step-card__desc" style="margin-bottom: var(--space-md)">
+                  Jika file CSV sudah dibuka dan semua data masuk ke
+                  <strong>kolom A saja</strong>
+                  , gunakan Text to Columns:
+                </p>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Seleksi seluruh kolom A (klik header kolom
+                        <strong>A</strong>
+                        ).
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Klik tab
+                        <strong>Data</strong>
+                        → pilih
+                        <strong>Text to Columns</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Pilih
+                        <strong>Delimited</strong>
+                        → klik
+                        <strong>Next</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Centang
+                        <strong>Comma</strong>
+                        sebagai delimiter (hapus centang lainnya). Preview di bawah akan menunjukkan data terpisah ke
+                        kolom-kolom.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Klik
+                        <strong>Next</strong>
+                        → atur format kolom jika perlu (General untuk semua) → klik
+                        <strong>Finish</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+                <div class="info-box info-box--warn">
+                  <i class="info-box__icon" data-lucide="alert-triangle"></i>
+                  <p class="info-box__text">
+                    <strong>Perhatian:</strong>
+                    Kolom
+                    <strong>Name</strong>
+                    pada dataset Titanic mengandung koma di dalam tanda kutip (misalnya
+                    <code>"Braund, Mr. Owen Harris"</code>
+                    ). Metode import via menu Data biasanya menangani ini secara otomatis. Jika menggunakan Text to
+                    Columns, pastikan
+                    <strong>Text qualifier</strong>
+                    diatur ke tanda kutip (
+                    <strong>"</strong>
+                    ) agar koma di dalam nama tidak ikut dipisah.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="check-circle-2"></i>
+                  Hasil yang Benar
+                </h3>
+                <p class="step-card__desc" style="margin-bottom: var(--space-md)">
+                  Setelah import berhasil, data harus terlihat seperti ini —
+                  <strong>setiap kolom terisi dengan benar</strong>
+                  :
+                </p>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kolom A</th>
+                        <th>Kolom B</th>
+                        <th>Kolom C</th>
+                        <th>Kolom D</th>
+                        <th>Kolom E</th>
+                        <th>Kolom F</th>
+                        <th>...</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="cell-highlight">PassengerId</td>
+                        <td class="cell-highlight">Survived</td>
+                        <td class="cell-highlight">Pclass</td>
+                        <td class="cell-highlight">Name</td>
+                        <td class="cell-highlight">Sex</td>
+                        <td class="cell-highlight">Age</td>
+                        <td>...</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>3</td>
+                        <td>Braund, Mr. Owen Harris</td>
+                        <td>male</td>
+                        <td>22</td>
+                        <td>...</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>Cumings, Mrs. John Bradley</td>
+                        <td>female</td>
+                        <td>38</td>
+                        <td>...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="info-box info-box--tip">
+                  <i class="info-box__icon" data-lucide="lightbulb"></i>
+                  <p class="info-box__text">
+                    <strong>Tips:</strong>
+                    Jika Anda menyimpan file CSV sebagai
+                    <strong>.xlsx</strong>
+                    (Excel format) setelah import, Anda tidak perlu mengulangi proses Text to Columns saat membukanya
+                    kembali nanti.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 1: Memeriksa Missing Values -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-1">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">01</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memeriksa Missing Values</h2>
+                <p class="step-card__subtitle">Identifikasi sel-sel kosong pada setiap kolom dataset</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Missing values (nilai kosong) adalah data yang tidak terisi pada suatu baris. Dalam dataset Titanic,
+                  kolom
+                  <strong>Age</strong>
+                  ,
+                  <strong>Cabin</strong>
+                  , dan
+                  <strong>Embarked</strong>
+                  memiliki banyak missing values. Langkah pertama data cleaning adalah mengetahui seberapa banyak data
+                  yang hilang di setiap kolom agar kita bisa memutuskan penanganan yang tepat.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Buka file
+                        <strong>Titanic-Dataset.csv</strong>
+                        di Excel. Data akan otomatis terisi pada kolom A–L.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Di sheet baru atau area kosong, buat header
+                        <strong>"Kolom"</strong>
+                        dan
+                        <strong>"Jumlah Kosong"</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan formula
+                        <strong>COUNTBLANK</strong>
+                        untuk menghitung jumlah sel kosong di setiap kolom.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Excel</span>
+                          <button class="formula-block__copy" data-copy="=COUNTBLANK(F2:F892)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="function">=COUNTBLANK</span>(<span class="string">F2:F892</span>)    <span class="keyword">→ Hitung kosong di kolom Age</span>
+<span class="function">=COUNTBLANK</span>(<span class="string">K2:K892</span>)    <span class="keyword">→ Hitung kosong di kolom Cabin</span>
+<span class="function">=COUNTBLANK</span>(<span class="string">L2:L892</span>)    <span class="keyword">→ Hitung kosong di kolom Embarked</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan
+                        <strong>Conditional Formatting</strong>
+                        untuk menyorot sel kosong: pilih seluruh data → Home → Conditional Formatting → Highlight Cells
+                        Rules → Blanks.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Hasil Pemeriksaan
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kolom</th>
+                        <th>Jumlah Kosong</th>
+                        <th>Persentase</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>PassengerId</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Survived</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Pclass</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Name</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Sex</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td class="cell-highlight">Age</td>
+                        <td class="cell-missing">177</td>
+                        <td class="cell-missing">19.87%</td>
+                        <td>⚠️ Perlu Ditangani</td>
+                      </tr>
+                      <tr>
+                        <td>SibSp</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Parch</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Ticket</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Fare</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td class="cell-highlight">Cabin</td>
+                        <td class="cell-missing">687</td>
+                        <td class="cell-missing">77.10%</td>
+                        <td>❌ Sangat Banyak</td>
+                      </tr>
+                      <tr>
+                        <td class="cell-highlight">Embarked</td>
+                        <td class="cell-missing">2</td>
+                        <td class="cell-missing">0.22%</td>
+                        <td>⚠️ Sedikit</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 2: Menangani Missing Values -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-2">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">02</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menangani Missing Values</h2>
+                <p class="step-card__subtitle">Mengisi atau menghapus data kosong dengan strategi yang tepat</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Setelah mengetahui lokasi missing values, kita perlu menanganinya. Strateginya berbeda tergantung
+                  jumlah dan tipe data:
+                  <br />
+                  •
+                  <strong>Age</strong>
+                  (19.87% kosong): Isi dengan nilai
+                  <strong>median</strong>
+                  karena data numerik dan bisa memiliki outlier.
+                  <br />
+                  •
+                  <strong>Embarked</strong>
+                  (0.22% kosong): Isi dengan
+                  <strong>modus</strong>
+                  (nilai paling sering muncul) karena data kategorikal.
+                  <br />
+                  •
+                  <strong>Cabin</strong>
+                  (77.10% kosong):
+                  <strong>Hapus kolom</strong>
+                  karena terlalu banyak data hilang.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Mengisi Age dengan Median:</strong>
+                        Hitung median terlebih dahulu, lalu isi sel kosong.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hitung Median Age</span>
+                          <button class="formula-block__copy" data-copy="=MEDIAN(F2:F892)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Hitung median Age di sel terpisah:</span>
+<span class="function">=MEDIAN</span>(<span class="string">F2:F892</span>)    <span class="keyword">→ Hasilnya ≈ 28</span>
+
+<span class="keyword">— Lalu gunakan Find & Replace untuk mengisi:</span>
+<span class="keyword">1. Seleksi kolom Age (F2:F892)</span>
+<span class="keyword">2. Ctrl+H → Find: (kosongkan) → Replace: 28</span>
+<span class="keyword">3. Options → Match entire cell contents ✅</span>
+<span class="keyword">4. Replace All</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Mengisi Embarked dengan Modus:</strong>
+                        Cari nilai yang paling sering muncul, lalu isi sel kosong.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hitung Modus Embarked</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy="=INDEX(L2:L892,MATCH(MAX(COUNTIF(L2:L892,L2:L892)),COUNTIF(L2:L892,L2:L892),0))">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Cari modus Embarked (Ctrl+Shift+Enter untuk array formula):</span>
+<span class="function">=INDEX</span>(<span class="string">L2:L892</span>,<span class="function">MATCH</span>(<span class="function">MAX</span>(<span class="function">COUNTIF</span>(<span class="string">L2:L892</span>,<span class="string">L2:L892</span>)),<span class="function">COUNTIF</span>(<span class="string">L2:L892</span>,<span class="string">L2:L892</span>),<span class="number">0</span>))
+<span class="keyword">→ Hasilnya: "S" (Southampton)</span>
+
+<span class="keyword">— Lalu isi 2 sel kosong Embarked dengan "S"</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Menghapus kolom Cabin:</strong>
+                        Klik kanan header kolom K → Delete. Kolom ini memiliki 77% data kosong sehingga tidak berguna
+                        untuk analisis.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+                <div class="info-box info-box--tip">
+                  <i class="info-box__icon" data-lucide="lightbulb"></i>
+                  <p class="info-box__text">
+                    <strong>Tips:</strong>
+                    Alternatif lain untuk mengisi Age adalah dengan
+                    <strong>rata-rata (AVERAGE)</strong>
+                    , namun
+                    <strong>median</strong>
+                    lebih disarankan karena tidak terpengaruh oleh outlier (misalnya penumpang berusia sangat tua).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 3: Memeriksa Data Duplikat -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-3">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">03</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memeriksa Data Duplikat</h2>
+                <p class="step-card__subtitle">Mengecek apakah ada baris data yang sama persis</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Data duplikat adalah baris yang memiliki nilai identik di semua kolom. Duplikat dapat mengakibatkan
+                  hasil analisis menjadi bias karena data dihitung lebih dari sekali. Pada dataset Titanic, setiap
+                  penumpang seharusnya unik berdasarkan
+                  <strong>PassengerId</strong>
+                  .
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan
+                        <strong>Conditional Formatting</strong>
+                        untuk menandai duplikat: Seleksi kolom A (PassengerId) → Home → Conditional Formatting →
+                        Highlight Cells Rules → Duplicate Values.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Untuk pemeriksaan menyeluruh, buat kolom helper yang menggabungkan semua kolom:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Cek Duplikat</span>
+                          <button class="formula-block__copy" data-copy='=A2&"|"&B2&"|"&C2&"|"&D2&"|"&E2&"|"&F2'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Buat kolom helper (misal di kolom M):</span>
+<span class="function">=A2</span>&amp;<span class="string">"|"</span>&amp;<span class="function">B2</span>&amp;<span class="string">"|"</span>&amp;<span class="function">C2</span>&amp;<span class="string">"|"</span>&amp;<span class="function">D2</span>&amp;<span class="string">"|"</span>&amp;<span class="function">E2</span>&amp;<span class="string">"|"</span>&amp;<span class="function">F2</span>
+
+<span class="keyword">— Lalu hitung kemunculan setiap kombinasi:</span>
+<span class="function">=COUNTIF</span>(<span class="string">M:M</span>,<span class="string">M2</span>)    <span class="keyword">→ Jika &gt; 1, berarti duplikat</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Filter kolom hasil COUNTIF untuk menampilkan hanya baris dengan nilai
+                        <strong>&gt; 1</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+                <div class="info-box info-box--info">
+                  <i class="info-box__icon" data-lucide="info"></i>
+                  <p class="info-box__text">
+                    Pada dataset Titanic, umumnya
+                    <strong>tidak ditemukan data duplikat</strong>
+                    karena setiap baris memiliki PassengerId unik. Namun pemeriksaan ini tetap penting sebagai best
+                    practice.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 4: Menghapus Data Duplikat -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-4">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">04</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menghapus Data Duplikat</h2>
+                <p class="step-card__subtitle">Menghilangkan baris data yang sama jika ditemukan</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Jika pada langkah sebelumnya ditemukan data duplikat, langkah ini bertujuan menghapusnya. Excel
+                  memiliki fitur bawaan
+                  <strong>Remove Duplicates</strong>
+                  yang memudahkan proses ini. Pada dataset Titanic, umumnya tidak ada duplikat, tetapi tetap penting
+                  mengetahui caranya.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Seleksi seluruh data (Ctrl+A atau klik salah satu sel dalam data).</p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Klik tab
+                        <strong>Data</strong>
+                        → klik
+                        <strong>Remove Duplicates</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Pada dialog yang muncul, centang
+                        <strong>semua kolom</strong>
+                        yang ingin dibandingkan (atau pilih Select All), lalu klik
+                        <strong>OK</strong>
+                        .
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Excel akan menampilkan dialog:
+                        <em>"X duplicate values found and removed; Y unique values remain."</em>
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+                <div class="info-box info-box--warn">
+                  <i class="info-box__icon" data-lucide="alert-triangle"></i>
+                  <p class="info-box__text">
+                    <strong>Perhatian:</strong>
+                    Selalu simpan backup data sebelum menghapus duplikat. Fitur Remove Duplicates akan menghapus baris
+                    secara permanen dan tidak dapat di-undo setelah file disimpan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 5: Memeriksa Tipe Data -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-5">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">05</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memeriksa Tipe Data</h2>
+                <p class="step-card__subtitle">Memastikan setiap kolom memiliki tipe data yang sesuai</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Tipe data yang salah bisa menyebabkan error dalam perhitungan. Misalnya, jika kolom
+                  <strong>Age</strong>
+                  terdeteksi sebagai teks, maka operasi matematika akan gagal. Kita perlu memastikan:
+                  <br />
+                  •
+                  <strong>Age</strong>
+                  dan
+                  <strong>Fare</strong>
+                  → Numerik (Number)
+                  <br />
+                  •
+                  <strong>Survived</strong>
+                  dan
+                  <strong>Pclass</strong>
+                  → Numerik/Kategori (Integer)
+                  <br />
+                  •
+                  <strong>Name</strong>
+                  ,
+                  <strong>Sex</strong>
+                  ,
+                  <strong>Embarked</strong>
+                  → Teks (Text)
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan fungsi
+                        <strong>TYPE</strong>
+                        atau
+                        <strong>ISNUMBER</strong>
+                        untuk memeriksa tipe data setiap sel:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Cek Tipe Data</span>
+                          <button class="formula-block__copy" data-copy="=ISNUMBER(F2)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="function">=ISNUMBER</span>(<span class="string">F2</span>)     <span class="keyword">→ TRUE jika Age adalah angka</span>
+<span class="function">=ISTEXT</span>(<span class="string">E2</span>)       <span class="keyword">→ TRUE jika Sex adalah teks</span>
+<span class="function">=TYPE</span>(<span class="string">F2</span>)         <span class="keyword">→ 1=Number, 2=Text, 4=Boolean, 16=Error</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Hitung berapa banyak sel yang bukan angka pada kolom numerik:</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hitung Tipe Salah</span>
+                          <button class="formula-block__copy" data-copy="=SUMPRODUCT((ISTEXT(F2:F892))*1)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Hitung sel teks di kolom Age (seharusnya 0):</span>
+<span class="function">=SUMPRODUCT</span>((<span class="function">ISTEXT</span>(<span class="string">F2:F892</span>))*<span class="number">1</span>)</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Jika ditemukan tipe data yang salah, konversi menggunakan
+                        <strong>VALUE()</strong>
+                        untuk teks→angka atau
+                        <strong>TEXT()</strong>
+                        untuk angka→teks.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Tipe Data yang Diharapkan
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kolom</th>
+                        <th>Tipe Data</th>
+                        <th>Contoh Nilai</th>
+                        <th>Catatan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>PassengerId</td>
+                        <td>Integer</td>
+                        <td>1, 2, 3</td>
+                        <td>ID unik</td>
+                      </tr>
+                      <tr>
+                        <td>Survived</td>
+                        <td>Integer (0/1)</td>
+                        <td>0, 1</td>
+                        <td>Biner: 0=Tidak, 1=Ya</td>
+                      </tr>
+                      <tr>
+                        <td>Pclass</td>
+                        <td>Integer (1/2/3)</td>
+                        <td>1, 2, 3</td>
+                        <td>Kelas tiket</td>
+                      </tr>
+                      <tr>
+                        <td>Name</td>
+                        <td>Text</td>
+                        <td>Braund, Mr. Owen</td>
+                        <td>Nama lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Sex</td>
+                        <td>Text</td>
+                        <td>male, female</td>
+                        <td>Kategorikal</td>
+                      </tr>
+                      <tr>
+                        <td>Age</td>
+                        <td>Float</td>
+                        <td>22, 38, 0.42</td>
+                        <td>Usia dalam tahun</td>
+                      </tr>
+                      <tr>
+                        <td>SibSp</td>
+                        <td>Integer</td>
+                        <td>0, 1, 2</td>
+                        <td>Saudara/pasangan</td>
+                      </tr>
+                      <tr>
+                        <td>Parch</td>
+                        <td>Integer</td>
+                        <td>0, 1, 2</td>
+                        <td>Orangtua/anak</td>
+                      </tr>
+                      <tr>
+                        <td>Ticket</td>
+                        <td>Text</td>
+                        <td>A/5 21171</td>
+                        <td>Nomor tiket</td>
+                      </tr>
+                      <tr>
+                        <td>Fare</td>
+                        <td>Float</td>
+                        <td>7.25, 71.28</td>
+                        <td>Harga tiket</td>
+                      </tr>
+                      <tr>
+                        <td>Embarked</td>
+                        <td>Text</td>
+                        <td>S, C, Q</td>
+                        <td>Pelabuhan keberangkatan</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 6: Menyeragamkan Format Data -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-6">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">06</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menyeragamkan Format Data</h2>
+                <p class="step-card__subtitle">Menghilangkan spasi berlebih dan menyeragamkan penulisan</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Data dari berbagai sumber sering memiliki format yang tidak konsisten: spasi berlebih di awal/akhir
+                  teks, huruf besar/kecil yang tidak seragam, atau karakter tidak terlihat. Pada dataset Titanic, ini
+                  terutama relevan untuk kolom
+                  <strong>Name</strong>
+                  ,
+                  <strong>Sex</strong>
+                  , dan
+                  <strong>Embarked</strong>
+                  .
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan fungsi
+                        <strong>TRIM</strong>
+                        untuk menghapus spasi berlebih dan
+                        <strong>CLEAN</strong>
+                        untuk karakter non-cetak:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Bersihkan Spasi</span>
+                          <button class="formula-block__copy" data-copy="=TRIM(CLEAN(D2))">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="function">=TRIM</span>(<span class="function">CLEAN</span>(<span class="string">D2</span>))    <span class="keyword">→ Bersihkan kolom Name</span>
+<span class="function">=TRIM</span>(<span class="string">E2</span>)            <span class="keyword">→ Bersihkan kolom Sex</span>
+<span class="function">=TRIM</span>(<span class="string">L2</span>)            <span class="keyword">→ Bersihkan kolom Embarked</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Untuk menyeragamkan huruf kecil pada kolom Sex:</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Seragamkan Huruf</span>
+                          <button class="formula-block__copy" data-copy="=LOWER(TRIM(E2))">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="function">=LOWER</span>(<span class="function">TRIM</span>(<span class="string">E2</span>))    <span class="keyword">→ "male", "female" (huruf kecil semua)</span>
+<span class="function">=UPPER</span>(<span class="function">TRIM</span>(<span class="string">L2</span>))    <span class="keyword">→ "S", "C", "Q" (huruf besar semua)</span>
+<span class="function">=PROPER</span>(<span class="function">TRIM</span>(<span class="string">D2</span>))   <span class="keyword">→ Kapitalisasi awal kata pada Name</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Copy hasil formula → Paste Values (Ctrl+Shift+V) untuk mengganti data asli dengan data yang
+                        sudah dibersihkan.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 7: Membersihkan Karakter Khusus -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-7">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">07</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Membersihkan Karakter Khusus</h2>
+                <p class="step-card__subtitle">Menghapus simbol atau karakter yang tidak diperlukan</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Beberapa kolom mengandung karakter khusus yang perlu dibersihkan jika akan dianalisis lebih lanjut.
+                  Pada dataset Titanic, kolom
+                  <strong>Ticket</strong>
+                  memiliki campuran huruf, angka, dan simbol (misalnya "A/5 21171", "STON/O2. 3101282"). Jika kita ingin
+                  menganalisis nomor tiket, karakter ini perlu dibersihkan.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan
+                        <strong>SUBSTITUTE</strong>
+                        untuk menghapus karakter tertentu dari kolom Ticket:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Bersihkan Karakter</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy='=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(I2,"/",""),".","")," ","")'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Hapus /, titik, dan spasi dari Ticket:</span>
+<span class="function">=SUBSTITUTE</span>(<span class="function">SUBSTITUTE</span>(<span class="function">SUBSTITUTE</span>(<span class="string">I2</span>,<span class="string">"/"</span>,<span class="string">""</span>),<span class="string">"."</span>,<span class="string">""</span>),<span class="string">" "</span>,<span class="string">""</span>)
+
+<span class="keyword">→ "A/5 21171"  menjadi  "A521171"</span>
+<span class="keyword">→ "STON/O2. 3101282"  menjadi  "STONO23101282"</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Untuk mengambil
+                        <strong>hanya angka</strong>
+                        dari Ticket, gunakan formula yang lebih kompleks:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Ekstrak Angka Saja</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy="=TEXTJOIN(&#34;&#34;,TRUE,IF(ISNUMBER(MID(I2,ROW(INDIRECT(&#34;1:&#34;&LEN(I2))),1)*1),MID(I2,ROW(INDIRECT(&#34;1:&#34;&LEN(I2))),1),&#34;&#34;))">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Array formula (Ctrl+Shift+Enter):</span>
+<span class="function">=TEXTJOIN</span>(<span class="string">""</span>,<span class="number">TRUE</span>,<span class="function">IF</span>(<span class="function">ISNUMBER</span>(
+  <span class="function">MID</span>(<span class="string">I2</span>,<span class="function">ROW</span>(<span class="function">INDIRECT</span>(<span class="string">"1:"</span>&amp;<span class="function">LEN</span>(<span class="string">I2</span>))),<span class="number">1</span>)*<span class="number">1</span>),
+  <span class="function">MID</span>(<span class="string">I2</span>,<span class="function">ROW</span>(<span class="function">INDIRECT</span>(<span class="string">"1:"</span>&amp;<span class="function">LEN</span>(<span class="string">I2</span>))),<span class="number">1</span>),<span class="string">""</span>))
+
+<span class="keyword">→ "A/5 21171"  menjadi  "521171"</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan
+                        <strong>Find & Replace</strong>
+                        (Ctrl+H) sebagai cara cepat menghapus karakter tertentu dari seluruh kolom.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 8: Menangani Outlier -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-8">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">08</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menangani Outlier</h2>
+                <p class="step-card__subtitle">Mendeteksi dan menangani nilai yang sangat jauh dari rata-rata</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Outlier adalah nilai yang jauh berbeda dari mayoritas data. Pada dataset Titanic, kolom
+                  <strong>Fare</strong>
+                  memiliki outlier yang sangat mencolok — beberapa penumpang membayar harga tiket yang sangat tinggi
+                  (misalnya 512.33) dibanding rata-rata. Metode
+                  <strong>IQR (Interquartile Range)</strong>
+                  digunakan untuk mendeteksi outlier secara statistik.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Hitung
+                        <strong>Q1</strong>
+                        ,
+                        <strong>Q3</strong>
+                        , dan
+                        <strong>IQR</strong>
+                        untuk kolom Fare:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Hitung IQR</span>
+                          <button class="formula-block__copy" data-copy="=QUARTILE(J2:J892,1)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">— Hitung Quartile dan IQR:</span>
+<span class="function">=QUARTILE</span>(<span class="string">J2:J892</span>,<span class="number">1</span>)              <span class="keyword">→ Q1 ≈ 7.91</span>
+<span class="function">=QUARTILE</span>(<span class="string">J2:J892</span>,<span class="number">3</span>)              <span class="keyword">→ Q3 ≈ 31.00</span>
+<span class="function">=QUARTILE</span>(<span class="string">J2:J892</span>,<span class="number">3</span>)<span class="keyword">-</span><span class="function">QUARTILE</span>(<span class="string">J2:J892</span>,<span class="number">1</span>)  <span class="keyword">→ IQR ≈ 23.09</span>
+
+<span class="keyword">— Batas bawah dan atas:</span>
+<span class="keyword">Batas Bawah = Q1 - 1.5 × IQR ≈ -26.72 (atau 0)</span>
+<span class="keyword">Batas Atas  = Q3 + 1.5 × IQR ≈ 65.63</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Tandai outlier dengan formula IF:</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Deteksi Outlier</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy='=IF(OR(J2<Q1-1.5*IQR, J2>Q3+1.5*IQR),"OUTLIER","Normal")'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Tandai outlier di kolom baru (misal "Fare_Status"):</span>
+<span class="function">=IF</span>(<span class="function">OR</span>(<span class="string">J2</span>&lt;<span class="string">$P$1</span>-<span class="number">1.5</span>*<span class="string">$P$3</span>, <span class="string">J2</span>&gt;<span class="string">$P$2</span>+<span class="number">1.5</span>*<span class="string">$P$3</span>),<span class="string">"OUTLIER"</span>,<span class="string">"Normal"</span>)
+
+<span class="keyword">→ Fare = 512.33 → "OUTLIER"</span>
+<span class="keyword">→ Fare = 7.25   → "Normal"</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Buat
+                        <strong>Boxplot</strong>
+                        untuk visualisasi: Insert → Chart → Box and Whisker. Pilih kolom Fare sebagai data source.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Penanganan:</strong>
+                        Outlier bisa di-
+                        <strong>cap</strong>
+                        (batas atas/bawah),
+                        <strong>dihapus</strong>
+                        , atau
+                        <strong>dibiarkan</strong>
+                        tergantung konteks analisis.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+                <div class="info-box info-box--tip">
+                  <i class="info-box__icon" data-lucide="lightbulb"></i>
+                  <p class="info-box__text">
+                    <strong>Tips:</strong>
+                    Pada kasus Titanic, outlier Fare mungkin memang valid (penumpang kelas 1 membayar sangat mahal).
+                    Pertimbangkan konteks sebelum menghapus outlier.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 9: Memvalidasi Rentang Nilai -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-9">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">09</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memvalidasi Rentang Nilai</h2>
+                <p class="step-card__subtitle">Memastikan setiap nilai berada dalam rentang yang valid</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Validasi rentang nilai memastikan data masuk akal secara logis. Misalnya:
+                  <br />
+                  •
+                  <strong>Age</strong>
+                  tidak boleh negatif dan tidak mungkin lebih dari ~120
+                  <br />
+                  •
+                  <strong>Pclass</strong>
+                  hanya boleh berisi 1, 2, atau 3
+                  <br />
+                  •
+                  <strong>Survived</strong>
+                  hanya boleh berisi 0 atau 1
+                  <br />
+                  •
+                  <strong>Fare</strong>
+                  tidak boleh negatif
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Buat kolom validasi untuk setiap kolom yang perlu dicek:</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Validasi Rentang</span>
+                          <button class="formula-block__copy" data-copy='=IF(AND(F2>=0,F2<=120),"Valid","INVALID")'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">— Validasi Age (0–120 tahun):</span>
+<span class="function">=IF</span>(<span class="function">AND</span>(<span class="string">F2</span>&gt;=<span class="number">0</span>, <span class="string">F2</span>&lt;=<span class="number">120</span>), <span class="string">"Valid"</span>, <span class="string">"INVALID"</span>)
+
+<span class="keyword">— Validasi Pclass (hanya 1, 2, atau 3):</span>
+<span class="function">=IF</span>(<span class="function">OR</span>(<span class="string">C2</span>=<span class="number">1</span>, <span class="string">C2</span>=<span class="number">2</span>, <span class="string">C2</span>=<span class="number">3</span>), <span class="string">"Valid"</span>, <span class="string">"INVALID"</span>)
+
+<span class="keyword">— Validasi Survived (hanya 0 atau 1):</span>
+<span class="function">=IF</span>(<span class="function">OR</span>(<span class="string">B2</span>=<span class="number">0</span>, <span class="string">B2</span>=<span class="number">1</span>), <span class="string">"Valid"</span>, <span class="string">"INVALID"</span>)
+
+<span class="keyword">— Validasi Fare (tidak negatif):</span>
+<span class="function">=IF</span>(<span class="string">J2</span>&gt;=<span class="number">0</span>, <span class="string">"Valid"</span>, <span class="string">"INVALID"</span>)</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Hitung total data yang invalid per kolom:</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hitung Data Invalid</span>
+                          <button class="formula-block__copy" data-copy='=COUNTIF(M2:M892,"INVALID")'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="function">=COUNTIF</span>(<span class="string">M2:M892</span>,<span class="string">"INVALID"</span>)    <span class="keyword">→ Jumlah data yang invalid</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan
+                        <strong>Data Validation</strong>
+                        untuk mencegah input nilai di luar rentang: Data → Data Validation → Allow: Whole number/Decimal
+                        → Set min & max.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 10: Mengubah Data Kategorikal -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-10">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">10</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Mengubah Data Kategorikal</h2>
+                <p class="step-card__subtitle">Mengkonversi data teks menjadi numerik untuk analisis</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Banyak algoritma analisis dan machine learning memerlukan input numerik. Data kategorikal seperti
+                  <strong>Sex</strong>
+                  ("male"/"female") dan
+                  <strong>Embarked</strong>
+                  ("S"/"C"/"Q") perlu diubah menjadi angka. Ada dua teknik utama:
+                  <br />
+                  •
+                  <strong>Label Encoding</strong>
+                  : Mengubah kategori menjadi angka (misal: male=1, female=0)
+                  <br />
+                  •
+                  <strong>One-Hot Encoding</strong>
+                  : Membuat kolom biner baru untuk setiap kategori
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Label Encoding — Sex:</strong>
+                        Ubah "male"/"female" menjadi angka:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Label Encoding Sex</span>
+                          <button class="formula-block__copy" data-copy='=IF(E2="male",1,0)'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">— Buat kolom "Sex_Encoded":</span>
+<span class="function">=IF</span>(<span class="string">E2</span>=<span class="string">"male"</span>,<span class="number">1</span>,<span class="number">0</span>)
+
+<span class="keyword">→ "male"   → 1</span>
+<span class="keyword">→ "female" → 0</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>One-Hot Encoding — Embarked:</strong>
+                        Buat 3 kolom biner baru:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>One-Hot Encoding Embarked</span>
+                          <button class="formula-block__copy" data-copy='=IF(L2="S",1,0)'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">— Buat kolom "Embarked_S":</span>
+<span class="function">=IF</span>(<span class="string">L2</span>=<span class="string">"S"</span>,<span class="number">1</span>,<span class="number">0</span>)
+
+<span class="keyword">— Buat kolom "Embarked_C":</span>
+<span class="function">=IF</span>(<span class="string">L2</span>=<span class="string">"C"</span>,<span class="number">1</span>,<span class="number">0</span>)
+
+<span class="keyword">— Buat kolom "Embarked_Q":</span>
+<span class="function">=IF</span>(<span class="string">L2</span>=<span class="string">"Q"</span>,<span class="number">1</span>,<span class="number">0</span>)</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+
+                <div class="step-card__section" style="margin-top: var(--space-lg)">
+                  <h3 class="step-card__section-title">
+                    <i data-lucide="bar-chart-2"></i>
+                    Contoh Hasil Encoding
+                  </h3>
+                  <div class="data-table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>Sex</th>
+                          <th>Sex_Encoded</th>
+                          <th>Embarked</th>
+                          <th>Emb_S</th>
+                          <th>Emb_C</th>
+                          <th>Emb_Q</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>male</td>
+                          <td class="cell-new">1</td>
+                          <td>S</td>
+                          <td class="cell-new">1</td>
+                          <td>0</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>female</td>
+                          <td class="cell-new">0</td>
+                          <td>C</td>
+                          <td>0</td>
+                          <td class="cell-new">1</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>female</td>
+                          <td class="cell-new">0</td>
+                          <td>S</td>
+                          <td class="cell-new">1</td>
+                          <td>0</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>male</td>
+                          <td class="cell-new">1</td>
+                          <td>Q</td>
+                          <td>0</td>
+                          <td>0</td>
+                          <td class="cell-new">1</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 11: Menghapus Kolom Tidak Relevan -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-11">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">11</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menghapus Kolom Tidak Relevan</h2>
+                <p class="step-card__subtitle">Menghilangkan kolom yang tidak berkontribusi pada analisis</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Tidak semua kolom berguna untuk analisis atau prediksi. Kolom-kolom yang hanya berfungsi sebagai
+                  identitas unik atau memiliki terlalu banyak variasi tidak memberikan pola yang berguna. Kolom yang
+                  biasa dihapus pada dataset Titanic:
+                  <br />
+                  •
+                  <strong>PassengerId</strong>
+                  : Hanya ID unik, tidak memiliki makna prediktif
+                  <br />
+                  •
+                  <strong>Ticket</strong>
+                  : Terlalu banyak variasi unik, sulit dikategorikan
+                  <br />
+                  •
+                  <strong>Name</strong>
+                  : Teks unik (kecuali jika diekstrak title-nya, lihat Step 12)
+                  <br />
+                  •
+                  <strong>Cabin</strong>
+                  : Sudah dihapus di Step 2 karena terlalu banyak missing values
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Identifikasi kolom yang akan dihapus:</strong>
+                        PassengerId (kolom A), Name (kolom D), Ticket (kolom I).
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Klik header kolom yang ingin dihapus (misal klik huruf "A" di atas). Untuk memilih beberapa
+                        kolom, tahan
+                        <strong>Ctrl</strong>
+                        dan klik header kolom lainnya.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Klik kanan →
+                        <strong>Delete</strong>
+                        . Kolom akan dihapus dan kolom lainnya bergeser ke kiri.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Verifikasi bahwa kolom yang tersisa sesuai kebutuhan analisis.</p>
+                    </div>
+                  </li>
+                </ol>
+
+                <div class="step-card__section" style="margin-top: var(--space-lg)">
+                  <h3 class="step-card__section-title">
+                    <i data-lucide="bar-chart-2"></i>
+                    Kolom Sebelum & Sesudah
+                  </h3>
+                  <div class="comparison">
+                    <div class="comparison__panel">
+                      <div class="comparison__label comparison__label--before">
+                        <i data-lucide="x-circle"></i>
+                        Sebelum (12 Kolom)
+                      </div>
+                      <div style="padding: var(--space-md); font-size: 14px; line-height: 2">
+                        <span style="text-decoration: line-through; opacity: 0.5">PassengerId</span>
+                        , Survived, Pclass,
+                        <span style="text-decoration: line-through; opacity: 0.5">Name</span>
+                        , Sex, Age, SibSp, Parch,
+                        <span style="text-decoration: line-through; opacity: 0.5">Ticket</span>
+                        , Fare,
+                        <span style="text-decoration: line-through; opacity: 0.5">Cabin</span>
+                        , Embarked
+                      </div>
+                    </div>
+                    <div class="comparison__panel">
+                      <div class="comparison__label comparison__label--after">
+                        <i data-lucide="check-circle-2"></i>
+                        Sesudah (8 Kolom)
+                      </div>
+                      <div style="padding: var(--space-md); font-size: 14px; line-height: 2">
+                        Survived, Pclass, Sex, Age, SibSp, Parch, Fare, Embarked
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 12: Feature Engineering -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-12">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">12</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Feature Engineering</h2>
+                <p class="step-card__subtitle">Membuat fitur baru dari data yang ada untuk meningkatkan analisis</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Feature engineering adalah proses membuat kolom/fitur baru dari data yang sudah ada untuk meningkatkan
+                  kualitas analisis atau akurasi model prediksi. Pada dataset Titanic, kita bisa membuat beberapa fitur
+                  baru yang sangat berguna:
+                  <br />
+                  •
+                  <strong>FamilySize</strong>
+                  : Jumlah anggota keluarga = SibSp + Parch + 1
+                  <br />
+                  •
+                  <strong>IsAlone</strong>
+                  : Apakah penumpang sendirian (FamilySize = 1)
+                  <br />
+                  •
+                  <strong>Title</strong>
+                  : Gelar dari kolom Name (Mr, Mrs, Miss, Master, dll.)
+                  <br />
+                  •
+                  <strong>AgeGroup</strong>
+                  : Kelompok usia (Anak, Dewasa, Lansia)
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="ruler"></i>
+                  Langkah-langkah di Excel
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>FamilySize:</strong>
+                        Buat kolom baru yang menjumlahkan SibSp, Parch, dan penumpang itu sendiri:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula FamilySize</span>
+                          <button class="formula-block__copy" data-copy="=G2+H2+1">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">— Kolom "FamilySize":</span>
+<span class="function">=G2+H2+1</span>    <span class="keyword">→ SibSp + Parch + 1 (diri sendiri)</span>
+
+<span class="keyword">→ SibSp=1, Parch=0 → FamilySize = 2</span>
+<span class="keyword">→ SibSp=0, Parch=0 → FamilySize = 1 (sendirian)</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>IsAlone:</strong>
+                        Tandai apakah penumpang bepergian sendirian:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula IsAlone</span>
+                          <button class="formula-block__copy" data-copy="=IF(G2+H2=0,1,0)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">— Kolom "IsAlone":</span>
+<span class="function">=IF</span>(<span class="string">G2</span>+<span class="string">H2</span>=<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>)
+
+<span class="keyword">→ 1 = Sendirian, 0 = Bersama keluarga</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Title (Gelar):</strong>
+                        Ekstrak gelar dari kolom Name. Nama dalam format "Braund,
+                        <strong>Mr.</strong>
+                        Owen Harris":
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula Ekstrak Title</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy='=MID(D2,FIND(",",D2)+2,FIND(".",D2)-FIND(",",D2)-2)'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre
+                          class="formula-block__code"><span class="keyword">— Kolom "Title" — Ekstrak teks antara ", " dan ".":</span>
+<span class="function">=MID</span>(<span class="string">D2</span>,<span class="function">FIND</span>(<span class="string">","</span>,<span class="string">D2</span>)+<span class="number">2</span>,<span class="function">FIND</span>(<span class="string">"."</span>,<span class="string">D2</span>)-<span class="function">FIND</span>(<span class="string">","</span>,<span class="string">D2</span>)-<span class="number">2</span>)
+
+<span class="keyword">→ "Braund, Mr. Owen Harris"      → "Mr"</span>
+<span class="keyword">→ "Cumings, Mrs. John Bradley"   → "Mrs"</span>
+<span class="keyword">→ "Heikkinen, Miss. Laina"       → "Miss"</span>
+<span class="keyword">→ "Palsson, Master. Gosta"       → "Master"</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>AgeGroup:</strong>
+                        Kelompokkan usia menjadi kategori:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Formula AgeGroup</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy='=IF(F2<=12,"Anak",IF(F2<=18,"Remaja",IF(F2<=60,"Dewasa","Lansia")))'>
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">— Kolom "AgeGroup":</span>
+<span class="function">=IF</span>(<span class="string">F2</span>&lt;=<span class="number">12</span>,<span class="string">"Anak"</span>,<span class="function">IF</span>(<span class="string">F2</span>&lt;=<span class="number">18</span>,<span class="string">"Remaja"</span>,<span class="function">IF</span>(<span class="string">F2</span>&lt;=<span class="number">60</span>,<span class="string">"Dewasa"</span>,<span class="string">"Lansia"</span>)))
+
+<span class="keyword">→ Age = 2   → "Anak"</span>
+<span class="keyword">→ Age = 15  → "Remaja"</span>
+<span class="keyword">→ Age = 38  → "Dewasa"</span>
+<span class="keyword">→ Age = 70  → "Lansia"</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+
+                <div class="step-card__section" style="margin-top: var(--space-lg)">
+                  <h3 class="step-card__section-title">
+                    <i data-lucide="bar-chart-2"></i>
+                    Contoh Hasil Feature Engineering
+                  </h3>
+                  <div class="data-table-wrapper">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>SibSp</th>
+                          <th>Parch</th>
+                          <th>Age</th>
+                          <th>FamilySize</th>
+                          <th>IsAlone</th>
+                          <th>Title</th>
+                          <th>AgeGroup</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Braund, Mr. Owen Harris</td>
+                          <td>1</td>
+                          <td>0</td>
+                          <td>22</td>
+                          <td class="cell-new">2</td>
+                          <td class="cell-new">0</td>
+                          <td class="cell-new">Mr</td>
+                          <td class="cell-new">Dewasa</td>
+                        </tr>
+                        <tr>
+                          <td>Cumings, Mrs. John Bradley</td>
+                          <td>1</td>
+                          <td>0</td>
+                          <td>38</td>
+                          <td class="cell-new">2</td>
+                          <td class="cell-new">0</td>
+                          <td class="cell-new">Mrs</td>
+                          <td class="cell-new">Dewasa</td>
+                        </tr>
+                        <tr>
+                          <td>Heikkinen, Miss. Laina</td>
+                          <td>0</td>
+                          <td>0</td>
+                          <td>26</td>
+                          <td class="cell-new">1</td>
+                          <td class="cell-new">1</td>
+                          <td class="cell-new">Miss</td>
+                          <td class="cell-new">Dewasa</td>
+                        </tr>
+                        <tr>
+                          <td>Palsson, Master. Gosta</td>
+                          <td>3</td>
+                          <td>1</td>
+                          <td>2</td>
+                          <td class="cell-new">5</td>
+                          <td class="cell-new">0</td>
+                          <td class="cell-new">Master</td>
+                          <td class="cell-new">Anak</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- ========== RIGHT SIDEBAR ========== -->
+      <aside class="sidebar-right" id="sidebar-right">
+        <div class="progress-box">
+          <h4 class="progress-box__title">
+            Progress Membaca
+            <span id="progress-text">0 / 13</span>
+          </h4>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="progress-box" style="margin-top: var(--space-xl)">
+          <h4 class="progress-box__title">
+            Sumber Dataset
+            <i data-lucide="database"></i>
+          </h4>
+          <p style="font-size: 14px; margin-bottom: var(--space-sm)">
+            Dataset resmi Titanic dari kompetisi Kaggle: Machine Learning from Disaster.
+          </p>
+          <a
+            href="https://www.kaggle.com/c/titanic/data"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              padding: 8px 12px;
+              background-color: var(--color-primary);
+              color: #1a1a1a;
+              font-weight: 700;
+              text-decoration: none;
+              border: 2px solid var(--color-border);
+              box-shadow: var(--shadow-1);
+              font-size: 14px;
+              transition:
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast);
+            ">
+            <i data-lucide="external-link" style="width: 16px; height: 16px"></i>
+            Buka di Kaggle
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Tutorial Data Cleaning Dataset Titanic.</p>
+      <p>Dataset: Kaggle Titanic — Machine Learning from Disaster</p>
+    </footer>
+
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top"><i data-lucide="arrow-up"></i></button>
+
+    <script src="script.js"></script>
+  </body>
+</html>
