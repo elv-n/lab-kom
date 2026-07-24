@@ -1,0 +1,1619 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial Data Cleaning Dataset Titanic — Python & Google Colab</title>
+    <meta
+      name="description"
+      content="Panduan lengkap 12 tahapan data cleaning pada dataset Titanic menggunakan Python dan Google Colab. Mulai dari memeriksa missing values hingga feature engineering dengan Pandas." />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header class="header" id="header">
+      <div class="header__brand">
+        <span class="header__brand-icon"><i data-lucide="ship"></i></span>
+        <span>Titanic Data Cleaning (Python)</span>
+      </div>
+      <div class="header__actions">
+        <span class="theme-toggle__label" id="theme-label">Light</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========== OVERLAY (mobile) ========== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ========== LAYOUT ========== -->
+    <div class="layout">
+      <!-- ========== LEFT SIDEBAR ========== -->
+      <aside class="sidebar-left" id="sidebar-left">
+        <p class="sidebar__title">Tahapan Tutorial</p>
+        <ul class="sidebar__nav" id="sidebar-nav">
+          <li>
+            <a class="sidebar__link" href="#dataset-preview">
+              <span
+                class="sidebar__link-number"
+                style="
+                  background-color: var(--color-foreground);
+                  color: var(--color-background);
+                  border: none;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                ">
+                <i data-lucide="table-2" style="width: 14px; height: 14px"></i>
+              </span>
+              <span class="sidebar__link-text">Preview Dataset</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-0">
+              <span
+                class="sidebar__link-number"
+                style="background-color: var(--color-secondary); color: var(--color-background)">
+                0
+              </span>
+              <span class="sidebar__link-text">Persiapan & Import</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-1">
+              <span class="sidebar__link-number">1</span>
+              <span class="sidebar__link-text">Missing Values</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-2">
+              <span class="sidebar__link-number">2</span>
+              <span class="sidebar__link-text">Tangani Missing</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-3">
+              <span class="sidebar__link-number">3</span>
+              <span class="sidebar__link-text">Cek Duplikat</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-4">
+              <span class="sidebar__link-number">4</span>
+              <span class="sidebar__link-text">Hapus Duplikat</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-5">
+              <span class="sidebar__link-number">5</span>
+              <span class="sidebar__link-text">Tipe Data</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-6">
+              <span class="sidebar__link-number">6</span>
+              <span class="sidebar__link-text">Format Data</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-7">
+              <span class="sidebar__link-number">7</span>
+              <span class="sidebar__link-text">Karakter Khusus</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-8">
+              <span class="sidebar__link-number">8</span>
+              <span class="sidebar__link-text">Outlier</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-9">
+              <span class="sidebar__link-number">9</span>
+              <span class="sidebar__link-text">Rentang Nilai</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-10">
+              <span class="sidebar__link-number">10</span>
+              <span class="sidebar__link-text">Data Kategorikal</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-11">
+              <span class="sidebar__link-number">11</span>
+              <span class="sidebar__link-text">Kolom Tak Relevan</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-12">
+              <span class="sidebar__link-number">12</span>
+              <span class="sidebar__link-text">Feature Engineering</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-13">
+              <span class="sidebar__link-number">13</span>
+              <span class="sidebar__link-text">Export Data</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- ========== MAIN CONTENT ========== -->
+      <main class="main" id="main-content">
+        <!-- HERO -->
+        <section class="hero">
+          <span class="hero__badge">
+            <i data-lucide="book-open" style="width: 14px; height: 14px; margin-right: 4px"></i>
+            Tutorial Lengkap
+          </span>
+          <h1 class="hero__title">
+            Data Cleaning
+            <br />
+            <span class="hero__title-accent">Dataset Titanic</span>
+          </h1>
+          <p class="hero__subtitle">Panduan tahapan data cleaning menggunakan Python, Pandas, dan Google Colab.</p>
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <span class="hero__stat-value">891</span>
+              <span class="hero__stat-label">Total Baris</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">12</span>
+              <span class="hero__stat-label">Kolom Awal</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">14</span>
+              <span class="hero__stat-label">Tahapan</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">Colab</span>
+              <span class="hero__stat-label">Tool Utama</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DATASET PREVIEW -->
+        <section class="dataset-preview" id="dataset-preview">
+          <h2 class="dataset-preview__title">
+            <i data-lucide="table"></i>
+            Preview Dataset
+          </h2>
+          <p>
+            Berikut adalah 5 baris pertama dari dataset Titanic yang akan kita bersihkan. Perhatikan kolom-kolom yang
+            memiliki nilai kosong (ditandai dengan warna merah dan nilai NaN).
+          </p>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>PassengerId</th>
+                  <th>Survived</th>
+                  <th>Pclass</th>
+                  <th>Name</th>
+                  <th>Sex</th>
+                  <th>Age</th>
+                  <th>SibSp</th>
+                  <th>Parch</th>
+                  <th>Ticket</th>
+                  <th>Fare</th>
+                  <th>Cabin</th>
+                  <th>Embarked</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>Braund, Mr. Owen Harris</td>
+                  <td>male</td>
+                  <td>22.0</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>A/5 21171</td>
+                  <td>7.2500</td>
+                  <td class="cell-missing">NaN</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>Cumings, Mrs. John Bradley</td>
+                  <td>female</td>
+                  <td>38.0</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>PC 17599</td>
+                  <td>71.2833</td>
+                  <td>C85</td>
+                  <td>C</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>Heikkinen, Miss. Laina</td>
+                  <td>female</td>
+                  <td>26.0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>STON/O2. 3101282</td>
+                  <td>7.9250</td>
+                  <td class="cell-missing">NaN</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>Futrelle, Mrs. Jacques Heath</td>
+                  <td>female</td>
+                  <td>35.0</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>113803</td>
+                  <td>53.1000</td>
+                  <td>C123</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>Allen, Mr. William Henry</td>
+                  <td>male</td>
+                  <td>35.0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>373450</td>
+                  <td>8.0500</td>
+                  <td class="cell-missing">NaN</td>
+                  <td>S</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>Moran, Mr. James</td>
+                  <td>male</td>
+                  <td class="cell-missing">NaN</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>330877</td>
+                  <td>8.4583</td>
+                  <td class="cell-missing">NaN</td>
+                  <td>Q</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 0: Persiapan -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-0">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div
+                class="step-card__number"
+                style="background-color: var(--color-secondary); color: var(--color-background)">
+                00
+              </div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Persiapan: Import Pandas dan Membaca CSV</h2>
+                <p class="step-card__subtitle">Memuat dataset ke dalam struktur DataFrame menggunakan Python</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Mengapa Ini Penting?
+                </h3>
+                <p class="step-card__desc">
+                  Berbeda dengan Excel di mana Anda harus memastikan regional format dan Text to Columns, 
+                  di Python menggunakan <strong>Pandas</strong>, pemisah koma (,) dan karakter kutip ("") 
+                  sudah ditangani secara otomatis. Langkah ini adalah titik awal sebelum Anda melakukan semua 
+                  tahapan manipulasi data.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Import library yang dibutuhkan.</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Kode Python</span>
+                          <button class="formula-block__copy" data-copy="import pandas as pd&#10;import numpy as np">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan fungsi <strong>pd.read_csv()</strong> untuk membaca file dataset Anda.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Membaca Dataset</span>
+                          <button class="formula-block__copy" data-copy="df = pd.read_csv('Titanic-Dataset.csv')&#10;df.head()">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Jika menggunakan URL langsung dari web:</span>
+url = <span class="string">'https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'</span>
+df = pd.read_csv(url)
+
+<span class="keyword"># Tampilkan 5 baris pertama:</span>
+df.head()</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">   PassengerId  Survived  Pclass  ...     Fare Cabin  Embarked
+0            1         0       3  ...   7.2500   NaN         S
+1            2         1       1  ...  71.2833   C85         C
+2            3         1       3  ...   7.9250   NaN         S
+3            4         1       1  ...  53.1000  C123         S
+4            5         0       3  ...   8.0500   NaN         S
+
+[5 rows x 12 columns]</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Fungsi <code>head()</code> secara otomatis mencetak 5 observasi pertama pada data. Terlihat bahwa kolom-kolom sudah berhasil dipisahkan dengan benar, dan data kosong direpresentasikan sebagai <code>NaN</code> (Not a Number) oleh Pandas.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 1: Memeriksa Missing Values -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-1">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">01</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memeriksa Missing Values</h2>
+                <p class="step-card__subtitle">Mendeteksi jumlah dan persentase nilai NaN di seluruh kolom</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Missing values (nilai kosong atau NaN) adalah data yang tidak terisi. Pada Pandas, kita bisa dengan
+                  cepat mendeteksinya menggunakan fungsi <code>isnull()</code> digabungkan dengan <code>sum()</code> 
+                  untuk mengetahui berapa banyak data yang hilang di tiap-tiap kolom.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Hitung jumlah nilai kosong (NaN) untuk setiap kolom secara keseluruhan.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Kode Python</span>
+                          <button class="formula-block__copy" data-copy="df.isnull().sum()">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="function">df</span>.isnull().sum()</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">PassengerId      0
+Survived         0
+Pclass           0
+Name             0
+Sex              0
+Age            177
+SibSp            0
+Parch            0
+Ticket           0
+Fare             0
+Cabin          687
+Embarked         2
+dtype: int64</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Pandas memberikan ringkasan seluruh kolom sekaligus. Anda bisa langsung melihat bahwa <code>Age</code> memiliki 177 data kosong, <code>Cabin</code> memiliki 687 data kosong, dan <code>Embarked</code> memiliki 2.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Hitung persentase nilai kosong untuk menentukan strategi penanganannya nanti.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hitung Persentase</span>
+                          <button class="formula-block__copy" data-copy="(df.isnull().sum() / len(df) * 100).round(2)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Mendapatkan persentase nilai kosong:</span>
+missing_pct = (<span class="function">df</span>.isnull().sum() / <span class="function">len</span>(df) * <span class="number">100</span>).<span class="function">round</span>(<span class="number">2</span>)
+<span class="keyword">print</span>(missing_pct)</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Hasil Pemeriksaan
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kolom</th>
+                        <th>Jumlah Kosong</th>
+                        <th>Persentase</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>PassengerId</td>
+                        <td>0</td>
+                        <td>0%</td>
+                        <td><i data-lucide="check-circle-2" style="color:var(--color-success);width:16px;height:16px;display:inline-block;vertical-align:middle;"></i> Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td class="cell-highlight">Age</td>
+                        <td class="cell-missing">177</td>
+                        <td class="cell-missing">19.87%</td>
+                        <td><i data-lucide="alert-triangle" style="color:var(--color-warning);width:16px;height:16px;display:inline-block;vertical-align:middle;"></i> Perlu Ditangani</td>
+                      </tr>
+                      <tr>
+                        <td class="cell-highlight">Cabin</td>
+                        <td class="cell-missing">687</td>
+                        <td class="cell-missing">77.10%</td>
+                        <td><i data-lucide="x-circle" style="color:var(--color-danger);width:16px;height:16px;display:inline-block;vertical-align:middle;"></i> Sangat Banyak</td>
+                      </tr>
+                      <tr>
+                        <td class="cell-highlight">Embarked</td>
+                        <td class="cell-missing">2</td>
+                        <td class="cell-missing">0.22%</td>
+                        <td><i data-lucide="alert-triangle" style="color:var(--color-warning);width:16px;height:16px;display:inline-block;vertical-align:middle;"></i> Sedikit</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 2: Menangani Missing Values -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-2">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">02</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menangani Missing Values</h2>
+                <p class="step-card__subtitle">Imputasi (mengisi) atau menghapus nilai NaN yang terdeteksi</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Untuk <strong>Age</strong>, kita akan mengisinya dengan median untuk meminimalisasi efek outlier.
+                  Untuk <strong>Embarked</strong>, kita isi dengan modus (karena kategorikal).
+                  Sedangkan <strong>Cabin</strong> akan kita hapus kolomnya seluruhnya menggunakan <code>drop()</code> karena mayoritas (77%) datanya kosong.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Mengisi Age dengan Median:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Imputasi Age</span>
+                          <button class="formula-block__copy" data-copy="median_age = df['Age'].median()&#10;df['Age'].fillna(median_age, inplace=True)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Hitung median usia</span>
+median_age = df[<span class="string">'Age'</span>].median()
+<span class="keyword">print</span>(<span class="string">f"Median Usia: {median_age}"</span>)
+
+<span class="keyword"># Isi (fillna) sel yang kosong dengan nilai median tersebut</span>
+df[<span class="string">'Age'</span>].fillna(median_age, inplace=<span class="number">True</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Median Usia: 28.0</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Pandas menemukan nilai tengah dari umur (28.0) dan argumen <code>inplace=True</code> memastikan semua NaN di kolom Age langsung ditimpa oleh angka 28 tanpa harus membuat variabel baru.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Mengisi Embarked dengan Modus:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Imputasi Embarked</span>
+                          <button class="formula-block__copy" data-copy="mode_embarked = df['Embarked'].mode()[0]&#10;df['Embarked'].fillna(mode_embarked, inplace=True)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Ambil modus menggunakan fungsi mode(), index [0] untuk nilai pertamanya</span>
+mode_embarked = df[<span class="string">'Embarked'</span>].mode()[<span class="number">0</span>]
+<span class="keyword">print</span>(<span class="string">f"Modus Embarked: {mode_embarked}"</span>)
+
+<span class="keyword"># Isi sel yang kosong</span>
+df[<span class="string">'Embarked'</span>].fillna(mode_embarked, inplace=<span class="number">True</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Modus Embarked: S</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Modus pelabuhan yang paling sering muncul adalah 'S' (Southampton). Dua observasi yang hilang pada Embarked sekarang diisi dengan 'S'.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Menghapus kolom Cabin:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hapus Kolom</span>
+                          <button class="formula-block__copy" data-copy="df.drop(columns=['Cabin'], inplace=True)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Menghapus seluruh kolom Cabin (axis=1 otomatis dikelola oleh argumen columns)</span>
+df.drop(columns=[<span class="string">'Cabin'</span>], inplace=<span class="number">True</span>)
+<span class="keyword">print</span>(df.columns)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Index(['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp',
+       'Parch', 'Ticket', 'Fare', 'Embarked'],
+      dtype='object')</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Terlihat bahwa pada daftar nama-nama kolom setelah kode dijalankan, kolom <code>Cabin</code> sudah tidak ada lagi di dalam DataFrame kita.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 3: Memeriksa Data Duplikat -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-3">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">03</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memeriksa Data Duplikat</h2>
+                <p class="step-card__subtitle">Mengecek apakah ada observasi baris yang identik</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Data duplikat adalah baris yang memiliki nilai identik. Dalam Pandas, cukup gunakan <code>duplicated().sum()</code> 
+                  untuk menghitung berapa baris yang merupakan duplikasi penuh dari baris sebelumnya.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan metode <strong>duplicated()</strong> digabung dengan <strong>sum()</strong>.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hitung Duplikat</span>
+                          <button class="formula-block__copy" data-copy="df.duplicated().sum()">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Menghitung jumlah duplikat (semua kolom)</span>
+jumlah_duplikat = df.duplicated().sum()
+<span class="keyword">print</span>(<span class="string">f"Jumlah duplikat: {jumlah_duplikat}"</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Jumlah duplikat: 0</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Dataset asli Kaggle ini tidak memiliki duplikat (0), karena setiap observasi memiliki <code>PassengerId</code> yang sifatnya unik.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 4: Menghapus Data Duplikat -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-4">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">04</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menghapus Data Duplikat</h2>
+                <p class="step-card__subtitle">Membersihkan observasi yang ganda jika ditemukan</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Meskipun pada Langkah 3 hasilnya 0, jika di kemudian hari Anda mengolah dataset dan menemukan duplikat, kita bisa menghapusnya secara otomatis dengan fungsi bawaan Pandas <code>drop_duplicates()</code>.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Jalankan <strong>drop_duplicates()</strong>.</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hapus Duplikat</span>
+                          <button class="formula-block__copy" data-copy="df.drop_duplicates(inplace=True)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Hapus baris duplikat secara permanen di memori (inplace=True)</span>
+df.drop_duplicates(inplace=<span class="number">True</span>)
+<span class="keyword">print</span>(<span class="string">f"Jumlah baris tersisa: {len(df)}"</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Jumlah baris tersisa: 891</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Tidak ada baris yang terhapus karena sejak awal tidak terdapat duplikat (tetap berjumlah 891 baris).
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 5: Memeriksa Tipe Data -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-5">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">05</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memeriksa Tipe Data</h2>
+                <p class="step-card__subtitle">Memastikan setiap kolom (Series) memiliki dtype Pandas yang sesuai</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Tipe data (dtype) di Pandas mencakup <code>int64</code>, <code>float64</code>, dan <code>object</code> (untuk teks/string). 
+                  Tipe data ini jauh lebih konsisten daripada di Excel. Kita hanya perlu memverifikasi apakah angka dibaca sebagai teks atau bukan.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan atribut <strong>dtypes</strong> untuk mencetak semua tipe kolom.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Cek Tipe Data</span>
+                          <button class="formula-block__copy" data-copy="df.dtypes">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="function">print</span>(df.dtypes)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">PassengerId      int64
+Survived         int64
+Pclass           int64
+Name            object
+Sex             object
+Age            float64
+SibSp            int64
+Parch            int64
+Ticket          object
+Fare           float64
+Embarked        object
+dtype: object</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Pandas dengan sangat baik mengenali bahwa `Fare` dan `Age` adalah float64 (desimal), `PassengerId` dll adalah int64 (angka bulat), dan teks sebagai `object`. Semuanya sudah sesuai sehingga tidak diperlukan konversi manual.
+                      </p>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Jika ada kolom yang salah (misalnya, angka yang terbaca teks), konversi menggunakan <strong>astype()</strong>.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Konversi Tipe Data</span>
+                          <button class="formula-block__copy" data-copy="df['Fare'] = df['Fare'].astype(float)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Contoh: Memastikan Fare benar-benar float</span>
+df[<span class="string">'Fare'</span>] = df[<span class="string">'Fare'</span>].astype(<span class="function">float</span>)</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 6: Menyeragamkan Format Data -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-6">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">06</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menyeragamkan Format Data</h2>
+                <p class="step-card__subtitle">Menggunakan metode string bawaan Pandas (.str)</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Untuk melakukan operasi pada kolom bertipe teks (object), Pandas menyediakan accessor <code>.str</code>. 
+                  Anda tidak perlu menggunakan TRIM atau LOWER di sel yang berbeda lalu menyalinnya kembali. Ini dilakukan secara *in-place*.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan <strong>str.strip()</strong> untuk menghapus spasi ekstra, 
+                        dan <strong>str.lower()</strong> / <strong>str.upper()</strong> untuk case konversi.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Format String</span>
+                          <button class="formula-block__copy" data-copy="df['Name'] = df['Name'].str.strip()&#10;df['Sex'] = df['Sex'].str.strip().str.lower()&#10;df['Embarked'] = df['Embarked'].str.strip().str.upper()">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Bersihkan nama</span>
+df[<span class="string">'Name'</span>] = df[<span class="string">'Name'</span>].str.strip()
+
+<span class="keyword"># Bersihkan spasi dan kecilkan huruf pada Sex (male/female)</span>
+df[<span class="string">'Sex'</span>] = df[<span class="string">'Sex'</span>].str.strip().str.lower()
+
+<span class="keyword"># Bersihkan dan huruf besarkan pelabuhan (S/C/Q)</span>
+df[<span class="string">'Embarked'</span>] = df[<span class="string">'Embarked'</span>].str.strip().str.upper()
+
+<span class="keyword">print</span>(df[[<span class="string">'Name'</span>, <span class="string">'Sex'</span>, <span class="string">'Embarked'</span>]].head(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">                           Name     Sex Embarked
+0       Braund, Mr. Owen Harris    male        S
+1  Cumings, Mrs. John Bradley    female        C
+2        Heikkinen, Miss. Laina  female        S</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Kode berhasil memastikan semua nama bersih dari spasi luar, kolom kelamin menggunakan huruf kecil standar, dan pelabuhan dikapitalisasi ('S', 'C', 'Q').
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 7: Membersihkan Karakter Khusus -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-7">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">07</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Membersihkan Karakter Khusus</h2>
+                <p class="step-card__subtitle">Memanfaatkan Regular Expression (Regex) dengan fungsi Pandas</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Untuk kolom <strong>Ticket</strong> yang memiliki kombinasi huruf, angka, garis miring, dan titik, 
+                  kita dapat menggunakan <code>str.replace()</code> yang mendukung pola RegEx secara langsung tanpa rumus panjang berlapis-lapis.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan Regex untuk menghapus / , titik, dan spasi.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hapus Simbol Regex</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy="df['Ticket'] = df['Ticket'].str.replace(r'[/. ]', '', regex=True)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Hapus simbol / . dan spasi menggunakan satu baris pattern Regex</span>
+df[<span class="string">'Ticket'</span>] = df[<span class="string">'Ticket'</span>].str.replace(<span class="string">r'[/. ]'</span>, <span class="string">''</span>, regex=<span class="number">True</span>)
+<span class="keyword">print</span>(df[<span class="string">'Ticket'</span>].head(<span class="number">5</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">0          A521171
+1          PC17599
+2    STONO23101282
+3           113803
+4           373450
+Name: Ticket, dtype: object</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Tiket seperti "A/5 21171" sekarang menjadi teks bersih "A521171" berkat pembersihan regex (yang mendeteksi dan menghapus `[/. ]`).
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 8: Menangani Outlier -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-8">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">08</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menangani Outlier</h2>
+                <p class="step-card__subtitle">Mendeteksi nilai ekstrim (IQR) secara statistik</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Mencari kuartil menggunakan <code>quantile()</code> dan mendeteksi Outlier menggunakan formula IQR.
+                  Ini persis sama dengan logika matematika Excel, namun penulisannya lebih modular di Python.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Hitung <strong>Q1</strong>, <strong>Q3</strong>, dan batasnya.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Hitung Batas Outlier IQR</span>
+                          <button class="formula-block__copy" data-copy="Q1 = df['Fare'].quantile(0.25)&#10;Q3 = df['Fare'].quantile(0.75)&#10;IQR = Q3 - Q1&#10;&#10;batas_bawah = Q1 - 1.5 * IQR&#10;batas_atas = Q3 + 1.5 * IQR">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Mencari titik per kuartil</span>
+Q1 = df[<span class="string">'Fare'</span>].quantile(<span class="number">0.25</span>)
+Q3 = df[<span class="string">'Fare'</span>].quantile(<span class="number">0.75</span>)
+IQR = Q3 - Q1
+
+<span class="keyword"># Mendefinisikan batas</span>
+batas_bawah = Q1 - <span class="number">1.5</span> * IQR
+batas_atas = Q3 + <span class="number">1.5</span> * IQR
+<span class="keyword">print</span>(<span class="string">f"Batas Atas: {batas_atas}"</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Batas Atas: 65.6344</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Tandai dan saring data menggunakan <strong>np.where</strong>.</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Deteksi Outlier</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy="df['Fare_Status'] = np.where((df['Fare'] < batas_bawah) | (df['Fare'] > batas_atas), 'OUTLIER', 'Normal')">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Array condition (seperti IF statement di Excel)</span>
+df[<span class="string">'Fare_Status'</span>] = np.where(
+    (df[<span class="string">'Fare'</span>] &lt; batas_bawah) | (df[<span class="string">'Fare'</span>] &gt; batas_atas), 
+    <span class="string">'OUTLIER'</span>, <span class="string">'Normal'</span>
+)
+
+outlier_count = (df[<span class="string">'Fare_Status'</span>] == <span class="string">'OUTLIER'</span>).sum()
+<span class="keyword">print</span>(<span class="string">f"Jumlah Outlier di Kolom Fare: {outlier_count}"</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Jumlah Outlier di Kolom Fare: 116</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Pandas mendeteksi 116 penumpang yang membayar tiket melebihi batas atas wajar ($65.6). Meskipun secara statistik dilabeli Outlier, di studi kasus Titanic data-data mahal ini umumnya sah untuk dijaga karena menunjukkan penumpang VIP.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 9: Memvalidasi Rentang Nilai -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-9">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">09</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Memvalidasi Rentang Nilai</h2>
+                <p class="step-card__subtitle">Menggunakan kondisi mask boolean untuk mencari anomali</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Jika di Excel Anda membutuhkan helper columns dengan operasi boolean, di Pandas Anda 
+                  dapat langsung menerapkannya pada seluruh subset untuk menghasilkan "masking" data.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">Mencari baris (filtering) dengan nilai aneh dan merangkum jumlahnya:</p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Validasi Logika & Rentang</span>
+                          <button class="formula-block__copy" data-copy="invalid_age = (~df['Age'].between(0, 120)).sum()&#10;invalid_pclass = (~df['Pclass'].isin([1, 2, 3])).sum()">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Age harus 0–120 (Tanda ~ berarti 'NOT' / kebalikan)</span>
+invalid_age = (~df[<span class="string">'Age'</span>].between(<span class="number">0</span>, <span class="number">120</span>)).sum()
+
+<span class="keyword"># Pclass hanya 1, 2, 3</span>
+invalid_pclass = (~df[<span class="string">'Pclass'</span>].isin([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])).sum()
+
+<span class="keyword">print</span>(<span class="string">f"Age tidak wajar: {invalid_age}"</span>)
+<span class="keyword">print</span>(<span class="string">f"Pclass salah: {invalid_pclass}"</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Age tidak wajar: 0
+Pclass salah: 0</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Tidak ditemukan adanya anomali pada kolom umur maupun pada kelas penumpang. Menandakan data kita cukup valid secara konseptual.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 10: Mengubah Data Kategorikal -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-10">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">10</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Mengubah Data Kategorikal</h2>
+                <p class="step-card__subtitle">Label Encoding dan One-Hot Encoding</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Untuk menyiapkan data bagi model Machine Learning, semua string harus jadi numerik.
+                  Python/Pandas menyediakan alat khusus yaitu <code>pd.get_dummies()</code> yang secara drastis
+                  lebih mudah digunakan daripada formula IF bertingkat di Excel.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Label Encoding — Sex:</strong> Map dictionary (Pria:1, Wanita:0).
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Map Encoding</span>
+                          <button class="formula-block__copy" data-copy="df['Sex_Encoded'] = df['Sex'].map({'male': 1, 'female': 0})">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Melakukan map teks ke nilai angka</span>
+df[<span class="string">'Sex_Encoded'</span>] = df[<span class="string">'Sex'</span>].map({<span class="string">'male'</span>: <span class="number">1</span>, <span class="string">'female'</span>: <span class="number">0</span>})
+<span class="keyword">print</span>(df[[<span class="string">'Sex'</span>, <span class="string">'Sex_Encoded'</span>]].head(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">      Sex  Sex_Encoded
+0    male            1
+1  female            0
+2  female            0</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>One-Hot Encoding — Embarked:</strong> Menggunakan <code>get_dummies()</code>.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Dummies (One-Hot)</span>
+                          <button class="formula-block__copy" data-copy="df = pd.get_dummies(df, columns=['Embarked'], prefix='Emb')">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Membuat otomatis 3 kolom biner (True/False yang berfungsi sbg 1/0)</span>
+df = pd.get_dummies(df, columns=[<span class="string">'Embarked'</span>], prefix=<span class="string">'Emb'</span>)
+<span class="keyword">print</span>(df[[<span class="string">'Emb_C'</span>, <span class="string">'Emb_Q'</span>, <span class="string">'Emb_S'</span>]].head(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">   Emb_C  Emb_Q  Emb_S
+0  False  False   True
+1   True  False  False
+2  False  False   True</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Fungsi Pandas <code>get_dummies()</code> jauh mempermudah pembuatan kolom dummy dibandingkan Excel, yang mengharuskan kita membuat kolom baru satu-persatu dan menuliskan fungsi IF.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 11: Menghapus Kolom Tidak Relevan -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-11">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">11</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Menghapus Kolom Tidak Relevan</h2>
+                <p class="step-card__subtitle">Membuang noise yang tidak digunakan untuk model prediksi</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Kolom identifikasi (PassengerId, Ticket) biasanya dihapus agar model ML tidak menghafalnya. 
+                  Kita bisa menghapus banyak kolom sekaligus dengan menyuplai daftar (List) di Pandas.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Jalankan <strong>drop()</strong> dengan argumen daftar kolom.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Drop Multi-Columns</span>
+                          <button class="formula-block__copy" data-copy="df.drop(columns=['PassengerId', 'Ticket', 'Sex', 'Fare_Status'], inplace=True, errors='ignore')">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Hapus kolom ID, tiket, hasil status fare, dan jenis kelamin asli (karena kita sudah punya Sex_Encoded)</span>
+df.drop(columns=[<span class="string">'PassengerId'</span>, <span class="string">'Ticket'</span>, <span class="string">'Sex'</span>, <span class="string">'Fare_Status'</span>], inplace=<span class="number">True</span>, errors=<span class="string">'ignore'</span>)
+<span class="keyword">print</span>(df.columns)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Index(['Survived', 'Pclass', 'Name', 'Age', 'SibSp', 'Parch', 'Fare',
+       'Sex_Encoded', 'Emb_C', 'Emb_Q', 'Emb_S'],
+      dtype='object')</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Kolom-kolom yang tidak diperlukan atau redundan (seperti Sex String karena kita memiliki Sex_Encoded, dan PassengerId yang nilainya terisolasi untuk tiap-tiap entitas) berhasil terbuang bersih.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 12: Feature Engineering -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-12">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">12</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Feature Engineering</h2>
+                <p class="step-card__subtitle">Berekspresi tingkat tinggi dengan Pandas untuk meramu fitur baru</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Python memungkinkan feature engineering yang rumit di Excel menjadi hal yang satu-baris saja.
+                  Kita bisa mendefinisikan kelompok (binning) pada usia atau mengekstrak prefix "Title" secara elegan.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>FamilySize & IsAlone:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Matematika Kolom</span>
+                          <button class="formula-block__copy" data-copy="df['FamilySize'] = df['SibSp'] + df['Parch'] + 1&#10;df['IsAlone'] = (df['FamilySize'] == 1).astype(int)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># FamilySize = Pasangan/Saudara + Orangtua/Anak + Diri Sendiri</span>
+df[<span class="string">'FamilySize'</span>] = df[<span class="string">'SibSp'</span>] + df[<span class="string">'Parch'</span>] + <span class="number">1</span>
+
+<span class="keyword"># IsAlone jadi Integer 1 jika ukuran keluarga 1, selain itu 0</span>
+df[<span class="string">'IsAlone'</span>] = (df[<span class="string">'FamilySize'</span>] == <span class="number">1</span>).astype(<span class="function">int</span>)
+<span class="keyword">print</span>(df[[<span class="string">'SibSp'</span>, <span class="string">'Parch'</span>, <span class="string">'FamilySize'</span>, <span class="string">'IsAlone'</span>]].head(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">   SibSp  Parch  FamilySize  IsAlone
+0      1      0           2        0
+1      1      0           2        0
+2      0      0           1        1</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Title (Gelar):</strong> Mengekstrak Mr/Mrs/Miss dari teks String name.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Ekstrak Regex Grouping</span>
+                          <button class="formula-block__copy" data-copy="df['Title'] = df['Name'].str.extract(r', ([A-Za-z]+)\.', expand=False)">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Cari kata yang didahului koma spasi dan diakhiri titik</span>
+df[<span class="string">'Title'</span>] = df[<span class="string">'Name'</span>].str.extract(<span class="string">r', ([A-Za-z]+)\.'</span>, expand=<span class="number">False</span>)
+<span class="keyword">print</span>(df[<span class="string">'Title'</span>].value_counts().head(<span class="number">4</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Title
+Mr        517
+Miss      182
+Mrs       125
+Master     40
+Name: count, dtype: int64</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>AgeGroup:</strong> Melakukan Binning dengan <code>pd.cut()</code>.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Binning dengan pd.cut</span>
+                          <button
+                            class="formula-block__copy"
+                            data-copy="df['AgeGroup'] = pd.cut(df['Age'], bins=[0, 12, 18, 60, 120], labels=['Anak', 'Remaja', 'Dewasa', 'Lansia'])">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Memotong dataset Age ke keranjang/kelompok umur</span>
+df[<span class="string">'AgeGroup'</span>] = pd.cut(
+    df[<span class="string">'Age'</span>], 
+    bins=[<span class="number">0</span>, <span class="number">12</span>, <span class="number">18</span>, <span class="number">60</span>, <span class="number">120</span>], 
+    labels=[<span class="string">'Anak'</span>, <span class="string">'Remaja'</span>, <span class="string">'Dewasa'</span>, <span class="string">'Lansia'</span>]
+)
+<span class="keyword">print</span>(df[[<span class="string">'Age'</span>, <span class="string">'AgeGroup'</span>]].head(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">    Age AgeGroup
+0  22.0   Dewasa
+1  38.0   Dewasa
+2  26.0   Dewasa</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> Feature Engineering berhasil menciptakan kolom `FamilySize` (penjumlahan otomatis), `IsAlone` (evaluasi ke integer 0/1 otomatis), `Title` menggunakan regex, dan `AgeGroup` dengan pd.cut secara bersih dan tanpa menggunakan Excel Macro / Formula yang berat.
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 13: Export Dataset -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-13">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">13</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Export Hasil Data Cleaning</h2>
+                <p class="step-card__subtitle">Menyimpan DataFrame yang sudah bersih ke dalam format CSV baru</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Setelah semua tahapan selesai, Anda tentu ingin menyimpan hasil kerja ini. Di Google Colab, Anda 
+                  dapat menggunakan <code>to_csv()</code> dan juga mengunduhnya langsung ke komputer Anda menggunakan 
+                  modul <code>files</code> dari <code>google.colab</code>.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="terminal"></i>
+                  Langkah-langkah di Colab
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        Gunakan fungsi <strong>to_csv()</strong> dan jalankan kode download.
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Export & Download CSV</span>
+                          <button class="formula-block__copy" data-copy="df.to_csv('Titanic_Cleaned.csv', index=False)&#10;from google.colab import files&#10;files.download('Titanic_Cleaned.csv')">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Export ke file CSV tanpa menyertakan indeks bawaan pandas</span>
+df.to_csv(<span class="string">'Titanic_Cleaned.csv'</span>, index=<span class="number">False</span>)
+
+<span class="keyword"># Baris khusus Google Colab untuk mendownload file ke PC pengguna</span>
+<span class="keyword">from</span> google.colab <span class="keyword">import</span> files
+files.download(<span class="string">'Titanic_Cleaned.csv'</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                        <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                          <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                        </div>
+                        <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">(Browser secara otomatis akan memunculkan popup download file Titanic_Cleaned.csv)</pre>
+                      </div>
+                      <p class="excel-step__text" style="margin-top: 0.5rem; font-size: 0.9em;">
+                        <strong>Penjelasan:</strong> <code>index=False</code> berguna agar urutan nomor baris (0, 1, 2...) tidak ikut tersimpan sebagai kolom baru. Dataset Anda yang sudah bersih kini siap untuk digunakan pada tahap Modeling Machine Learning!
+                      </p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- ========== RIGHT SIDEBAR ========== -->
+      <aside class="sidebar-right" id="sidebar-right">
+        <div class="progress-box">
+          <h4 class="progress-box__title">
+            Progress Membaca
+            <span id="progress-text">0 / 14</span>
+          </h4>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="progress-box" style="margin-top: var(--space-xl)">
+          <h4 class="progress-box__title">
+            Sumber Dataset
+            <i data-lucide="database"></i>
+          </h4>
+          <p style="font-size: 14px; margin-bottom: var(--space-sm)">
+            Dataset resmi Titanic dari kompetisi Kaggle: Machine Learning from Disaster.
+          </p>
+          <a
+            href="https://www.kaggle.com/c/titanic/data"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              padding: 8px 12px;
+              background-color: var(--color-primary);
+              color: #1a1a1a;
+              font-weight: 700;
+              text-decoration: none;
+              border: 2px solid var(--color-border);
+              box-shadow: var(--shadow-1);
+              font-size: 14px;
+              transition:
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast);
+            ">
+            <i data-lucide="external-link" style="width: 16px; height: 16px"></i>
+            Buka di Kaggle
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Tutorial Data Cleaning Dataset Titanic (Python).</p>
+      <p>Dataset: Kaggle Titanic — Machine Learning from Disaster</p>
+    </footer>
+
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top"><i data-lucide="arrow-up"></i></button>
+
+    <script src="script.js"></script>
+  </body>
+</html>
