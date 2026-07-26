@@ -1,0 +1,1378 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial Dasar PHP — Dari Syntax hingga OOP</title>
+    <meta
+      name="description"
+      content="Panduan lengkap belajar bahasa pemrograman PHP dari dasar, mencakup syntax dasar, variabel, operator, perulangan, fungsi, hingga Object-Oriented Programming (OOP/PBO)." />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header class="header" id="header">
+      <div class="header__brand">
+        <span class="header__brand-icon"><i data-lucide="code-2"></i></span>
+        <span>Tutorial Dasar PHP</span>
+      </div>
+      <div class="header__actions">
+        <span class="theme-toggle__label" id="theme-label">Light</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========== OVERLAY (mobile) ========== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ========== LAYOUT ========== -->
+    <div class="layout">
+      <!-- ========== LEFT SIDEBAR ========== -->
+      <aside class="sidebar-left" id="sidebar-left">
+        <p class="sidebar__title">Tahapan Tutorial</p>
+        <ul class="sidebar__nav" id="sidebar-nav">
+          <li>
+            <a class="sidebar__link" href="#step-0">
+              <span class="sidebar__link-number" style="background-color: var(--color-secondary); color: var(--color-background)">0</span>
+              <span class="sidebar__link-text">Syntax Dasar</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-1">
+              <span class="sidebar__link-number">1</span>
+              <span class="sidebar__link-text">Variabel & Tipe Data</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-2">
+              <span class="sidebar__link-number">2</span>
+              <span class="sidebar__link-text">Operator</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-3">
+              <span class="sidebar__link-number">3</span>
+              <span class="sidebar__link-text">Struktur Kontrol</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-4">
+              <span class="sidebar__link-number">4</span>
+              <span class="sidebar__link-text">Perulangan</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-5">
+              <span class="sidebar__link-number">5</span>
+              <span class="sidebar__link-text">Fungsi (Function)</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-6">
+              <span class="sidebar__link-number">6</span>
+              <span class="sidebar__link-text">Array</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-7">
+              <span class="sidebar__link-number">7</span>
+              <span class="sidebar__link-text">PBO / OOP</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- ========== MAIN CONTENT ========== -->
+      <main class="main" id="main-content">
+        <!-- HERO -->
+        <section class="hero">
+          <span class="hero__badge">
+            <i data-lucide="book-open" style="width: 14px; height: 14px; margin-right: 4px"></i>
+            Tutorial Lengkap
+          </span>
+          <h1 class="hero__title">
+            Belajar <span class="highlight">Dasar PHP</span> Secara Komprehensif
+          </h1>
+          <p class="hero__desc">
+            Panduan lengkap mempelajari PHP dari awal. Anda akan menguasai syntax dasar, struktur logika, penanganan data dengan Array, hingga konsep Object-Oriented Programming (OOP).
+          </p>
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <div class="hero__stat-value">8</div>
+              <div class="hero__stat-label">Tahapan Utama</div>
+            </div>
+            <div class="hero__stat">
+              <div class="hero__stat-value">30</div>
+              <div class="hero__stat-label">Contoh Kode</div>
+            </div>
+            <div class="hero__stat">
+              <div class="hero__stat-value">100</div>
+              <div class="hero__stat-label">% Gratis</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROGRESS BAR -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <p class="progress-text">Progres: <span id="progress-text">0 / 8</span> diselesaikan</p>
+        </div>
+
+        <!-- ============================= -->
+        <!-- STEP 0: Syntax Dasar -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-0">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number" style="background-color: var(--color-secondary); color: var(--color-background)">00</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Syntax Dasar & Hello World</h2>
+                <p class="step-card__subtitle">Mengenal struktur dasar file PHP, cara menampilkan teks, dan jenis komentar.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Kode PHP harus selalu diapit oleh tag <code>&lt;?php</code> dan <code>?&gt;</code>. Setiap baris instruksi (statement) di PHP harus diakhiri dengan titik koma (<code>;</code>). Untuk menampilkan output ke layar, kita bisa menggunakan perintah <code>echo</code> atau <code>print</code>. Perbedaan utamanya: <code>echo</code> bisa menerima banyak argumen sekaligus, sedangkan <code>print</code> hanya satu dan selalu mengembalikan nilai <code>1</code>.
+                </p>
+              </div>
+
+              <!-- Contoh 1: echo & print -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>echo & print</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Menampilkan Teks</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;echo &quot;Hello, World!&quot;;&#10;echo &quot;\n&quot;;&#10;print &quot;Selamat belajar PHP!&quot;;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">echo</span> <span class="string">"Hello, World!"</span>;
+<span class="keyword">echo</span> <span class="string">"\n"</span>;
+<span class="keyword">print</span> <span class="string">"Selamat belajar PHP!"</span>;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Hello, World!
+Selamat belajar PHP!</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: Komentar -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Jenis Komentar</h3>
+                <p class="step-card__desc">
+                  Komentar digunakan untuk memberikan catatan pada kode. PHP mendukung tiga jenis komentar:
+                  <code>//</code> untuk satu baris, <code>#</code> untuk satu baris (alternatif), dan <code>/* ... */</code> untuk multi-baris.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Tiga Jenis Komentar</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;// Ini komentar satu baris (gaya C++)&#10;# Ini juga komentar satu baris (gaya Shell)&#10;&#10;/*&#10;  Ini komentar multi-baris.&#10;  Bisa mencakup beberapa baris sekaligus.&#10;*/&#10;&#10;echo &quot;Komentar tidak akan tampil di output.&quot;;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">//</span> Ini komentar satu baris (gaya C++)
+<span class="keyword">#</span> Ini juga komentar satu baris (gaya Shell)
+
+<span class="keyword">/*
+  Ini komentar multi-baris.
+  Bisa mencakup beberapa baris sekaligus.
+*/</span>
+
+<span class="keyword">echo</span> <span class="string">"Komentar tidak akan tampil di output."</span>;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Komentar tidak akan tampil di output.</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 3: PHP di dalam HTML -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>PHP di dalam HTML</h3>
+                <p class="step-card__desc">
+                  PHP bisa disisipkan langsung ke dalam file HTML. Server akan memproses bagian yang diapit tag PHP dan meninggalkan HTML lainnya.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Embed PHP ke HTML</span>
+                    <button class="formula-block__copy" data-copy="<!DOCTYPE html>&#10;<html>&#10;<body>&#10;  <h1><?php echo &quot;Judul dari PHP&quot;; ?></h1>&#10;  <p>Ini paragraf HTML biasa.</p>&#10;  <p><?php echo &quot;Dan ini dari PHP juga!&quot;; ?></p>&#10;</body>&#10;</html>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+<span class="keyword">&lt;html&gt;</span>
+<span class="keyword">&lt;body&gt;</span>
+  <span class="keyword">&lt;h1&gt;</span><span class="keyword">&lt;?php</span> <span class="keyword">echo</span> <span class="string">"Judul dari PHP"</span>; <span class="keyword">?&gt;</span><span class="keyword">&lt;/h1&gt;</span>
+  <span class="keyword">&lt;p&gt;</span>Ini paragraf HTML biasa.<span class="keyword">&lt;/p&gt;</span>
+  <span class="keyword">&lt;p&gt;</span><span class="keyword">&lt;?php</span> <span class="keyword">echo</span> <span class="string">"Dan ini dari PHP juga!"</span>; <span class="keyword">?&gt;</span><span class="keyword">&lt;/p&gt;</span>
+<span class="keyword">&lt;/body&gt;</span>
+<span class="keyword">&lt;/html&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output di Browser</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Judul dari PHP
+Ini paragraf HTML biasa.
+Dan ini dari PHP juga!</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 1: Variabel & Tipe Data -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-1">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">01</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Variabel & Tipe Data</h2>
+                <p class="step-card__subtitle">Cara menyimpan data, mengenali tipe, dan menggunakan konstanta.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Variabel di PHP selalu diawali dengan tanda <code>$</code>. PHP bersifat <i>loosely typed</i>, artinya Anda tidak perlu mendeklarasikan tipe datanya secara eksplisit. Tipe data utama di PHP meliputi: <strong>String</strong>, <strong>Integer</strong>, <strong>Float</strong>, <strong>Boolean</strong>, <strong>Array</strong>, <strong>NULL</strong>, dan <strong>Object</strong>. Anda bisa mengecek tipe data variabel menggunakan <code>gettype()</code> atau <code>var_dump()</code>.
+                </p>
+              </div>
+
+              <!-- Contoh 1: Deklarasi Variabel -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Deklarasi Variabel & Tipe Data</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Variabel Dasar</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$nama = &quot;Budi&quot;;       // String&#10;$umur = 25;            // Integer&#10;$berat = 65.5;         // Float&#10;$is_aktif = true;      // Boolean&#10;$alamat = null;        // NULL&#10;&#10;echo &quot;Nama: $nama\n&quot;;&#10;echo &quot;Umur: $umur tahun\n&quot;;&#10;echo &quot;Berat: $berat kg\n&quot;;&#10;var_dump($is_aktif);&#10;echo &quot;\n&quot;;&#10;var_dump($alamat);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$nama</span> = <span class="string">"Budi"</span>;       <span class="keyword">//</span> String
+<span class="keyword">$umur</span> = <span class="number">25</span>;            <span class="keyword">//</span> Integer
+<span class="keyword">$berat</span> = <span class="number">65.5</span>;         <span class="keyword">//</span> Float
+<span class="keyword">$is_aktif</span> = <span class="keyword">true</span>;      <span class="keyword">//</span> Boolean
+<span class="keyword">$alamat</span> = <span class="keyword">null</span>;        <span class="keyword">//</span> NULL
+
+<span class="keyword">echo</span> <span class="string">"Nama: $nama\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Umur: $umur tahun\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Berat: $berat kg\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$is_aktif</span>);
+<span class="keyword">echo</span> <span class="string">"\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$alamat</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Nama: Budi
+Umur: 25 tahun
+Berat: 65.5 kg
+bool(true)
+NULL</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: Konstanta -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Konstanta (define & const)</h3>
+                <p class="step-card__desc">
+                  Konstanta adalah nilai yang <strong>tidak bisa diubah</strong> setelah dideklarasikan. Gunakan <code>define()</code> untuk konstanta global atau <code>const</code> di dalam class.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Konstanta</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;define(&quot;NAMA_APP&quot;, &quot;PHP Tutorial&quot;);&#10;define(&quot;VERSI&quot;, 8.2);&#10;&#10;echo NAMA_APP . &quot; versi &quot; . VERSI;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="function">define</span>(<span class="string">"NAMA_APP"</span>, <span class="string">"PHP Tutorial"</span>);
+<span class="function">define</span>(<span class="string">"VERSI"</span>, <span class="number">8.2</span>);
+
+<span class="keyword">echo</span> NAMA_APP . <span class="string">" versi "</span> . VERSI;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">PHP Tutorial versi 8.2</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 3: Type Casting -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Type Casting (Konversi Tipe)</h3>
+                <p class="step-card__desc">
+                  Anda bisa mengubah tipe data variabel secara manual menggunakan <i>type casting</i> dengan sintaks <code>(tipe)</code>.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Type Casting</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$angka_str = &quot;42&quot;;&#10;$angka_int = (int)$angka_str;&#10;$angka_float = (float)&quot;3.14&quot;;&#10;$ke_string = (string)100;&#10;&#10;var_dump($angka_str);   echo &quot;\n&quot;;&#10;var_dump($angka_int);   echo &quot;\n&quot;;&#10;var_dump($angka_float); echo &quot;\n&quot;;&#10;var_dump($ke_string);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$angka_str</span> = <span class="string">"42"</span>;
+<span class="keyword">$angka_int</span> = (<span class="keyword">int</span>)<span class="keyword">$angka_str</span>;
+<span class="keyword">$angka_float</span> = (<span class="keyword">float</span>)<span class="string">"3.14"</span>;
+<span class="keyword">$ke_string</span> = (<span class="keyword">string</span>)<span class="number">100</span>;
+
+<span class="function">var_dump</span>(<span class="keyword">$angka_str</span>);   <span class="keyword">echo</span> <span class="string">"\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$angka_int</span>);   <span class="keyword">echo</span> <span class="string">"\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$angka_float</span>); <span class="keyword">echo</span> <span class="string">"\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$ke_string</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">string(2) "42"
+int(42)
+float(3.14)
+string(3) "100"</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 4: String Concatenation -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Penggabungan String (Concatenation)</h3>
+                <p class="step-card__desc">
+                  Di PHP, kita menggabungkan string menggunakan operator titik (<code>.</code>), atau langsung menyisipkan variabel di dalam string berpetik ganda (<code>"..."</code>).
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Concatenation</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$depan = &quot;Budi&quot;;&#10;$belakang = &quot;Santoso&quot;;&#10;&#10;// Cara 1: Operator titik (.)&#10;echo $depan . &quot; &quot; . $belakang . &quot;\n&quot;;&#10;&#10;// Cara 2: Interpolasi dalam double-quote&#10;echo &quot;Nama lengkap: $depan $belakang\n&quot;;&#10;&#10;// Cara 3: Operator .= (append)&#10;$pesan = &quot;Halo, &quot;;&#10;$pesan .= $depan;&#10;echo $pesan;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$depan</span> = <span class="string">"Budi"</span>;
+<span class="keyword">$belakang</span> = <span class="string">"Santoso"</span>;
+
+<span class="keyword">//</span> Cara 1: Operator titik (.)
+<span class="keyword">echo</span> <span class="keyword">$depan</span> . <span class="string">" "</span> . <span class="keyword">$belakang</span> . <span class="string">"\n"</span>;
+
+<span class="keyword">//</span> Cara 2: Interpolasi dalam double-quote
+<span class="keyword">echo</span> <span class="string">"Nama lengkap: $depan $belakang\n"</span>;
+
+<span class="keyword">//</span> Cara 3: Operator .= (append)
+<span class="keyword">$pesan</span> = <span class="string">"Halo, "</span>;
+<span class="keyword">$pesan</span> .= <span class="keyword">$depan</span>;
+<span class="keyword">echo</span> <span class="keyword">$pesan</span>;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Budi Santoso
+Nama lengkap: Budi Santoso
+Halo, Budi</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 2: Operator -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-2">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">02</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Operator</h2>
+                <p class="step-card__subtitle">Aritmatika, perbandingan, logika, dan penugasan.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  PHP memiliki berbagai jenis operator: <strong>Aritmatika</strong> (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>**</code>), <strong>Penugasan</strong> (<code>=</code>, <code>+=</code>, <code>-=</code>, <code>.=</code>), <strong>Perbandingan</strong> (<code>==</code>, <code>===</code>, <code>!=</code>, <code>!==</code>, <code>&gt;</code>, <code>&lt;</code>), dan <strong>Logika</strong> (<code>&amp;&amp;</code>, <code>||</code>, <code>!</code>). Penting memahami perbedaan <code>==</code> (membandingkan nilai saja) dan <code>===</code> (membandingkan nilai <i>dan</i> tipe data).
+                </p>
+              </div>
+
+              <!-- Contoh 1: Aritmatika -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Operator Aritmatika</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Aritmatika</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$a = 15;&#10;$b = 4;&#10;&#10;echo &quot;Tambah  : &quot; . ($a + $b) . &quot;\n&quot;;&#10;echo &quot;Kurang  : &quot; . ($a - $b) . &quot;\n&quot;;&#10;echo &quot;Kali    : &quot; . ($a * $b) . &quot;\n&quot;;&#10;echo &quot;Bagi    : &quot; . ($a / $b) . &quot;\n&quot;;&#10;echo &quot;Modulus : &quot; . ($a % $b) . &quot;\n&quot;;&#10;echo &quot;Pangkat : &quot; . ($a ** 2) . &quot;\n&quot;;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$a</span> = <span class="number">15</span>;
+<span class="keyword">$b</span> = <span class="number">4</span>;
+
+<span class="keyword">echo</span> <span class="string">"Tambah  : "</span> . (<span class="keyword">$a</span> + <span class="keyword">$b</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Kurang  : "</span> . (<span class="keyword">$a</span> - <span class="keyword">$b</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Kali    : "</span> . (<span class="keyword">$a</span> * <span class="keyword">$b</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Bagi    : "</span> . (<span class="keyword">$a</span> / <span class="keyword">$b</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Modulus : "</span> . (<span class="keyword">$a</span> % <span class="keyword">$b</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Pangkat : "</span> . (<span class="keyword">$a</span> ** <span class="number">2</span>) . <span class="string">"\n"</span>;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Tambah  : 19
+Kurang  : 11
+Kali    : 60
+Bagi    : 3.75
+Modulus : 3
+Pangkat : 225</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: Perbandingan == vs === -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Perbandingan: == vs ===</h3>
+                <p class="step-card__desc">
+                  Operator <code>==</code> hanya membandingkan <strong>nilai</strong>. Operator <code>===</code> membandingkan <strong>nilai dan tipe data</strong> sekaligus (strict comparison).
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>== vs ===</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$x = 5;      // Integer&#10;$y = &quot;5&quot;;    // String&#10;&#10;var_dump($x == $y);  echo &quot; // == (nilai saja)\n&quot;;&#10;var_dump($x === $y); echo &quot; // === (nilai + tipe)\n&quot;;&#10;var_dump($x != $y);  echo &quot; // !=\n&quot;;&#10;var_dump($x !== $y); echo &quot; // !==\n&quot;;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$x</span> = <span class="number">5</span>;      <span class="keyword">//</span> Integer
+<span class="keyword">$y</span> = <span class="string">"5"</span>;    <span class="keyword">//</span> String
+
+<span class="function">var_dump</span>(<span class="keyword">$x</span> == <span class="keyword">$y</span>);  <span class="keyword">echo</span> <span class="string">" // == (nilai saja)\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$x</span> === <span class="keyword">$y</span>); <span class="keyword">echo</span> <span class="string">" // === (nilai + tipe)\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$x</span> != <span class="keyword">$y</span>);  <span class="keyword">echo</span> <span class="string">" // !=\n"</span>;
+<span class="function">var_dump</span>(<span class="keyword">$x</span> !== <span class="keyword">$y</span>); <span class="keyword">echo</span> <span class="string">" // !==\n"</span>;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">bool(true)  // == (nilai saja)
+bool(false) // === (nilai + tipe)
+bool(false) // !=
+bool(true)  // !==</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 3: Operator Logika & Ternary -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Operator Logika & Ternary</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Logika & Ternary</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$umur = 20;&#10;$punya_ktp = true;&#10;&#10;// Operator Logika: && (AND), || (OR), ! (NOT)&#10;if ($umur >= 17 && $punya_ktp) {&#10;    echo &quot;Boleh memilih dalam Pemilu.\n&quot;;&#10;}&#10;&#10;// Ternary Operator (singkatan if-else)&#10;$status = ($umur >= 18) ? &quot;Dewasa&quot; : &quot;Anak-anak&quot;;&#10;echo &quot;Status: $status\n&quot;;&#10;&#10;// Null Coalescing Operator (??)&#10;$username = null;&#10;echo &quot;User: &quot; . ($username ?? &quot;Guest&quot;);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$umur</span> = <span class="number">20</span>;
+<span class="keyword">$punya_ktp</span> = <span class="keyword">true</span>;
+
+<span class="keyword">//</span> Operator Logika: &amp;&amp; (AND), || (OR), ! (NOT)
+<span class="keyword">if</span> (<span class="keyword">$umur</span> &gt;= <span class="number">17</span> &amp;&amp; <span class="keyword">$punya_ktp</span>) {
+    <span class="keyword">echo</span> <span class="string">"Boleh memilih dalam Pemilu.\n"</span>;
+}
+
+<span class="keyword">//</span> Ternary Operator (singkatan if-else)
+<span class="keyword">$status</span> = (<span class="keyword">$umur</span> &gt;= <span class="number">18</span>) ? <span class="string">"Dewasa"</span> : <span class="string">"Anak-anak"</span>;
+<span class="keyword">echo</span> <span class="string">"Status: $status\n"</span>;
+
+<span class="keyword">//</span> Null Coalescing Operator (??)
+<span class="keyword">$username</span> = <span class="keyword">null</span>;
+<span class="keyword">echo</span> <span class="string">"User: "</span> . (<span class="keyword">$username</span> ?? <span class="string">"Guest"</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Boleh memilih dalam Pemilu.
+Status: Dewasa
+User: Guest</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 3: Struktur Kontrol -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-3">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">03</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Struktur Kontrol (Percabangan)</h2>
+                <p class="step-card__subtitle">Mengatur alur program menggunakan if-elseif-else dan switch-case.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Percabangan memungkinkan kita menjalankan blok kode tertentu hanya jika suatu kondisi terpenuhi (bernilai <code>true</code>). Untuk satu/dua kondisi gunakan <code>if-else</code>. Untuk banyak kondisi terhadap satu variabel, gunakan <code>switch-case</code> yang lebih rapi.
+                </p>
+              </div>
+
+              <!-- Contoh 1: if-elseif-else -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Percabangan if-elseif-else</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>if-elseif-else</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$nilai = 85;&#10;&#10;if ($nilai >= 90) {&#10;    $grade = &quot;A&quot;;&#10;} elseif ($nilai >= 80) {&#10;    $grade = &quot;B&quot;;&#10;} elseif ($nilai >= 70) {&#10;    $grade = &quot;C&quot;;&#10;} elseif ($nilai >= 60) {&#10;    $grade = &quot;D&quot;;&#10;} else {&#10;    $grade = &quot;E&quot;;&#10;}&#10;&#10;echo &quot;Nilai: $nilai → Grade: $grade&quot;;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$nilai</span> = <span class="number">85</span>;
+
+<span class="keyword">if</span> (<span class="keyword">$nilai</span> &gt;= <span class="number">90</span>) {
+    <span class="keyword">$grade</span> = <span class="string">"A"</span>;
+} <span class="keyword">elseif</span> (<span class="keyword">$nilai</span> &gt;= <span class="number">80</span>) {
+    <span class="keyword">$grade</span> = <span class="string">"B"</span>;
+} <span class="keyword">elseif</span> (<span class="keyword">$nilai</span> &gt;= <span class="number">70</span>) {
+    <span class="keyword">$grade</span> = <span class="string">"C"</span>;
+} <span class="keyword">elseif</span> (<span class="keyword">$nilai</span> &gt;= <span class="number">60</span>) {
+    <span class="keyword">$grade</span> = <span class="string">"D"</span>;
+} <span class="keyword">else</span> {
+    <span class="keyword">$grade</span> = <span class="string">"E"</span>;
+}
+
+<span class="keyword">echo</span> <span class="string">"Nilai: $nilai → Grade: $grade"</span>;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Nilai: 85 → Grade: B</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: switch-case -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Switch-Case</h3>
+                <p class="step-card__desc">
+                  <code>switch</code> cocok untuk memeriksa satu variabel terhadap banyak kemungkinan nilai. Jangan lupa kata kunci <code>break</code> di setiap case!
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Switch-Case</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$hari = &quot;Senin&quot;;&#10;&#10;switch ($hari) {&#10;    case &quot;Senin&quot;:&#10;    case &quot;Selasa&quot;:&#10;    case &quot;Rabu&quot;:&#10;    case &quot;Kamis&quot;:&#10;    case &quot;Jumat&quot;:&#10;        echo &quot;$hari: Hari kerja.&quot;;&#10;        break;&#10;    case &quot;Sabtu&quot;:&#10;    case &quot;Minggu&quot;:&#10;        echo &quot;$hari: Hari libur!&quot;;&#10;        break;&#10;    default:&#10;        echo &quot;Hari tidak dikenali.&quot;;&#10;}&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$hari</span> = <span class="string">"Senin"</span>;
+
+<span class="keyword">switch</span> (<span class="keyword">$hari</span>) {
+    <span class="keyword">case</span> <span class="string">"Senin"</span>:
+    <span class="keyword">case</span> <span class="string">"Selasa"</span>:
+    <span class="keyword">case</span> <span class="string">"Rabu"</span>:
+    <span class="keyword">case</span> <span class="string">"Kamis"</span>:
+    <span class="keyword">case</span> <span class="string">"Jumat"</span>:
+        <span class="keyword">echo</span> <span class="string">"$hari: Hari kerja."</span>;
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">"Sabtu"</span>:
+    <span class="keyword">case</span> <span class="string">"Minggu"</span>:
+        <span class="keyword">echo</span> <span class="string">"$hari: Hari libur!"</span>;
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="keyword">echo</span> <span class="string">"Hari tidak dikenali."</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Senin: Hari kerja.</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 4: Perulangan -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-4">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">04</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Perulangan (Looping)</h2>
+                <p class="step-card__subtitle">for, while, do-while, dan foreach.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Perulangan menjalankan blok kode berulang kali. Gunakan <code>for</code> jika jumlah iterasi sudah diketahui, <code>while</code> jika kondisi dicek sebelum iterasi, <code>do-while</code> jika blok harus dijalankan minimal satu kali, dan <code>foreach</code> khusus untuk mengiterasi array.
+                </p>
+              </div>
+
+              <!-- Contoh 1: for -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>For Loop</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>For Loop</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;for ($i = 1; $i <= 5; $i++) {&#10;    echo &quot;Iterasi ke-$i\n&quot;;&#10;}&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">for</span> (<span class="keyword">$i</span> = <span class="number">1</span>; <span class="keyword">$i</span> &lt;= <span class="number">5</span>; <span class="keyword">$i</span>++) {
+    <span class="keyword">echo</span> <span class="string">"Iterasi ke-$i\n"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Iterasi ke-1
+Iterasi ke-2
+Iterasi ke-3
+Iterasi ke-4
+Iterasi ke-5</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: while -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>While Loop</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>While Loop</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$hitung = 1;&#10;&#10;while ($hitung <= 3) {&#10;    echo &quot;Hitung: $hitung\n&quot;;&#10;    $hitung++;&#10;}&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$hitung</span> = <span class="number">1</span>;
+
+<span class="keyword">while</span> (<span class="keyword">$hitung</span> &lt;= <span class="number">3</span>) {
+    <span class="keyword">echo</span> <span class="string">"Hitung: $hitung\n"</span>;
+    <span class="keyword">$hitung</span>++;
+}
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Hitung: 1
+Hitung: 2
+Hitung: 3</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 3: foreach -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Foreach (Khusus Array)</h3>
+                <p class="step-card__desc">
+                  <code>foreach</code> adalah cara paling mudah dan aman untuk melakukan iterasi pada setiap elemen array. Tersedia sintaks <code>$value</code> saja atau <code>$key =&gt; $value</code>.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Foreach</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$warna = [&quot;Merah&quot;, &quot;Hijau&quot;, &quot;Biru&quot;];&#10;&#10;foreach ($warna as $index => $w) {&#10;    echo &quot;[$index] $w\n&quot;;&#10;}&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$warna</span> = [<span class="string">"Merah"</span>, <span class="string">"Hijau"</span>, <span class="string">"Biru"</span>];
+
+<span class="keyword">foreach</span> (<span class="keyword">$warna</span> <span class="keyword">as</span> <span class="keyword">$index</span> =&gt; <span class="keyword">$w</span>) {
+    <span class="keyword">echo</span> <span class="string">"[$index] $w\n"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">[0] Merah
+[1] Hijau
+[2] Biru</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 4: break & continue -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Break & Continue</h3>
+                <p class="step-card__desc">
+                  <code>break</code> menghentikan loop secara total. <code>continue</code> melewatkan sisa iterasi saat ini dan lanjut ke iterasi berikutnya.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Break & Continue</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;for ($i = 1; $i <= 10; $i++) {&#10;    if ($i == 3) continue; // Lewati angka 3&#10;    if ($i == 7) break;    // Berhenti di angka 7&#10;    echo &quot;$i &quot;;&#10;}&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">for</span> (<span class="keyword">$i</span> = <span class="number">1</span>; <span class="keyword">$i</span> &lt;= <span class="number">10</span>; <span class="keyword">$i</span>++) {
+    <span class="keyword">if</span> (<span class="keyword">$i</span> == <span class="number">3</span>) <span class="keyword">continue</span>; <span class="keyword">//</span> Lewati angka 3
+    <span class="keyword">if</span> (<span class="keyword">$i</span> == <span class="number">7</span>) <span class="keyword">break</span>;    <span class="keyword">//</span> Berhenti di angka 7
+    <span class="keyword">echo</span> <span class="string">"$i "</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">1 2 4 5 6 </pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 5: Fungsi -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-5">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">05</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Fungsi (Function)</h2>
+                <p class="step-card__subtitle">Membungkus logika agar dapat digunakan kembali (Reusable).</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Fungsi adalah blok kode yang diberi nama dan dirancang untuk melakukan tugas tertentu. Keuntungannya: kode lebih rapi, mudah dipelihara, dan bisa dipanggil berkali-kali (<i>reusable</i>). Fungsi bisa memiliki parameter, nilai default, dan mengembalikan nilai dengan <code>return</code>.
+                </p>
+              </div>
+
+              <!-- Contoh 1: Fungsi Dasar -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Fungsi Dasar & Return</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Fungsi Dasar</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;function sapa($nama) {&#10;    return &quot;Halo, &quot; . $nama . &quot;! Selamat datang.&quot;;&#10;}&#10;&#10;echo sapa(&quot;Andi&quot;) . &quot;\n&quot;;&#10;echo sapa(&quot;Siti&quot;);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">function</span> <span class="function">sapa</span>(<span class="keyword">$nama</span>) {
+    <span class="keyword">return</span> <span class="string">"Halo, "</span> . <span class="keyword">$nama</span> . <span class="string">"! Selamat datang."</span>;
+}
+
+<span class="keyword">echo</span> <span class="function">sapa</span>(<span class="string">"Andi"</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="function">sapa</span>(<span class="string">"Siti"</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Halo, Andi! Selamat datang.
+Halo, Siti! Selamat datang.</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: Default Parameter -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Default Parameter & Banyak Parameter</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Default Parameter</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;function hitungLuas($panjang, $lebar = 10) {&#10;    return $panjang * $lebar;&#10;}&#10;&#10;echo &quot;Luas 1: &quot; . hitungLuas(5, 8) . &quot;\n&quot;;&#10;echo &quot;Luas 2: &quot; . hitungLuas(5) . &quot; (lebar default=10)&quot;;&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">function</span> <span class="function">hitungLuas</span>(<span class="keyword">$panjang</span>, <span class="keyword">$lebar</span> = <span class="number">10</span>) {
+    <span class="keyword">return</span> <span class="keyword">$panjang</span> * <span class="keyword">$lebar</span>;
+}
+
+<span class="keyword">echo</span> <span class="string">"Luas 1: "</span> . <span class="function">hitungLuas</span>(<span class="number">5</span>, <span class="number">8</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Luas 2: "</span> . <span class="function">hitungLuas</span>(<span class="number">5</span>) . <span class="string">" (lebar default=10)"</span>;
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Luas 1: 40
+Luas 2: 50 (lebar default=10)</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 3: Variable Scope -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Variable Scope (Lingkup Variabel)</h3>
+                <p class="step-card__desc">
+                  Variabel yang didefinisikan di luar fungsi tidak bisa diakses di dalam fungsi, dan sebaliknya. Gunakan <code>global</code> untuk mengakses variabel global di dalam fungsi.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Variable Scope</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$pesan = &quot;Halo dari luar!&quot;;&#10;&#10;function tampilkan() {&#10;    // $pesan tidak bisa diakses langsung&#10;    global $pesan;&#10;    echo $pesan . &quot;\n&quot;;&#10;    &#10;    $lokal = &quot;Saya variabel lokal.&quot;;&#10;    echo $lokal . &quot;\n&quot;;&#10;}&#10;&#10;tampilkan();&#10;// echo $lokal; // Error! Tidak bisa diakses di luar fungsi&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$pesan</span> = <span class="string">"Halo dari luar!"</span>;
+
+<span class="keyword">function</span> <span class="function">tampilkan</span>() {
+    <span class="keyword">//</span> $pesan tidak bisa diakses langsung
+    <span class="keyword">global</span> <span class="keyword">$pesan</span>;
+    <span class="keyword">echo</span> <span class="keyword">$pesan</span> . <span class="string">"\n"</span>;
+
+    <span class="keyword">$lokal</span> = <span class="string">"Saya variabel lokal."</span>;
+    <span class="keyword">echo</span> <span class="keyword">$lokal</span> . <span class="string">"\n"</span>;
+}
+
+<span class="function">tampilkan</span>();
+<span class="keyword">//</span> echo $lokal; <span class="keyword">//</span> Error! Tidak bisa diakses
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Halo dari luar!
+Saya variabel lokal.</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 4: Anonymous Function -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Anonymous Function (Closure)</h3>
+                <p class="step-card__desc">
+                  Anonymous function (fungsi tanpa nama) dapat disimpan ke variabel atau digunakan sebagai callback.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Anonymous Function</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$kali_dua = function($n) {&#10;    return $n * 2;&#10;};&#10;&#10;echo $kali_dua(5) . &quot;\n&quot;;&#10;echo $kali_dua(12);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$kali_dua</span> = <span class="keyword">function</span>(<span class="keyword">$n</span>) {
+    <span class="keyword">return</span> <span class="keyword">$n</span> * <span class="number">2</span>;
+};
+
+<span class="keyword">echo</span> <span class="keyword">$kali_dua</span>(<span class="number">5</span>) . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="keyword">$kali_dua</span>(<span class="number">12</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">10
+24</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 6: Array -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-6">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">06</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Array</h2>
+                <p class="step-card__subtitle">Indexed, Associative, Multidimensi, dan fungsi-fungsi Array.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Array adalah struktur data yang bisa menyimpan banyak nilai dalam satu variabel. PHP mendukung <strong>Indexed Array</strong> (indeks numerik otomatis), <strong>Associative Array</strong> (indeks berupa string/key), dan <strong>Array Multidimensi</strong> (array di dalam array). PHP juga menyediakan banyak fungsi bawaan untuk memanipulasi array.
+                </p>
+              </div>
+
+              <!-- Contoh 1: Indexed Array -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Indexed Array</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Indexed Array</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$buah = [&quot;Apel&quot;, &quot;Pisang&quot;, &quot;Jeruk&quot;, &quot;Mangga&quot;];&#10;&#10;echo $buah[0] . &quot;\n&quot;;  // Elemen pertama&#10;echo $buah[2] . &quot;\n&quot;;  // Elemen ketiga&#10;echo &quot;Jumlah: &quot; . count($buah) . &quot;\n&quot;;&#10;&#10;// Menambah elemen baru&#10;$buah[] = &quot;Durian&quot;;&#10;echo &quot;Setelah tambah: &quot; . count($buah);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$buah</span> = [<span class="string">"Apel"</span>, <span class="string">"Pisang"</span>, <span class="string">"Jeruk"</span>, <span class="string">"Mangga"</span>];
+
+<span class="keyword">echo</span> <span class="keyword">$buah</span>[<span class="number">0</span>] . <span class="string">"\n"</span>;  <span class="keyword">//</span> Elemen pertama
+<span class="keyword">echo</span> <span class="keyword">$buah</span>[<span class="number">2</span>] . <span class="string">"\n"</span>;  <span class="keyword">//</span> Elemen ketiga
+<span class="keyword">echo</span> <span class="string">"Jumlah: "</span> . <span class="function">count</span>(<span class="keyword">$buah</span>) . <span class="string">"\n"</span>;
+
+<span class="keyword">//</span> Menambah elemen baru
+<span class="keyword">$buah</span>[] = <span class="string">"Durian"</span>;
+<span class="keyword">echo</span> <span class="string">"Setelah tambah: "</span> . <span class="function">count</span>(<span class="keyword">$buah</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Apel
+Jeruk
+Jumlah: 4
+Setelah tambah: 5</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: Associative Array -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Associative Array</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Associative Array</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$mahasiswa = [&#10;    &quot;nama&quot;  => &quot;Dewi Lestari&quot;,&#10;    &quot;nim&quot;   => &quot;2024001&quot;,&#10;    &quot;jurusan&quot; => &quot;Teknik Informatika&quot;,&#10;    &quot;ipk&quot;   => 3.85&#10;];&#10;&#10;echo &quot;Nama   : &quot; . $mahasiswa[&quot;nama&quot;] . &quot;\n&quot;;&#10;echo &quot;NIM    : &quot; . $mahasiswa[&quot;nim&quot;] . &quot;\n&quot;;&#10;echo &quot;Jurusan: &quot; . $mahasiswa[&quot;jurusan&quot;] . &quot;\n&quot;;&#10;echo &quot;IPK    : &quot; . $mahasiswa[&quot;ipk&quot;];&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$mahasiswa</span> = [
+    <span class="string">"nama"</span>  =&gt; <span class="string">"Dewi Lestari"</span>,
+    <span class="string">"nim"</span>   =&gt; <span class="string">"2024001"</span>,
+    <span class="string">"jurusan"</span> =&gt; <span class="string">"Teknik Informatika"</span>,
+    <span class="string">"ipk"</span>   =&gt; <span class="number">3.85</span>
+];
+
+<span class="keyword">echo</span> <span class="string">"Nama   : "</span> . <span class="keyword">$mahasiswa</span>[<span class="string">"nama"</span>] . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"NIM    : "</span> . <span class="keyword">$mahasiswa</span>[<span class="string">"nim"</span>] . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"Jurusan: "</span> . <span class="keyword">$mahasiswa</span>[<span class="string">"jurusan"</span>] . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="string">"IPK    : "</span> . <span class="keyword">$mahasiswa</span>[<span class="string">"ipk"</span>];
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Nama   : Dewi Lestari
+NIM    : 2024001
+Jurusan: Teknik Informatika
+IPK    : 3.85</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 3: Array Multidimensi -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Array Multidimensi</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Array Multidimensi</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$siswa = [&#10;    [&quot;Andi&quot;,  90, &quot;A&quot;],&#10;    [&quot;Budi&quot;,  75, &quot;B&quot;],&#10;    [&quot;Citra&quot;, 85, &quot;A&quot;]&#10;];&#10;&#10;echo &quot;Nama  | Nilai | Grade\n&quot;;&#10;echo &quot;------+-------+------\n&quot;;&#10;foreach ($siswa as $s) {&#10;    echo str_pad($s[0], 6) . &quot;| &quot; . $s[1] . &quot;    | &quot; . $s[2] . &quot;\n&quot;;&#10;}&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$siswa</span> = [
+    [<span class="string">"Andi"</span>,  <span class="number">90</span>, <span class="string">"A"</span>],
+    [<span class="string">"Budi"</span>,  <span class="number">75</span>, <span class="string">"B"</span>],
+    [<span class="string">"Citra"</span>, <span class="number">85</span>, <span class="string">"A"</span>]
+];
+
+<span class="keyword">echo</span> <span class="string">"Nama  | Nilai | Grade\n"</span>;
+<span class="keyword">echo</span> <span class="string">"------+-------+------\n"</span>;
+<span class="keyword">foreach</span> (<span class="keyword">$siswa</span> <span class="keyword">as</span> <span class="keyword">$s</span>) {
+    <span class="keyword">echo</span> <span class="function">str_pad</span>(<span class="keyword">$s</span>[<span class="number">0</span>], <span class="number">6</span>) . <span class="string">"| "</span> . <span class="keyword">$s</span>[<span class="number">1</span>] . <span class="string">"    | "</span> . <span class="keyword">$s</span>[<span class="number">2</span>] . <span class="string">"\n"</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Nama  | Nilai | Grade
+------+-------+------
+Andi  | 90    | A
+Budi  | 75    | B
+Citra | 85    | A</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 4: Fungsi Array -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>Fungsi-fungsi Array Penting</h3>
+                <p class="step-card__desc">
+                  PHP menyediakan banyak fungsi bawaan: <code>count()</code>, <code>sort()</code>, <code>array_push()</code>, <code>array_pop()</code>, <code>in_array()</code>, <code>array_merge()</code>, <code>array_keys()</code>, dll.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Fungsi Array</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;$angka = [5, 2, 8, 1, 9];&#10;&#10;// Sort (ascending)&#10;sort($angka);&#10;echo &quot;Sorted  : &quot; . implode(&quot;, &quot;, $angka) . &quot;\n&quot;;&#10;&#10;// array_push & array_pop&#10;array_push($angka, 100);&#10;echo &quot;Push 100: &quot; . implode(&quot;, &quot;, $angka) . &quot;\n&quot;;&#10;&#10;$removed = array_pop($angka);&#10;echo &quot;Pop     : dihapus=$removed → &quot; . implode(&quot;, &quot;, $angka) . &quot;\n&quot;;&#10;&#10;// in_array&#10;echo &quot;Ada 8?  : &quot; . (in_array(8, $angka) ? &quot;Ya&quot; : &quot;Tidak&quot;);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">$angka</span> = [<span class="number">5</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">9</span>];
+
+<span class="keyword">//</span> Sort (ascending)
+<span class="function">sort</span>(<span class="keyword">$angka</span>);
+<span class="keyword">echo</span> <span class="string">"Sorted  : "</span> . <span class="function">implode</span>(<span class="string">", "</span>, <span class="keyword">$angka</span>) . <span class="string">"\n"</span>;
+
+<span class="keyword">//</span> array_push &amp; array_pop
+<span class="function">array_push</span>(<span class="keyword">$angka</span>, <span class="number">100</span>);
+<span class="keyword">echo</span> <span class="string">"Push 100: "</span> . <span class="function">implode</span>(<span class="string">", "</span>, <span class="keyword">$angka</span>) . <span class="string">"\n"</span>;
+
+<span class="keyword">$removed</span> = <span class="function">array_pop</span>(<span class="keyword">$angka</span>);
+<span class="keyword">echo</span> <span class="string">"Pop     : dihapus=$removed → "</span> . <span class="function">implode</span>(<span class="string">", "</span>, <span class="keyword">$angka</span>) . <span class="string">"\n"</span>;
+
+<span class="keyword">//</span> in_array
+<span class="keyword">echo</span> <span class="string">"Ada 8?  : "</span> . (<span class="function">in_array</span>(<span class="number">8</span>, <span class="keyword">$angka</span>) ? <span class="string">"Ya"</span> : <span class="string">"Tidak"</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Sorted  : 1, 2, 5, 8, 9
+Push 100: 1, 2, 5, 8, 9, 100
+Pop     : dihapus=100 → 1, 2, 5, 8, 9
+Ada 8?  : Ya</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 7: PBO / OOP Dasar -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-7">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">07</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">PBO / OOP Dasar</h2>
+                <p class="step-card__subtitle">Class, Object, Constructor, Visibility, dan Inheritance.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  OOP (Object-Oriented Programming) mengorganisir kode ke dalam <strong>Class</strong> (cetak biru) dan <strong>Object</strong> (instansi). Class memiliki <strong>Properties</strong> (data) dan <strong>Methods</strong> (perilaku). Konsep penting OOP: <i>Encapsulation</i> (menyembunyikan detail internal), <i>Inheritance</i> (pewarisan), dan <i>Polymorphism</i> (banyak bentuk). Visibility mengatur akses: <code>public</code> (bisa diakses dari mana saja), <code>private</code> (hanya di dalam class itu), dan <code>protected</code> (class itu + turunannya).
+                </p>
+              </div>
+
+              <!-- Contoh 1: Class, Object, Property, Method & Constructor -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>1. Class, Object & Constructor</h3>
+                <p class="step-card__desc">
+                  Class adalah blueprint, Object adalah instansinya. Property adalah variabel di dalam class, Method adalah fungsinya. <strong>Constructor</strong> (<code>__construct</code>) adalah method khusus yang otomatis dijalankan saat object dibuat.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Class & Object</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;class Mobil {&#10;    // Properties&#10;    public $merk;&#10;    public $warna;&#10;    &#10;    // Constructor&#10;    public function __construct($merk, $warna) {&#10;        $this->merk = $merk;&#10;        $this->warna = $warna;&#10;    }&#10;    &#10;    // Method&#10;    public function info() {&#10;        return &quot;Mobil $this->merk berwarna $this->warna.&quot;;&#10;    }&#10;}&#10;&#10;// Membuat Object&#10;$mobil1 = new Mobil(&quot;Toyota&quot;, &quot;Putih&quot;);&#10;$mobil2 = new Mobil(&quot;Honda&quot;, &quot;Hitam&quot;);&#10;&#10;echo $mobil1->info() . &quot;\n&quot;;&#10;echo $mobil2->info();&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">class</span> <span class="function">Mobil</span> {
+    <span class="keyword">//</span> Properties
+    <span class="keyword">public</span> <span class="keyword">$merk</span>;
+    <span class="keyword">public</span> <span class="keyword">$warna</span>;
+
+    <span class="keyword">//</span> Constructor
+    <span class="keyword">public function</span> <span class="function">__construct</span>(<span class="keyword">$merk</span>, <span class="keyword">$warna</span>) {
+        <span class="keyword">$this</span>-&gt;merk = <span class="keyword">$merk</span>;
+        <span class="keyword">$this</span>-&gt;warna = <span class="keyword">$warna</span>;
+    }
+
+    <span class="keyword">//</span> Method
+    <span class="keyword">public function</span> <span class="function">info</span>() {
+        <span class="keyword">return</span> <span class="string">"Mobil $this-&gt;merk berwarna $this-&gt;warna."</span>;
+    }
+}
+
+<span class="keyword">//</span> Membuat Object
+<span class="keyword">$mobil1</span> = <span class="keyword">new</span> Mobil(<span class="string">"Toyota"</span>, <span class="string">"Putih"</span>);
+<span class="keyword">$mobil2</span> = <span class="keyword">new</span> Mobil(<span class="string">"Honda"</span>, <span class="string">"Hitam"</span>);
+
+<span class="keyword">echo</span> <span class="keyword">$mobil1</span>-&gt;<span class="function">info</span>() . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="keyword">$mobil2</span>-&gt;<span class="function">info</span>();
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Mobil Toyota berwarna Putih.
+Mobil Honda berwarna Hitam.</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 2: Access Modifier & Encapsulation -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>2. Access Modifier & Encapsulation</h3>
+                <p class="step-card__desc">
+                  <strong>Access Modifier:</strong> <code>public</code> (bebas diakses), <code>private</code> (hanya di dalam class), <code>protected</code> (di class + class turunan).<br>
+                  <strong>Encapsulation:</strong> Menyembunyikan data internal (private) dan menyediakan metode <i>getter/setter</i> untuk mengakses/mengubah data secara aman.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Encapsulation</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;class BankAccount {&#10;    private $saldo;&#10;    &#10;    public function __construct($saldo_awal) {&#10;        $this->saldo = $saldo_awal;&#10;    }&#10;    &#10;    // Setter (dengan validasi)&#10;    public function setor($jumlah) {&#10;        if ($jumlah > 0) {&#10;            $this->saldo += $jumlah;&#10;            echo &quot;Berhasil setor: Rp&quot; . number_format($jumlah) . &quot;\n&quot;;&#10;        }&#10;    }&#10;    &#10;    // Getter&#10;    public function getSaldo() {&#10;        return $this->saldo;&#10;    }&#10;}&#10;&#10;$akun = new BankAccount(10000);&#10;$akun->setor(50000);&#10;// echo $akun->saldo; // ERROR: Tidak bisa akses properti private langsung&#10;echo &quot;Total Saldo: Rp&quot; . number_format($akun->getSaldo());&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">class</span> <span class="function">BankAccount</span> {
+    <span class="keyword">private</span> <span class="keyword">$saldo</span>;
+
+    <span class="keyword">public function</span> <span class="function">__construct</span>(<span class="keyword">$saldo_awal</span>) {
+        <span class="keyword">$this</span>-&gt;saldo = <span class="keyword">$saldo_awal</span>;
+    }
+
+    <span class="keyword">//</span> Setter (dengan validasi)
+    <span class="keyword">public function</span> <span class="function">setor</span>(<span class="keyword">$jumlah</span>) {
+        <span class="keyword">if</span> (<span class="keyword">$jumlah</span> &gt; <span class="number">0</span>) {
+            <span class="keyword">$this</span>-&gt;saldo += <span class="keyword">$jumlah</span>;
+            <span class="keyword">echo</span> <span class="string">"Berhasil setor: Rp"</span> . <span class="function">number_format</span>(<span class="keyword">$jumlah</span>) . <span class="string">"\n"</span>;
+        }
+    }
+
+    <span class="keyword">//</span> Getter
+    <span class="keyword">public function</span> <span class="function">getSaldo</span>() {
+        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;saldo;
+    }
+}
+
+<span class="keyword">$akun</span> = <span class="keyword">new</span> BankAccount(<span class="number">10000</span>);
+<span class="keyword">$akun</span>-&gt;<span class="function">setor</span>(<span class="number">50000</span>);
+<span class="keyword">//</span> echo $akun-&gt;saldo; <span class="keyword">//</span> ERROR: Tidak bisa akses properti private langsung
+<span class="keyword">echo</span> <span class="string">"Total Saldo: Rp"</span> . <span class="function">number_format</span>(<span class="keyword">$akun</span>-&gt;<span class="function">getSaldo</span>());
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Berhasil setor: Rp50,000
+Total Saldo: Rp60,000</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 3: Inheritance, Polymorphism & Overriding -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>3. Inheritance, Polymorphism & Overriding</h3>
+                <p class="step-card__desc">
+                  <strong>Inheritance:</strong> Mewarisi method/property ke class anak menggunakan <code>extends</code>.<br>
+                  <strong>Polymorphism & Overriding:</strong> Class anak bisa menulis ulang (menimpa) method dari class induk dengan nama yang sama, sehingga satu fungsi bisa merespon secara berbeda (banyak bentuk) tergantung objek pemanggilnya.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Inheritance & Overriding</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;class Hewan {&#10;    protected $nama;&#10;    public function __construct($nama) {&#10;        $this->nama = $nama;&#10;    }&#10;    public function suara() {&#10;        return &quot;Hewan bersuara...&quot;;&#10;    }&#10;}&#10;&#10;class Kucing extends Hewan {&#10;    // Overriding method suara()&#10;    public function suara() {&#10;        return $this->nama . &quot; berkata: Meow!&quot;;&#10;    }&#10;}&#10;&#10;class Anjing extends Hewan {&#10;    // Overriding method suara()&#10;    public function suara() {&#10;        return $this->nama . &quot; berkata: Guk guk!&quot;;&#10;    }&#10;}&#10;&#10;$hewan1 = new Kucing(&quot;Kitty&quot;);&#10;$hewan2 = new Anjing(&quot;Buddy&quot;);&#10;&#10;// Polymorphism: method sama, hasil berbeda&#10;echo $hewan1->suara() . &quot;\n&quot;;&#10;echo $hewan2->suara();&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">class</span> <span class="function">Hewan</span> {
+    <span class="keyword">protected</span> <span class="keyword">$nama</span>;
+    <span class="keyword">public function</span> <span class="function">__construct</span>(<span class="keyword">$nama</span>) {
+        <span class="keyword">$this</span>-&gt;nama = <span class="keyword">$nama</span>;
+    }
+    <span class="keyword">public function</span> <span class="function">suara</span>() {
+        <span class="keyword">return</span> <span class="string">"Hewan bersuara..."</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="function">Kucing</span> <span class="keyword">extends</span> <span class="function">Hewan</span> {
+    <span class="keyword">//</span> Overriding method suara()
+    <span class="keyword">public function</span> <span class="function">suara</span>() {
+        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;nama . <span class="string">" berkata: Meow!"</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="function">Anjing</span> <span class="keyword">extends</span> <span class="function">Hewan</span> {
+    <span class="keyword">//</span> Overriding method suara()
+    <span class="keyword">public function</span> <span class="function">suara</span>() {
+        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;nama . <span class="string">" berkata: Guk guk!"</span>;
+    }
+}
+
+<span class="keyword">$hewan1</span> = <span class="keyword">new</span> Kucing(<span class="string">"Kitty"</span>);
+<span class="keyword">$hewan2</span> = <span class="keyword">new</span> Anjing(<span class="string">"Buddy"</span>);
+
+<span class="keyword">//</span> Polymorphism: method sama, hasil berbeda
+<span class="keyword">echo</span> <span class="keyword">$hewan1</span>-&gt;<span class="function">suara</span>() . <span class="string">"\n"</span>;
+<span class="keyword">echo</span> <span class="keyword">$hewan2</span>-&gt;<span class="function">suara</span>();
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Kitty berkata: Meow!
+Buddy berkata: Guk guk!</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 4: Abstract Class & Interface -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>4. Abstract Class & Interface</h3>
+                <p class="step-card__desc">
+                  <strong>Abstract Class:</strong> Class yang tidak bisa diinstansiasi, berisi deklarasi method yang <i>wajib</i> diimplementasikan oleh class anaknya.<br>
+                  <strong>Interface:</strong> Kontrak murni, berisi method kosong (tanpa body) yang mewajibkan class yang melakukan <code>implements</code> untuk membuat fungsi tersebut.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Abstract & Interface</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;// Interface&#10;interface Logger {&#10;    public function log($pesan);&#10;}&#10;&#10;// Abstract Class&#10;abstract class Bentuk {&#10;    abstract public function hitungLuas();&#10;}&#10;&#10;// Class turunan menerapkan abstract dan interface&#10;class Persegi extends Bentuk implements Logger {&#10;    private $sisi;&#10;    &#10;    public function __construct($s) {&#10;        $this->sisi = $s;&#10;    }&#10;    &#10;    // Implementasi abstract method&#10;    public function hitungLuas() {&#10;        return $this->sisi * $this->sisi;&#10;    }&#10;    &#10;    // Implementasi interface method&#10;    public function log($pesan) {&#10;        echo &quot;[LOG] &quot; . $pesan . &quot;\n&quot;;&#10;    }&#10;}&#10;&#10;$p = new Persegi(5);&#10;$luas = $p->hitungLuas();&#10;$p->log(&quot;Luas persegi adalah: $luas&quot;);&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">//</span> Interface
+<span class="keyword">interface</span> <span class="function">Logger</span> {
+    <span class="keyword">public function</span> <span class="function">log</span>(<span class="keyword">$pesan</span>);
+}
+
+<span class="keyword">//</span> Abstract Class
+<span class="keyword">abstract class</span> <span class="function">Bentuk</span> {
+    <span class="keyword">abstract public function</span> <span class="function">hitungLuas</span>();
+}
+
+<span class="keyword">//</span> Class turunan menerapkan abstract dan interface
+<span class="keyword">class</span> <span class="function">Persegi</span> <span class="keyword">extends</span> <span class="function">Bentuk</span> <span class="keyword">implements</span> <span class="function">Logger</span> {
+    <span class="keyword">private</span> <span class="keyword">$sisi</span>;
+
+    <span class="keyword">public function</span> <span class="function">__construct</span>(<span class="keyword">$s</span>) {
+        <span class="keyword">$this</span>-&gt;sisi = <span class="keyword">$s</span>;
+    }
+
+    <span class="keyword">//</span> Implementasi abstract method
+    <span class="keyword">public function</span> <span class="function">hitungLuas</span>() {
+        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;sisi * <span class="keyword">$this</span>-&gt;sisi;
+    }
+
+    <span class="keyword">//</span> Implementasi interface method
+    <span class="keyword">public function</span> <span class="function">log</span>(<span class="keyword">$pesan</span>) {
+        <span class="keyword">echo</span> <span class="string">"[LOG] "</span> . <span class="keyword">$pesan</span> . <span class="string">"\n"</span>;
+    }
+}
+
+<span class="keyword">$p</span> = <span class="keyword">new</span> Persegi(<span class="number">5</span>);
+<span class="keyword">$luas</span> = <span class="keyword">$p</span>-&gt;<span class="function">hitungLuas</span>();
+<span class="keyword">$p</span>-&gt;<span class="function">log</span>(<span class="string">"Luas persegi adalah: $luas"</span>);
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">[LOG] Luas persegi adalah: 25</pre>
+                </div>
+              </div>
+
+              <!-- Contoh 5: Exception Handling -->
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>5. Exception Handling</h3>
+                <p class="step-card__desc">
+                  Untuk menangani error atau kondisi tak terduga, gunakan block <code>try...catch...finally</code>. Gunakan <code>throw new Exception()</code> untuk melempar error secara manual saat validasi gagal.
+                </p>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Try Catch</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;function bagi($a, $b) {&#10;    if ($b == 0) {&#10;        throw new Exception(&quot;Error: Tidak bisa dibagi dengan nol!&quot;);&#10;    }&#10;    return $a / $b;&#10;}&#10;&#10;try {&#10;    echo &quot;Hasil 10 / 2: &quot; . bagi(10, 2) . &quot;\n&quot;;&#10;    echo &quot;Hasil 5 / 0: &quot; . bagi(5, 0) . &quot;\n&quot;;&#10;    echo &quot;Baris ini tidak akan dijalankan.&quot;;&#10;} catch (Exception $e) {&#10;    echo &quot;Exception Ditangkap: &quot; . $e->getMessage() . &quot;\n&quot;;&#10;} finally {&#10;    echo &quot;Blok finally selalu dijalankan di akhir.&quot;;&#10;}&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="keyword">function</span> <span class="function">bagi</span>(<span class="keyword">$a</span>, <span class="keyword">$b</span>) {
+    <span class="keyword">if</span> (<span class="keyword">$b</span> == <span class="number">0</span>) {
+        <span class="keyword">throw new</span> <span class="function">Exception</span>(<span class="string">"Error: Tidak bisa dibagi dengan nol!"</span>);
+    }
+    <span class="keyword">return</span> <span class="keyword">$a</span> / <span class="keyword">$b</span>;
+}
+
+<span class="keyword">try</span> {
+    <span class="keyword">echo</span> <span class="string">"Hasil 10 / 2: "</span> . <span class="function">bagi</span>(<span class="number">10</span>, <span class="number">2</span>) . <span class="string">"\n"</span>;
+    <span class="keyword">echo</span> <span class="string">"Hasil 5 / 0: "</span> . <span class="function">bagi</span>(<span class="number">5</span>, <span class="number">0</span>) . <span class="string">"\n"</span>;
+    <span class="keyword">echo</span> <span class="string">"Baris ini tidak akan dijalankan."</span>;
+} <span class="keyword">catch</span> (Exception <span class="keyword">$e</span>) {
+    <span class="keyword">echo</span> <span class="string">"Exception Ditangkap: "</span> . <span class="keyword">$e</span>-&gt;<span class="function">getMessage</span>() . <span class="string">"\n"</span>;
+} <span class="keyword">finally</span> {
+    <span class="keyword">echo</span> <span class="string">"Blok finally selalu dijalankan di akhir."</span>;
+}
+<span class="keyword">?&gt;</span></pre>
+                </div>
+                <div class="formula-block" style="margin-top: 1rem; border-color: var(--color-success);">
+                  <div class="formula-block__header" style="background-color: var(--color-success); color: var(--color-background);">
+                    <span><i data-lucide="terminal" style="width: 14px; height: 14px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Output Hasil</span>
+                  </div>
+                  <pre class="formula-block__code" style="background-color: var(--color-background); color: var(--color-foreground);">Hasil 10 / 2: 5
+Exception Ditangkap: Error: Tidak bisa dibagi dengan nol!
+Blok finally selalu dijalankan di akhir.</pre>
+                </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top"><i data-lucide="arrow-up"></i></button>
+
+    <script src="../../js/script.js"></script>
+  </body>
+</html>

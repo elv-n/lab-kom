@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Lengkap — AutoKredit | Simulasi Kredit Mobil</title>
+    <meta name="description" content="Panduan lengkap step-by-step membuat project AutoKredit — Simulasi Kredit Mobil menggunakan PHP dan Bootstrap 5.">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* ============================================
+           DESIGN SYSTEM — SIDEBAR LAYOUT + IDE CODE
+           ============================================ */
+
+        :root {
+            --primary: #000000;
+            --primary-deep: #1a1a1a;
+            --secondary: #efefef;
+            --background: #ffffff;
+            --background-canvas: #fafafa;
+            --background-bone: #f0f0f0;
+            --surface-card: #ffffff;
+            --surface-dark: #000000;
+            --surface-deep: #1a1a1a;
+            --ink: #000000;
+            --body-color: #000000;
+            --charcoal: #222222;
+            --ash: #4b4b4b;
+            --stone: #afafaf;
+            --on-primary: #ffffff;
+            --on-dark: #fcfcfc;
+            --on-dark-mute: rgba(252, 252, 252, 0.72);
+            --hairline: #efefef;
+            --divider: #e0e0e0;
+            --badge-success: #34d399;
+            --badge-warning: #f59e0b;
+            --badge-info: #3b82f6;
+            --rounded-sm: 8px;
+            --rounded-md: 12px;
+            --rounded-lg: 16px;
+            --rounded-full: 9999px;
+            --font-main: 'DM Sans', system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+            --shadow-1: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12);
+            --shadow-2: 0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.12);
+            --shadow-3: 0 8px 16px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08);
+
+            /* IDE Syntax Colors (One Dark Pro inspired) */
+            --code-bg: #1e1e2e;
+            --code-gutter: #2a2a3e;
+            --code-line-num: #5c5c7a;
+            --code-text: #cdd6f4;
+            --code-tag: #f38ba8;
+            --code-attr-name: #fab387;
+            --code-attr-value: #a6e3a1;
+            --code-string: #a6e3a1;
+            --code-comment: #6c7086;
+            --code-keyword: #cba6f7;
+            --code-variable: #f38ba8;
+            --code-function: #89b4fa;
+            --code-number: #fab387;
+            --code-operator: #89dceb;
+            --code-property: #89b4fa;
+            --code-selector: #f9e2af;
+            --code-value: #a6e3a1;
+            --code-punctuation: #bac2de;
+            --code-php-tag: #a6e3a1;
+            --code-entity: #f9e2af;
+
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--body-color);
+            background: var(--background);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ---- LAYOUT: SIDEBAR + MAIN ---- */
+        .page-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ---- SIDEBAR NAVIGATION ---- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--background);
+            border-right: 1px solid var(--hairline);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            padding: 24px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-logo {
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .sidebar-logo a {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--ink);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-logo i {
+            font-size: 1.25rem;
+        }
+
+        .sidebar-label {
+            padding: 0 20px;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            color: var(--stone);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--ash);
+            text-decoration: none;
+            transition: all 0.15s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav li a:hover {
+            color: var(--ink);
+            background: var(--secondary);
+        }
+
+        .sidebar-nav li a.active {
+            color: var(--ink);
+            background: var(--secondary);
+            border-left-color: var(--ink);
+            font-weight: 700;
+        }
+
+        .sidebar-nav li a .nav-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: var(--rounded-full);
+            background: var(--background-bone);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            color: var(--ash);
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav li a.active .nav-number {
+            background: var(--primary);
+            color: var(--on-primary);
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--hairline);
+            margin: 16px 20px;
+        }
+
+        /* ---- MAIN CONTENT ---- */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-width: 0;
+        }
+
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* ---- SIMPLE TITLE HEADER ---- */
+        .page-header {
+            padding: 48px 32px 32px;
+            max-width: 900px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+            color: var(--ash);
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        /* ---- FILE STRUCTURE (VERTICAL TREE) ---- */
+        .file-structure-section {
+            padding: 40px 32px;
+            max-width: 900px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .section-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            color: var(--stone);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .file-structure-section h2 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 20px;
+        }
+
+        .file-tree {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 24px 28px;
+            border-radius: var(--rounded-sm);
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            line-height: 1.9;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .file-tree .folder {
+            color: #fab387;
+        }
+
+        .file-tree .file {
+            color: var(--code-text);
+        }
+
+        .file-tree .comment {
+            color: var(--code-comment);
+        }
+
+        .file-tree .indent {
+            color: #45475a;
+        }
+
+        /* ---- STRUCTURE DIAGRAM ---- */
+        .structure-diagram {
+            background: var(--background-bone);
+            padding: 24px;
+            border-radius: var(--rounded-sm);
+            margin: 20px 0 0;
+        }
+
+        .structure-diagram h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .structure-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .flow-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: var(--rounded-full);
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .flow-item-active {
+            background: var(--primary);
+            color: var(--on-primary);
+        }
+
+        .flow-item-default {
+            background: var(--secondary);
+            color: var(--ink);
+        }
+
+        .flow-arrow {
+            color: var(--stone);
+            font-size: 0.875rem;
+        }
+
+        /* ---- STEPS ---- */
+        .step-section {
+            padding: 48px 0;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .step-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--rounded-full);
+            background: var(--primary);
+            color: var(--on-primary);
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-header-content h2 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1.22;
+        }
+
+        .step-header-content .step-subtitle {
+            font-size: 0.8125rem;
+            color: var(--ash);
+            margin-top: 4px;
+        }
+
+        .step-description {
+            font-size: 0.9375rem;
+            color: var(--charcoal);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+
+        .step-description strong {
+            color: var(--ink);
+        }
+
+        /* ---- FILE CARD ---- */
+        .file-card {
+            margin-bottom: 24px;
+        }
+
+        .file-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #181825;
+            color: var(--on-dark);
+            border-radius: var(--rounded-sm) var(--rounded-sm) 0 0;
+            border-bottom: 1px solid #313244;
+        }
+
+        .file-card-icon {
+            font-size: 1rem;
+        }
+
+        .file-card-name {
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .file-card-badge {
+            margin-left: auto;
+            padding: 2px 10px;
+            border-radius: var(--rounded-full);
+            font-size: 0.6875rem;
+            font-weight: 600;
+        }
+
+        .badge-php {
+            background: rgba(163, 134, 247, 0.2);
+            color: #cba6f7;
+        }
+
+        .badge-css {
+            background: rgba(137, 180, 250, 0.2);
+            color: #89b4fa;
+        }
+
+        .badge-html {
+            background: rgba(243, 139, 168, 0.2);
+            color: #f38ba8;
+        }
+
+        /* ---- IDE-STYLE CODE BLOCK ---- */
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 0 0 var(--rounded-sm) var(--rounded-sm);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 20px 24px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.75;
+            color: var(--code-text);
+            white-space: pre;
+            overflow-x: auto;
+            counter-reset: line;
+        }
+
+        .code-block .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: var(--rounded-full);
+            background: rgba(255,255,255,0.08);
+            color: var(--code-line-num);
+            font-size: 0.6875rem;
+            font-weight: 500;
+            font-family: var(--font-main);
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .code-block .copy-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--code-text);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        .code-block .copy-btn.copied {
+            background: rgba(166, 227, 161, 0.15);
+            color: #a6e3a1;
+            border-color: rgba(166, 227, 161, 0.3);
+        }
+
+        /* Syntax Highlighting Classes */
+        .hl-tag { color: var(--code-tag); }
+        .hl-attr { color: var(--code-attr-name); }
+        .hl-val { color: var(--code-attr-value); }
+        .hl-str { color: var(--code-string); }
+        .hl-cmt { color: var(--code-comment); font-style: italic; }
+        .hl-kw { color: var(--code-keyword); }
+        .hl-var { color: var(--code-variable); }
+        .hl-fn { color: var(--code-function); }
+        .hl-num { color: var(--code-number); }
+        .hl-op { color: var(--code-operator); }
+        .hl-prop { color: var(--code-property); }
+        .hl-sel { color: var(--code-selector); }
+        .hl-punc { color: var(--code-punctuation); }
+        .hl-php { color: var(--code-php-tag); font-weight: 700; }
+        .hl-ent { color: var(--code-entity); }
+        .hl-text { color: var(--code-text); }
+
+        /* ---- EXPLANATION BOX ---- */
+        .explanation-box {
+            padding: 20px 24px;
+            background: var(--background-bone);
+            border-radius: 0;
+            margin-top: 16px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .explanation-box h4 {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .explanation-box p,
+        .explanation-box ul {
+            font-size: 0.8125rem;
+            color: var(--charcoal);
+            line-height: 1.7;
+        }
+
+        .explanation-box ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .explanation-box ul li {
+            margin-bottom: 6px;
+        }
+
+        .explanation-box code {
+            background: var(--secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+        }
+
+        /* ---- INFO CALLOUT ---- */
+        .callout {
+            padding: 14px 18px;
+            border-radius: var(--rounded-sm);
+            margin: 16px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .callout-info {
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 3px solid var(--badge-info);
+        }
+
+        .callout-warning {
+            background: rgba(245, 158, 11, 0.08);
+            border-left: 3px solid var(--badge-warning);
+        }
+
+        .callout-success {
+            background: rgba(52, 211, 153, 0.08);
+            border-left: 3px solid var(--badge-success);
+        }
+
+        .callout i {
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .callout-info i { color: var(--badge-info); }
+        .callout-warning i { color: var(--badge-warning); }
+        .callout-success i { color: var(--badge-success); }
+
+        .callout p {
+            font-size: 0.8125rem;
+            color: var(--charcoal);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .callout strong {
+            color: var(--ink);
+        }
+
+        /* ---- FORMULA BOX ---- */
+        .formula-box {
+            background: var(--code-bg);
+            color: var(--on-dark);
+            padding: 20px;
+            border-radius: var(--rounded-sm);
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .formula-box .formula-label {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            color: var(--code-comment);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .formula-box .formula-text {
+            font-family: var(--font-mono);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--code-keyword);
+        }
+
+        /* ---- FOOTER ---- */
+        .site-footer {
+            background: var(--surface-dark);
+            color: var(--on-dark);
+            padding: 40px 24px;
+            margin-left: var(--sidebar-width);
+        }
+
+        .site-footer .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .footer-text {
+            font-size: 0.8125rem;
+            color: var(--on-dark-mute);
+        }
+
+        .footer-divider {
+            width: 60px;
+            height: 2px;
+            background: rgba(255,255,255,0.15);
+            margin: 20px auto;
+            border: none;
+        }
+
+        /* ---- SCROLL-TO-TOP ---- */
+        .scroll-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--rounded-full);
+            background: var(--primary);
+            color: var(--on-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-3);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease;
+            z-index: 999;
+            font-size: 1rem;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ---- PROGRESS BAR ---- */
+        .progress-bar-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary);
+            z-index: 1001;
+            transition: width 0.1s linear;
+        }
+
+        /* ---- MOBILE HAMBURGER ---- */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--rounded-sm);
+            background: var(--background);
+            color: var(--ink);
+            border: 1px solid var(--hairline);
+            font-size: 1.25rem;
+            z-index: 1002;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-1);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        /* ---- ANIMATIONS ---- */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+
+            .sidebar-overlay.open {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .site-footer {
+                margin-left: 0;
+            }
+
+            .page-header {
+                padding: 64px 24px 24px;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .file-structure-section {
+                padding: 32px 24px;
+            }
+
+            .content-container {
+                padding: 0 24px;
+            }
+
+            .structure-flow {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar-top" id="progressBar"></div>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="page-layout">
+
+        <!-- ==================== SIDEBAR NAVIGATION ==================== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <a href="#">
+                    <i class="bi bi-car-front-fill"></i>
+                    Tutorial AutoKredit
+                </a>
+            </div>
+
+            <div class="sidebar-label">Overview</div>
+            <ul class="sidebar-nav">
+                <li><a href="#overview" class="active"><i class="bi bi-house-door"></i> Pendahuluan</a></li>
+                <li><a href="#struktur"><i class="bi bi-folder2-open"></i> Struktur File</a></li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-label">Langkah Tutorial</div>
+            <ul class="sidebar-nav" id="navLinks">
+                <li><a href="#step-1"><span class="nav-number">1</span> header.php</a></li>
+                <li><a href="#step-2"><span class="nav-number">2</span> navbar.php</a></li>
+                <li><a href="#step-3"><span class="nav-number">3</span> slider.php</a></li>
+                <li><a href="#step-4"><span class="nav-number">4</span> form.php</a></li>
+                <li><a href="#step-5"><span class="nav-number">5</span> proses.php</a></li>
+                <li><a href="#step-6"><span class="nav-number">6</span> hasil.php</a></li>
+                <li><a href="#step-7"><span class="nav-number">7</span> tentang.php</a></li>
+                <li><a href="#step-8"><span class="nav-number">8</span> kontak.php</a></li>
+                <li><a href="#step-9"><span class="nav-number">9</span> footer.php</a></li>
+                <li><a href="#step-10"><span class="nav-number">10</span> style.css</a></li>
+                <li><a href="#step-11"><span class="nav-number">11</span> index.php</a></li>
+            </ul>
+        </aside>
+
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <div class="main-content">
+
+            <!-- ---- SIMPLE TITLE HEADER ---- -->
+            <header class="page-header" id="overview">
+                <h1>Tutorial Lengkap Project AutoKredit</h1>
+                <p>Panduan step-by-step membuat website Simulasi Kredit Mobil menggunakan PHP dan Bootstrap 5 — dari nol sampai jadi.</p>
+            </header>
+
+            <!-- ---- FILE STRUCTURE ---- -->
+            <section class="file-structure-section" id="struktur">
+                <div class="section-label">Struktur Project</div>
+                <h2>File yang Akan Dibuat</h2>
+
+                <div class="file-tree"><span class="folder">📁 lat-ukk/</span>
+<span class="indent">├──</span> <span class="file">📄 header.php</span>    <span class="comment">← Tag HTML, &lt;head&gt;, CSS, dan font</span>
+<span class="indent">├──</span> <span class="file">📄 navbar.php</span>    <span class="comment">← Menu navigasi (Beranda, Tentang, Kontak)</span>
+<span class="indent">├──</span> <span class="file">📄 slider.php</span>    <span class="comment">← Gambar slider / carousel</span>
+<span class="indent">├──</span> <span class="file">📄 form.php</span>      <span class="comment">← Form input kredit (Harga, DP, Tenor)</span>
+<span class="indent">├──</span> <span class="file">📄 proses.php</span>    <span class="comment">← Logika perhitungan angsuran</span>
+<span class="indent">├──</span> <span class="file">📄 hasil.php</span>     <span class="comment">← Tampilan tabel hasil perhitungan</span>
+<span class="indent">├──</span> <span class="file">📄 tentang.php</span>   <span class="comment">← Section Tentang Perusahaan</span>
+<span class="indent">├──</span> <span class="file">📄 kontak.php</span>    <span class="comment">← Section Kontak Perusahaan</span>
+<span class="indent">├──</span> <span class="file">📄 footer.php</span>    <span class="comment">← Footer dan Bootstrap JS</span>
+<span class="indent">├──</span> <span class="file">🎨 style.css</span>     <span class="comment">← Custom stylesheet</span>
+<span class="indent">└──</span> <span class="file">📄 index.php</span>     <span class="comment">← Entry point / halaman utama</span></div>
+
+                <div class="structure-diagram">
+                    <h4><i class="bi bi-diagram-3"></i> Alur Include File</h4>
+                    <div class="structure-flow">
+                        <span class="flow-item flow-item-active">index.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">header.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">navbar.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">slider.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">form.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">proses.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">hasil.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">tentang.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">kontak.php</span>
+                        <span class="flow-arrow"><i class="bi bi-arrow-right"></i></span>
+                        <span class="flow-item flow-item-default">footer.php</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== TUTORIAL STEPS ==================== -->
+            <main class="content-container">
+
+                <!-- ========== STEP 1: header.php ========== -->
+                <div class="step-section fade-in-up" id="step-1">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-header-content">
+                            <h2>Membuat header.php</h2>
+                            <div class="step-subtitle">Struktur HTML, meta tag, dan aset eksternal</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>header.php</strong> adalah fondasi dari setiap halaman web. File ini berisi deklarasi <code>&lt;!DOCTYPE html&gt;</code>, tag <code>&lt;head&gt;</code> yang memuat meta tag, CSS Bootstrap, ikon, Google Fonts, dan link ke custom stylesheet. File ini dibuka dengan tag <code>&lt;body&gt;</code> dan <strong>tidak ditutup</strong> — penutupan dilakukan di <strong>footer.php</strong>.
+                    </p>
+
+                    <div class="callout callout-info">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <p><strong>Mengapa dipisah?</strong> Dengan memisahkan header ke file sendiri, kita menghindari duplikasi kode. Setiap halaman cukup melakukan <code>include 'header.php'</code> untuk mendapatkan struktur HTML yang konsisten.</p>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">header.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-tag">&lt;!DOCTYPE</span> <span class="hl-attr">html</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;html</span> <span class="hl-attr">lang</span><span class="hl-op">=</span><span class="hl-val">"id"</span><span class="hl-tag">&gt;</span>
+
+<span class="hl-tag">&lt;head&gt;</span>
+    <span class="hl-tag">&lt;meta</span> <span class="hl-attr">charset</span><span class="hl-op">=</span><span class="hl-val">"UTF-8"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;meta</span> <span class="hl-attr">name</span><span class="hl-op">=</span><span class="hl-val">"viewport"</span> <span class="hl-attr">content</span><span class="hl-op">=</span><span class="hl-val">"width=device-width, initial-scale=1.0"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;title&gt;</span><span class="hl-text">AutoKredit - Simulasi Kredit Mobil</span><span class="hl-tag">&lt;/title&gt;</span>
+    <span class="hl-cmt">&lt;!-- Bootstrap 5 CSS CDN --&gt;</span>
+    <span class="hl-tag">&lt;link</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span> <span class="hl-attr">rel</span><span class="hl-op">=</span><span class="hl-val">"stylesheet"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-cmt">&lt;!-- Bootstrap Icons --&gt;</span>
+    <span class="hl-tag">&lt;link</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"</span> <span class="hl-attr">rel</span><span class="hl-op">=</span><span class="hl-val">"stylesheet"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-cmt">&lt;!-- Google Fonts --&gt;</span>
+    <span class="hl-tag">&lt;link</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"</span> <span class="hl-attr">rel</span><span class="hl-op">=</span><span class="hl-val">"stylesheet"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-cmt">&lt;!-- Custom CSS --&gt;</span>
+    <span class="hl-tag">&lt;link</span> <span class="hl-attr">rel</span><span class="hl-op">=</span><span class="hl-val">"stylesheet"</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"style.css"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;/head&gt;</span>
+
+<span class="hl-tag">&lt;body&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>&lt;!DOCTYPE html&gt;</code> — Memberitahu browser bahwa ini dokumen HTML5.</li>
+                            <li><code>lang="id"</code> — Menandai bahasa halaman adalah Bahasa Indonesia.</li>
+                            <li><code>meta charset="UTF-8"</code> — Mendukung karakter Unicode (huruf, simbol, emoji).</li>
+                            <li><code>meta viewport</code> — Membuat halaman responsive di perangkat mobile.</li>
+                            <li><strong>Bootstrap 5 CSS</strong> — Framework CSS untuk layout dan komponen siap pakai.</li>
+                            <li><strong>Bootstrap Icons</strong> — Library ikon vektor gratis dari Bootstrap.</li>
+                            <li><strong>Google Fonts (Inter)</strong> — Font modern yang bersih dan mudah dibaca.</li>
+                            <li><code>style.css</code> — File CSS kustom kita untuk styling tambahan.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 2: navbar.php ========== -->
+                <div class="step-section fade-in-up" id="step-2">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-header-content">
+                            <h2>Membuat navbar.php</h2>
+                            <div class="step-subtitle">Menu navigasi responsive dengan Bootstrap</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>navbar.php</strong> berisi komponen navigasi yang <strong>sticky</strong> (menempel di atas saat scroll). Navbar menggunakan tema gelap (<code>navbar-dark bg-dark</code>) dengan logo <strong>AutoKredit</strong> di kiri dan menu navigasi di kanan. Pada layar kecil, menu akan collapse menjadi tombol hamburger.
+                    </p>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">navbar.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-cmt">&lt;!-- ===================== NAVBAR ===================== --&gt;</span>
+<span class="hl-tag">&lt;nav</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"navbar navbar-expand-lg navbar-dark bg-dark sticky-top"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"container"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-cmt">&lt;!-- Logo --&gt;</span>
+        <span class="hl-tag">&lt;a</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"navbar-brand d-flex align-items-center"</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"#"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-car-front-fill me-2 text-primary"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+            <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold"</span><span class="hl-tag">&gt;</span><span class="hl-text">Auto</span><span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-primary"</span><span class="hl-tag">&gt;</span><span class="hl-text">Kredit</span><span class="hl-tag">&lt;/span&gt;&lt;/span&gt;</span>
+        <span class="hl-tag">&lt;/a&gt;</span>
+        <span class="hl-cmt">&lt;!-- Toggler untuk mobile --&gt;</span>
+        <span class="hl-tag">&lt;button</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"navbar-toggler"</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"button"</span> <span class="hl-attr">data-bs-toggle</span><span class="hl-op">=</span><span class="hl-val">"collapse"</span> <span class="hl-attr">data-bs-target</span><span class="hl-op">=</span><span class="hl-val">"#navbarNav"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"navbar-toggler-icon"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+        <span class="hl-tag">&lt;/button&gt;</span>
+        <span class="hl-cmt">&lt;!-- Menu Navigasi --&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"collapse navbar-collapse"</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"navbarNav"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;ul</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"navbar-nav ms-auto"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;li</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"nav-item"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;a</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"nav-link active"</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"#beranda"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-house-door me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Beranda</span>
+                    <span class="hl-tag">&lt;/a&gt;</span>
+                <span class="hl-tag">&lt;/li&gt;</span>
+                <span class="hl-tag">&lt;li</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"nav-item"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;a</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"nav-link"</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"#tentang"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-building me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Tentang Perusahaan</span>
+                    <span class="hl-tag">&lt;/a&gt;</span>
+                <span class="hl-tag">&lt;/li&gt;</span>
+                <span class="hl-tag">&lt;li</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"nav-item"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;a</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"nav-link"</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"#kontak"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-telephone me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Kontak Perusahaan</span>
+                    <span class="hl-tag">&lt;/a&gt;</span>
+                <span class="hl-tag">&lt;/li&gt;</span>
+            <span class="hl-tag">&lt;/ul&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/nav&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>navbar-expand-lg</code> — Menu horizontal di layar ≥ 992px, hamburger di bawahnya.</li>
+                            <li><code>navbar-dark bg-dark</code> — Tema gelap dengan teks putih.</li>
+                            <li><code>sticky-top</code> — Navbar menempel di atas saat halaman di-scroll.</li>
+                            <li><code>navbar-toggler</code> — Tombol hamburger yang muncul di layar kecil.</li>
+                            <li><code>data-bs-toggle="collapse"</code> — Atribut Bootstrap untuk toggle menu.</li>
+                            <li><code>ms-auto</code> — Margin start auto → mendorong menu ke kanan.</li>
+                            <li><code>bi bi-house-door</code> — Ikon dari Bootstrap Icons.</li>
+                            <li>Setiap <code>href="#..."</code> mengarah ke section ID di halaman (anchor link).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 3: slider.php ========== -->
+                <div class="step-section fade-in-up" id="step-3">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-header-content">
+                            <h2>Membuat slider.php</h2>
+                            <div class="step-subtitle">Bootstrap Carousel sebagai hero section</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>slider.php</strong> membuat carousel (slider) yang berfungsi sebagai <strong>hero section</strong> di bagian atas halaman. Terdapat 3 slide dengan warna gradien berbeda, masing-masing berisi judul, deskripsi, dan tombol CTA (Call to Action). Carousel otomatis berganti slide (<code>data-bs-ride="carousel"</code>).
+                    </p>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">slider.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-cmt">&lt;!-- ===================== HEADER / SLIDER ===================== --&gt;</span>
+<span class="hl-tag">&lt;section</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"beranda"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"heroCarousel"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel slide"</span> <span class="hl-attr">data-bs-ride</span><span class="hl-op">=</span><span class="hl-val">"carousel"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-cmt">&lt;!-- Indikator slide (titik-titik di bawah) --&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-indicators"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"button"</span> <span class="hl-attr">data-bs-target</span><span class="hl-op">=</span><span class="hl-val">"#heroCarousel"</span> <span class="hl-attr">data-bs-slide-to</span><span class="hl-op">=</span><span class="hl-val">"0"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"active"</span><span class="hl-tag">&gt;&lt;/button&gt;</span>
+            <span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"button"</span> <span class="hl-attr">data-bs-target</span><span class="hl-op">=</span><span class="hl-val">"#heroCarousel"</span> <span class="hl-attr">data-bs-slide-to</span><span class="hl-op">=</span><span class="hl-val">"1"</span><span class="hl-tag">&gt;&lt;/button&gt;</span>
+            <span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"button"</span> <span class="hl-attr">data-bs-target</span><span class="hl-op">=</span><span class="hl-val">"#heroCarousel"</span> <span class="hl-attr">data-bs-slide-to</span><span class="hl-op">=</span><span class="hl-val">"2"</span><span class="hl-tag">&gt;&lt;/button&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-cmt">&lt;!-- Isi Slide --&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-inner"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-cmt">&lt;!-- Slide 1 --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-item active"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-slide slide-1"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-caption-custom"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;h1&gt;</span><span class="hl-text">Simulasi Kredit Mobil</span><span class="hl-tag">&lt;/h1&gt;</span>
+                        <span class="hl-tag">&lt;p&gt;</span><span class="hl-text">Hitung angsuran kredit mobil impian Anda dengan mudah dan cepat</span><span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"#simulasi"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"btn btn-primary btn-lg"</span><span class="hl-tag">&gt;</span><span class="hl-text">Hitung Sekarang</span><span class="hl-tag">&lt;/a&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-cmt">&lt;!-- Slide 2 --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-item"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-slide slide-2"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-caption-custom"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;h1&gt;</span><span class="hl-text">Bunga Kompetitif 20%</span><span class="hl-tag">&lt;/h1&gt;</span>
+                        <span class="hl-tag">&lt;p&gt;</span><span class="hl-text">Nikmati bunga flat yang transparan tanpa biaya tersembunyi</span><span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"#simulasi"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"btn btn-primary btn-lg"</span><span class="hl-tag">&gt;</span><span class="hl-text">Mulai Simulasi</span><span class="hl-tag">&lt;/a&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-cmt">&lt;!-- Slide 3 --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-item"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-slide slide-3"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-caption-custom"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;h1&gt;</span><span class="hl-text">Tenor Fleksibel</span><span class="hl-tag">&lt;/h1&gt;</span>
+                        <span class="hl-tag">&lt;p&gt;</span><span class="hl-text">Pilih tenor cicilan sesuai kemampuan finansial Anda</span><span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"#simulasi"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"btn btn-primary btn-lg"</span><span class="hl-tag">&gt;</span><span class="hl-text">Cek Angsuran</span><span class="hl-tag">&lt;/a&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-cmt">&lt;!-- Tombol Prev / Next --&gt;</span>
+        <span class="hl-tag">&lt;button</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-control-prev"</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"button"</span> <span class="hl-attr">data-bs-target</span><span class="hl-op">=</span><span class="hl-val">"#heroCarousel"</span> <span class="hl-attr">data-bs-slide</span><span class="hl-op">=</span><span class="hl-val">"prev"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-control-prev-icon"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+        <span class="hl-tag">&lt;/button&gt;</span>
+        <span class="hl-tag">&lt;button</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-control-next"</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"button"</span> <span class="hl-attr">data-bs-target</span><span class="hl-op">=</span><span class="hl-val">"#heroCarousel"</span> <span class="hl-attr">data-bs-slide</span><span class="hl-op">=</span><span class="hl-val">"next"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"carousel-control-next-icon"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+        <span class="hl-tag">&lt;/button&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/section&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>data-bs-ride="carousel"</code> — Mengaktifkan autoplay pada carousel.</li>
+                            <li><code>carousel-indicators</code> — Titik-titik indikator di bawah slide.</li>
+                            <li><code>data-bs-slide-to="0"</code> — Menghubungkan indikator ke slide tertentu (0-indexed).</li>
+                            <li><code>carousel-item active</code> — Slide pertama yang aktif saat halaman dimuat.</li>
+                            <li><code>carousel-slide slide-1</code> — Class custom kita untuk background gradien (didefinisikan di style.css).</li>
+                            <li><code>carousel-caption-custom</code> — Class custom untuk teks di atas slide.</li>
+                            <li><code>carousel-control-prev/next</code> — Tombol navigasi kiri-kanan.</li>
+                            <li>Setiap tombol CTA menggunakan <code>href="#simulasi"</code> mengarah ke form kredit.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 4: form.php ========== -->
+                <div class="step-section fade-in-up" id="step-4">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-header-content">
+                            <h2>Membuat form.php</h2>
+                            <div class="step-subtitle">Form input data kredit mobil</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>form.php</strong> berisi form HTML yang menerima 3 input dari user: <strong>Harga Mobil</strong>, <strong>DP (persen)</strong>, dan <strong>Tenor (tahun)</strong>. Form menggunakan method <code>POST</code> dan mengirim data ke halaman yang sama. Di bagian bawah, file ini meng-include <strong>proses.php</strong> untuk memproses data saat form disubmit.
+                    </p>
+
+                    <div class="callout callout-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <p><strong>Perhatikan!</strong> Atribut <code>value="&lt;?= isset($_POST['harga_mobil']) ? htmlspecialchars($_POST['harga_mobil']) : '' ?&gt;"</code> berfungsi untuk mempertahankan nilai input setelah form disubmit, sehingga user tidak perlu mengisi ulang.</p>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">form.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-cmt">&lt;!-- ===================== FORM SIMULASI KREDIT ===================== --&gt;</span>
+<span class="hl-tag">&lt;section</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"simulasi"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"py-5"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"container"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-cmt">&lt;!-- Judul Section --&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-center mb-5"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;h2</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold"</span><span class="hl-tag">&gt;</span><span class="hl-text">Simulasi Kredit Mobil</span><span class="hl-tag">&lt;/h2&gt;</span>
+            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted"</span><span class="hl-tag">&gt;</span><span class="hl-text">Masukkan data di bawah ini untuk menghitung angsuran bulanan Anda</span><span class="hl-tag">&lt;/p&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"row justify-content-center"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-lg-8"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card shadow-sm"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card-body p-4"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-cmt">&lt;!-- Form menggunakan method POST --&gt;</span>
+                        <span class="hl-tag">&lt;form</span> <span class="hl-attr">method</span><span class="hl-op">=</span><span class="hl-val">"POST"</span> <span class="hl-attr">action</span><span class="hl-op">=</span><span class="hl-val">"#simulasi"</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"formKredit"</span><span class="hl-tag">&gt;</span>
+
+                            <span class="hl-cmt">&lt;!-- Input Harga Mobil --&gt;</span>
+                            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-3"</span><span class="hl-tag">&gt;</span>
+                                <span class="hl-tag">&lt;label</span> <span class="hl-attr">for</span><span class="hl-op">=</span><span class="hl-val">"harga_mobil"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"form-label fw-semibold"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fas fa-car me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Harga Mobil (Rp)</span>
+                                <span class="hl-tag">&lt;/label&gt;</span>
+                                <span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"number"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"form-control form-control-lg"</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"harga_mobil"</span>
+                                       <span class="hl-attr">name</span><span class="hl-op">=</span><span class="hl-val">"harga_mobil"</span> <span class="hl-attr">placeholder</span><span class="hl-op">=</span><span class="hl-val">"Contoh: 100000000"</span> <span class="hl-attr">min</span><span class="hl-op">=</span><span class="hl-val">"1"</span> <span class="hl-attr">required</span>
+                                       <span class="hl-attr">value</span><span class="hl-op">=</span><span class="hl-val">"<span class="hl-php">&lt;?=</span> <span class="hl-fn">isset</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'harga_mobil'</span>]) ? <span class="hl-fn">htmlspecialchars</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'harga_mobil'</span>]) : <span class="hl-str">''</span> <span class="hl-php">?&gt;</span>"</span><span class="hl-tag">&gt;</span>
+                            <span class="hl-tag">&lt;/div&gt;</span>
+
+                            <span class="hl-cmt">&lt;!-- Input DP (Persen) --&gt;</span>
+                            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-3"</span><span class="hl-tag">&gt;</span>
+                                <span class="hl-tag">&lt;label</span> <span class="hl-attr">for</span><span class="hl-op">=</span><span class="hl-val">"dp_persen"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"form-label fw-semibold"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fas fa-percentage me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">DP (Persen)</span>
+                                <span class="hl-tag">&lt;/label&gt;</span>
+                                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"input-group input-group-lg"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"number"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"form-control"</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"dp_persen"</span>
+                                           <span class="hl-attr">name</span><span class="hl-op">=</span><span class="hl-val">"dp_persen"</span> <span class="hl-attr">placeholder</span><span class="hl-op">=</span><span class="hl-val">"Contoh: 20"</span> <span class="hl-attr">min</span><span class="hl-op">=</span><span class="hl-val">"0"</span> <span class="hl-attr">max</span><span class="hl-op">=</span><span class="hl-val">"100"</span> <span class="hl-attr">required</span>
+                                           <span class="hl-attr">value</span><span class="hl-op">=</span><span class="hl-val">"<span class="hl-php">&lt;?=</span> <span class="hl-fn">isset</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'dp_persen'</span>]) ? <span class="hl-fn">htmlspecialchars</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'dp_persen'</span>]) : <span class="hl-str">''</span> <span class="hl-php">?&gt;</span>"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"input-group-text"</span><span class="hl-tag">&gt;</span><span class="hl-text">%</span><span class="hl-tag">&lt;/span&gt;</span>
+                                <span class="hl-tag">&lt;/div&gt;</span>
+                            <span class="hl-tag">&lt;/div&gt;</span>
+
+                            <span class="hl-cmt">&lt;!-- Input Tenor (Tahun) --&gt;</span>
+                            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-3"</span><span class="hl-tag">&gt;</span>
+                                <span class="hl-tag">&lt;label</span> <span class="hl-attr">for</span><span class="hl-op">=</span><span class="hl-val">"tenor_tahun"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"form-label fw-semibold"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fas fa-calendar-alt me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Tenor (Tahun)</span>
+                                <span class="hl-tag">&lt;/label&gt;</span>
+                                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"input-group input-group-lg"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;input</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"number"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"form-control"</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"tenor_tahun"</span>
+                                           <span class="hl-attr">name</span><span class="hl-op">=</span><span class="hl-val">"tenor_tahun"</span> <span class="hl-attr">placeholder</span><span class="hl-op">=</span><span class="hl-val">"Contoh: 5"</span> <span class="hl-attr">min</span><span class="hl-op">=</span><span class="hl-val">"1"</span> <span class="hl-attr">required</span>
+                                           <span class="hl-attr">value</span><span class="hl-op">=</span><span class="hl-val">"<span class="hl-php">&lt;?=</span> <span class="hl-fn">isset</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'tenor_tahun'</span>]) ? <span class="hl-fn">htmlspecialchars</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'tenor_tahun'</span>]) : <span class="hl-str">''</span> <span class="hl-php">?&gt;</span>"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"input-group-text"</span><span class="hl-tag">&gt;</span><span class="hl-text">Tahun</span><span class="hl-tag">&lt;/span&gt;</span>
+                                <span class="hl-tag">&lt;/div&gt;</span>
+                            <span class="hl-tag">&lt;/div&gt;</span>
+
+                            <span class="hl-cmt">&lt;!-- Tombol Hitung &amp; Reset --&gt;</span>
+                            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"row g-2 mt-3"</span><span class="hl-tag">&gt;</span>
+                                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-6"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;button</span> <span class="hl-attr">type</span><span class="hl-op">=</span><span class="hl-val">"submit"</span> <span class="hl-attr">name</span><span class="hl-op">=</span><span class="hl-val">"hitung"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"btn btn-primary btn-lg w-100"</span><span class="hl-tag">&gt;</span>
+                                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fas fa-calculator me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Hitung</span>
+                                    <span class="hl-tag">&lt;/button&gt;</span>
+                                <span class="hl-tag">&lt;/div&gt;</span>
+                                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-6"</span><span class="hl-tag">&gt;</span>
+                                    <span class="hl-tag">&lt;a</span> <span class="hl-attr">href</span><span class="hl-op">=</span><span class="hl-val">"index.php?reset=1#simulasi"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"btn btn-outline-secondary btn-lg w-100"</span><span class="hl-tag">&gt;</span>
+                                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fas fa-undo me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Reset</span>
+                                    <span class="hl-tag">&lt;/a&gt;</span>
+                                <span class="hl-tag">&lt;/div&gt;</span>
+                            <span class="hl-tag">&lt;/div&gt;</span>
+                        <span class="hl-tag">&lt;/form&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+
+                <span class="hl-cmt">&lt;!-- Hasil perhitungan akan ditampilkan di sini --&gt;</span>
+                <span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'proses.php'</span>; <span class="hl-php">?&gt;</span>
+
+            <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/section&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>method="POST"</code> — Data dikirim melalui HTTP POST (tidak tampil di URL).</li>
+                            <li><code>action="#simulasi"</code> — Form mengirim ke halaman yang sama, scroll ke section simulasi.</li>
+                            <li><code>type="number"</code> — Input hanya menerima angka.</li>
+                            <li><code>min="1" required</code> — Validasi HTML5: nilai minimal 1 dan wajib diisi.</li>
+                            <li><code>htmlspecialchars()</code> — Mencegah serangan XSS dengan meng-escape karakter khusus HTML.</li>
+                            <li><code>input-group</code> — Menggabungkan input dan label satuan (%, Tahun) dalam satu baris.</li>
+                            <li><code>name="hitung"</code> — Nama tombol submit, digunakan <code>isset($_POST['hitung'])</code> di proses.php.</li>
+                            <li><code>include 'proses.php'</code> — Memuat logika pemrosesan di bawah form.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 5: proses.php ========== -->
+                <div class="step-section fade-in-up" id="step-5">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <div class="step-header-content">
+                            <h2>Membuat proses.php</h2>
+                            <div class="step-subtitle">Logika perhitungan angsuran kredit</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>proses.php</strong> adalah otak dari aplikasi ini. File ini memproses data yang dikirim dari form, melakukan validasi input, menghitung angsuran kredit menggunakan rumus flat rate, dan menampilkan hasil melalui file <strong>hasil.php</strong>.
+                    </p>
+
+                    <div class="formula-box">
+                        <div class="formula-label">Rumus Perhitungan Angsuran</div>
+                        <div class="formula-text">Angsuran = ((Harga Mobil + Bunga 20%) - DP) / Jumlah Bulan</div>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">proses.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-php">&lt;?php</span>
+<span class="hl-cmt">/**
+ * ==========================================================
+ * FILE: proses.php
+ * FUNGSI: Memproses perhitungan angsuran kredit mobil
+ * ==========================================================
+ *
+ * ALGORITMA PERHITUNGAN:
+ * ----------------------
+ * 1. Menerima input dari form (POST method):
+ *    - harga_mobil : harga mobil dalam Rupiah (angka)
+ *    - dp_persen   : persentase uang muka / DP (0-100)
+ *    - tenor_tahun : lama cicilan dalam tahun (angka)
+ *
+ * 2. Validasi input:
+ *    - Harga mobil harus &gt; 0
+ *    - DP harus antara 0% - 100%
+ *    - Tenor harus minimal 1 tahun
+ *
+ * 3. Proses perhitungan:
+ *    a. bunga       = harga_mobil × 20 / 100
+ *    b. dp_nominal  = harga_mobil × dp_persen / 100
+ *    c. jumlah_bulan = tenor_tahun × 12
+ *    d. angsuran    = ((harga_mobil + bunga) - dp_nominal) / jumlah_bulan
+ *
+ * 4. Tampilkan hasil ke user
+ *
+ * RUMUS UTAMA:
+ *   Angsuran = ((Harga Mobil + Bunga 20%) - DP) / Jumlah Bulan
+ * ==========================================================
+ */</span>
+
+<span class="hl-cmt">// Cek apakah form sudah disubmit (tombol "hitung" ditekan)</span>
+<span class="hl-kw">if</span> (<span class="hl-fn">isset</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'hitung'</span>])) {
+
+    <span class="hl-cmt">// ===== LANGKAH 1: Ambil data input dari form =====</span>
+    <span class="hl-var">$harga_mobil</span> <span class="hl-op">=</span> <span class="hl-fn">floatval</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'harga_mobil'</span>]);  <span class="hl-cmt">// Konversi ke angka desimal</span>
+    <span class="hl-var">$dp_persen</span>   <span class="hl-op">=</span> <span class="hl-fn">floatval</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'dp_persen'</span>]);     <span class="hl-cmt">// Konversi ke angka desimal</span>
+    <span class="hl-var">$tenor_tahun</span> <span class="hl-op">=</span> <span class="hl-fn">intval</span>(<span class="hl-var">$_POST</span>[<span class="hl-str">'tenor_tahun'</span>]);     <span class="hl-cmt">// Konversi ke angka bulat</span>
+
+    <span class="hl-cmt">// ===== LANGKAH 2: Validasi input =====</span>
+    <span class="hl-var">$error</span> <span class="hl-op">=</span> <span class="hl-str">''</span>;
+    <span class="hl-kw">if</span> (<span class="hl-var">$harga_mobil</span> <span class="hl-op">&lt;=</span> <span class="hl-num">0</span>) {
+        <span class="hl-var">$error</span> <span class="hl-op">=</span> <span class="hl-str">'Harga mobil harus lebih dari 0!'</span>;
+    } <span class="hl-kw">elseif</span> (<span class="hl-var">$dp_persen</span> <span class="hl-op">&lt;</span> <span class="hl-num">0</span> <span class="hl-op">||</span> <span class="hl-var">$dp_persen</span> <span class="hl-op">&gt;</span> <span class="hl-num">100</span>) {
+        <span class="hl-var">$error</span> <span class="hl-op">=</span> <span class="hl-str">'DP harus antara 0% - 100%!'</span>;
+    } <span class="hl-kw">elseif</span> (<span class="hl-var">$tenor_tahun</span> <span class="hl-op">&lt;=</span> <span class="hl-num">0</span>) {
+        <span class="hl-var">$error</span> <span class="hl-op">=</span> <span class="hl-str">'Tenor harus minimal 1 tahun!'</span>;
+    }
+
+    <span class="hl-cmt">// Jika ada error, tampilkan pesan</span>
+    <span class="hl-kw">if</span> (<span class="hl-var">$error</span>) {
+        <span class="hl-kw">echo</span> <span class="hl-str">'&lt;div class="alert alert-danger mt-4" role="alert"&gt;'</span>;
+        <span class="hl-kw">echo</span> <span class="hl-str">'&lt;i class="bi bi-exclamation-triangle me-2"&gt;&lt;/i&gt;'</span> <span class="hl-op">.</span> <span class="hl-var">$error</span>;
+        <span class="hl-kw">echo</span> <span class="hl-str">'&lt;/div&gt;'</span>;
+    } <span class="hl-kw">else</span> {
+
+        <span class="hl-cmt">// ===== LANGKAH 3: Proses Perhitungan =====</span>
+
+        <span class="hl-cmt">// a. Hitung bunga (20% dari harga mobil)</span>
+        <span class="hl-var">$persen_bunga</span> <span class="hl-op">=</span> <span class="hl-num">20</span>;
+        <span class="hl-var">$bunga</span> <span class="hl-op">=</span> <span class="hl-var">$harga_mobil</span> <span class="hl-op">*</span> (<span class="hl-var">$persen_bunga</span> <span class="hl-op">/</span> <span class="hl-num">100</span>);
+
+        <span class="hl-cmt">// b. Hitung nominal DP dalam Rupiah</span>
+        <span class="hl-var">$dp_nominal</span> <span class="hl-op">=</span> <span class="hl-var">$harga_mobil</span> <span class="hl-op">*</span> (<span class="hl-var">$dp_persen</span> <span class="hl-op">/</span> <span class="hl-num">100</span>);
+
+        <span class="hl-cmt">// c. Konversi tenor dari tahun ke bulan</span>
+        <span class="hl-var">$jumlah_bulan</span> <span class="hl-op">=</span> <span class="hl-var">$tenor_tahun</span> <span class="hl-op">*</span> <span class="hl-num">12</span>;
+
+        <span class="hl-cmt">// d. Hitung angsuran per bulan</span>
+        <span class="hl-cmt">//    Rumus: ((Harga Mobil + Bunga) - DP) / Jumlah Bulan</span>
+        <span class="hl-var">$angsuran</span> <span class="hl-op">=</span> ((<span class="hl-var">$harga_mobil</span> <span class="hl-op">+</span> <span class="hl-var">$bunga</span>) <span class="hl-op">-</span> <span class="hl-var">$dp_nominal</span>) <span class="hl-op">/</span> <span class="hl-var">$jumlah_bulan</span>;
+
+        <span class="hl-cmt">// ===== LANGKAH 4: Tampilkan hasil =====</span>
+        <span class="hl-cmt">// Menggunakan include untuk memisahkan tampilan hasil</span>
+        <span class="hl-kw">include</span> <span class="hl-str">'hasil.php'</span>;
+    }
+}
+<span class="hl-php">?&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>isset($_POST['hitung'])</code> — Mengecek apakah tombol "Hitung" sudah ditekan.</li>
+                            <li><code>floatval()</code> — Mengkonversi string input menjadi angka desimal (float).</li>
+                            <li><code>intval()</code> — Mengkonversi string input menjadi angka bulat (integer).</li>
+                            <li><strong>Validasi</strong> — Memastikan semua input valid sebelum dihitung (harga > 0, DP 0-100%, tenor ≥ 1).</li>
+                            <li><strong>Bunga Flat 20%</strong> — Bunga dihitung sekali dari harga mobil, bukan bunga menurun.</li>
+                            <li><code>$jumlah_bulan = $tenor_tahun * 12</code> — Mengubah tenor tahun ke bulan.</li>
+                            <li><strong>Rumus angsuran</strong> — Total pinjaman (harga + bunga - DP) dibagi jumlah bulan.</li>
+                            <li><code>include 'hasil.php'</code> — Memisahkan tampilan hasil ke file tersendiri (separation of concerns).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 6: hasil.php ========== -->
+                <div class="step-section fade-in-up" id="step-6">
+                    <div class="step-header">
+                        <div class="step-number">6</div>
+                        <div class="step-header-content">
+                            <h2>Membuat hasil.php</h2>
+                            <div class="step-subtitle">Tampilan tabel hasil perhitungan angsuran</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>hasil.php</strong> menampilkan hasil perhitungan dalam format tabel yang rapi. File ini menggunakan variabel-variabel yang sudah dihitung di <strong>proses.php</strong> seperti <code>$harga_mobil</code>, <code>$dp_nominal</code>, <code>$bunga</code>, dan <code>$angsuran</code>. Baris terakhir (angsuran per bulan) diberi highlight hijau sebagai <strong>highlight utama</strong>.
+                    </p>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">hasil.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-cmt">&lt;!-- ===================== HASIL PERHITUNGAN ===================== --&gt;</span>
+<span class="hl-cmt">&lt;!--
+    File ini menampilkan hasil perhitungan dari proses.php
+    Variabel yang tersedia (dari proses.php):
+    - $harga_mobil  : Harga mobil (Rp)
+    - $dp_persen    : DP dalam persen (%)
+    - $dp_nominal   : DP dalam Rupiah
+    - $tenor_tahun  : Tenor dalam tahun
+    - $jumlah_bulan : Tenor dalam bulan
+    - $persen_bunga : Persen bunga (20%)
+    - $bunga        : Bunga dalam Rupiah
+    - $angsuran     : Angsuran per bulan (Rp)
+--&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card mt-4 border-success"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card-header bg-success text-white"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-tag">&lt;h5</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-0"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-check-circle me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Hasil Perhitungan Angsuran</span>
+        <span class="hl-tag">&lt;/h5&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card-body"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-tag">&lt;table</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"table table-bordered table-striped mb-0"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;tbody&gt;</span>
+                <span class="hl-cmt">&lt;!-- Baris 1: Harga Mobil --&gt;</span>
+                <span class="hl-tag">&lt;tr&gt;</span>
+                    <span class="hl-tag">&lt;td</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-semibold"</span> <span class="hl-attr">style</span><span class="hl-op">=</span><span class="hl-val">"width: 40%;"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-car-front me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Harga Mobil</span>
+                    <span class="hl-tag">&lt;/td&gt;</span>
+                    <span class="hl-tag">&lt;td&gt;</span><span class="hl-text">Rp. </span><span class="hl-php">&lt;?=</span> <span class="hl-fn">number_format</span>(<span class="hl-var">$harga_mobil</span>, <span class="hl-num">0</span>, <span class="hl-str">','</span>, <span class="hl-str">'.'</span>) <span class="hl-php">?&gt;</span><span class="hl-tag">&lt;/td&gt;</span>
+                <span class="hl-tag">&lt;/tr&gt;</span>
+                <span class="hl-cmt">&lt;!-- Baris 2: DP --&gt;</span>
+                <span class="hl-tag">&lt;tr&gt;</span>
+                    <span class="hl-tag">&lt;td</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-semibold"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-wallet2 me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">DP</span>
+                    <span class="hl-tag">&lt;/td&gt;</span>
+                    <span class="hl-tag">&lt;td&gt;</span><span class="hl-php">&lt;?=</span> <span class="hl-var">$dp_persen</span> <span class="hl-php">?&gt;</span><span class="hl-text">% (Rp. </span><span class="hl-php">&lt;?=</span> <span class="hl-fn">number_format</span>(<span class="hl-var">$dp_nominal</span>, <span class="hl-num">0</span>, <span class="hl-str">','</span>, <span class="hl-str">'.'</span>) <span class="hl-php">?&gt;</span><span class="hl-text">)</span><span class="hl-tag">&lt;/td&gt;</span>
+                <span class="hl-tag">&lt;/tr&gt;</span>
+                <span class="hl-cmt">&lt;!-- Baris 3: Tenor --&gt;</span>
+                <span class="hl-tag">&lt;tr&gt;</span>
+                    <span class="hl-tag">&lt;td</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-semibold"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-calendar3 me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Tenor</span>
+                    <span class="hl-tag">&lt;/td&gt;</span>
+                    <span class="hl-tag">&lt;td&gt;</span><span class="hl-php">&lt;?=</span> <span class="hl-var">$tenor_tahun</span> <span class="hl-php">?&gt;</span><span class="hl-text"> Tahun (</span><span class="hl-php">&lt;?=</span> <span class="hl-var">$jumlah_bulan</span> <span class="hl-php">?&gt;</span><span class="hl-text"> Bulan)</span><span class="hl-tag">&lt;/td&gt;</span>
+                <span class="hl-tag">&lt;/tr&gt;</span>
+                <span class="hl-cmt">&lt;!-- Baris 4: Bunga --&gt;</span>
+                <span class="hl-tag">&lt;tr&gt;</span>
+                    <span class="hl-tag">&lt;td</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-semibold"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-graph-up me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Bunga</span>
+                    <span class="hl-tag">&lt;/td&gt;</span>
+                    <span class="hl-tag">&lt;td&gt;</span><span class="hl-php">&lt;?=</span> <span class="hl-var">$persen_bunga</span> <span class="hl-php">?&gt;</span><span class="hl-text">% (Rp. </span><span class="hl-php">&lt;?=</span> <span class="hl-fn">number_format</span>(<span class="hl-var">$bunga</span>, <span class="hl-num">0</span>, <span class="hl-str">','</span>, <span class="hl-str">'.'</span>) <span class="hl-php">?&gt;</span><span class="hl-text">)</span><span class="hl-tag">&lt;/td&gt;</span>
+                <span class="hl-tag">&lt;/tr&gt;</span>
+                <span class="hl-cmt">&lt;!-- Baris 5: Jumlah Angsuran (HASIL UTAMA) --&gt;</span>
+                <span class="hl-tag">&lt;tr</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"table-success"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;td</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold fs-5"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-cash-stack me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Jumlah Angsuran</span>
+                    <span class="hl-tag">&lt;/td&gt;</span>
+                    <span class="hl-tag">&lt;td</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold fs-5 text-success"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-text">Rp. </span><span class="hl-php">&lt;?=</span> <span class="hl-fn">number_format</span>(<span class="hl-fn">round</span>(<span class="hl-var">$angsuran</span>), <span class="hl-num">0</span>, <span class="hl-str">','</span>, <span class="hl-str">'.'</span>) <span class="hl-php">?&gt;</span><span class="hl-text"> / Bulan</span>
+                    <span class="hl-tag">&lt;/td&gt;</span>
+                <span class="hl-tag">&lt;/tr&gt;</span>
+            <span class="hl-tag">&lt;/tbody&gt;</span>
+        <span class="hl-tag">&lt;/table&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/div&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>number_format($harga_mobil, 0, ',', '.')</code> — Memformat angka menjadi format Rupiah (titik pemisah ribuan, tanpa desimal).</li>
+                            <li><code>round($angsuran)</code> — Membulatkan angsuran ke bilangan bulat terdekat.</li>
+                            <li><code>&lt;?= ... ?&gt;</code> — Shorthand PHP untuk <code>&lt;?php echo ... ?&gt;</code>.</li>
+                            <li><code>table-bordered table-striped</code> — Tabel dengan border dan baris bergaris-garis (zebra stripes).</li>
+                            <li><code>table-success</code> — Memberi background hijau pada baris hasil utama.</li>
+                            <li><code>border-success</code> — Memberi border hijau pada card.</li>
+                            <li><code>bg-success text-white</code> — Header card berwarna hijau dengan teks putih.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 7: tentang.php ========== -->
+                <div class="step-section fade-in-up" id="step-7">
+                    <div class="step-header">
+                        <div class="step-number">7</div>
+                        <div class="step-header-content">
+                            <h2>Membuat tentang.php</h2>
+                            <div class="step-subtitle">Section profil dan statistik perusahaan</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>tentang.php</strong> menampilkan informasi tentang perusahaan AutoKredit. Layoutnya menggunakan <strong>2 kolom</strong>: kolom kiri berisi deskripsi dan keunggulan, kolom kanan berisi <strong>statistik</strong> dalam grid 2x2 (pelanggan, mobil terjual, cabang, pengalaman).
+                    </p>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">tentang.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-cmt">&lt;!-- ===================== TENTANG PERUSAHAAN ===================== --&gt;</span>
+<span class="hl-tag">&lt;section</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"tentang"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"py-5 bg-light"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"container"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-cmt">&lt;!-- Judul Section --&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-center mb-5"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;h2</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold"</span><span class="hl-tag">&gt;</span><span class="hl-text">Tentang Perusahaan</span><span class="hl-tag">&lt;/h2&gt;</span>
+            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted"</span><span class="hl-tag">&gt;</span><span class="hl-text">Kenali lebih dekat AutoKredit</span><span class="hl-tag">&lt;/p&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"row align-items-center"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-cmt">&lt;!-- Kolom Kiri: Deskripsi --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-lg-6 mb-4 mb-lg-0"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card border-0 shadow-sm h-100"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card-body p-4"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;h4</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold mb-3"</span><span class="hl-tag">&gt;</span>
+                            <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-car-front-fill text-primary me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">AutoKredit</span>
+                        <span class="hl-tag">&lt;/h4&gt;</span>
+                        <span class="hl-tag">&lt;p&gt;</span>
+                            <span class="hl-text">AutoKredit adalah perusahaan pembiayaan mobil terpercaya yang telah melayani</span>
+                            <span class="hl-text">ribuan pelanggan di seluruh Indonesia. Kami menyediakan solusi kredit mobil</span>
+                            <span class="hl-text">dengan bunga kompetitif dan proses yang cepat serta transparan.</span>
+                        <span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;p&gt;</span>
+                            <span class="hl-text">Dengan pengalaman bertahun-tahun di bidang pembiayaan otomotif, kami berkomitmen</span>
+                            <span class="hl-text">memberikan layanan terbaik untuk membantu Anda memiliki mobil impian.</span>
+                        <span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-cmt">&lt;!-- List Keunggulan --&gt;</span>
+                        <span class="hl-tag">&lt;ul</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"list-unstyled"</span><span class="hl-tag">&gt;</span>
+                            <span class="hl-tag">&lt;li</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-2"</span><span class="hl-tag">&gt;&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-check-circle-fill text-success me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Bunga transparan 20% flat</span><span class="hl-tag">&lt;/li&gt;</span>
+                            <span class="hl-tag">&lt;li</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-2"</span><span class="hl-tag">&gt;&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-check-circle-fill text-success me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Proses cepat dan mudah</span><span class="hl-tag">&lt;/li&gt;</span>
+                            <span class="hl-tag">&lt;li</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-2"</span><span class="hl-tag">&gt;&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-check-circle-fill text-success me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Tenor fleksibel 1-7 tahun</span><span class="hl-tag">&lt;/li&gt;</span>
+                            <span class="hl-tag">&lt;li</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-2"</span><span class="hl-tag">&gt;&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-check-circle-fill text-success me-2"</span><span class="hl-tag">&gt;&lt;/i&gt;</span> <span class="hl-text">Tanpa biaya tersembunyi</span><span class="hl-tag">&lt;/li&gt;</span>
+                        <span class="hl-tag">&lt;/ul&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-cmt">&lt;!-- Kolom Kanan: Statistik --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-lg-6"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"row g-3"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-6"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card text-center border-0 shadow-sm p-3"</span><span class="hl-tag">&gt;</span>
+                            <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-people-fill text-primary fs-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                            <span class="hl-tag">&lt;h3</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold mt-2"</span><span class="hl-tag">&gt;</span><span class="hl-text">5000+</span><span class="hl-tag">&lt;/h3&gt;</span>
+                            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted mb-0"</span><span class="hl-tag">&gt;</span><span class="hl-text">Pelanggan</span><span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;/div&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-6"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card text-center border-0 shadow-sm p-3"</span><span class="hl-tag">&gt;</span>
+                            <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-car-front text-primary fs-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                            <span class="hl-tag">&lt;h3</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold mt-2"</span><span class="hl-tag">&gt;</span><span class="hl-text">3000+</span><span class="hl-tag">&lt;/h3&gt;</span>
+                            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted mb-0"</span><span class="hl-tag">&gt;</span><span class="hl-text">Mobil Terjual</span><span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;/div&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-6"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card text-center border-0 shadow-sm p-3"</span><span class="hl-tag">&gt;</span>
+                            <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-geo-alt-fill text-primary fs-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                            <span class="hl-tag">&lt;h3</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold mt-2"</span><span class="hl-tag">&gt;</span><span class="hl-text">15+</span><span class="hl-tag">&lt;/h3&gt;</span>
+                            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted mb-0"</span><span class="hl-tag">&gt;</span><span class="hl-text">Cabang</span><span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;/div&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-6"</span><span class="hl-tag">&gt;</span>
+                        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card text-center border-0 shadow-sm p-3"</span><span class="hl-tag">&gt;</span>
+                            <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-award-fill text-primary fs-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                            <span class="hl-tag">&lt;h3</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold mt-2"</span><span class="hl-tag">&gt;</span><span class="hl-text">10+</span><span class="hl-tag">&lt;/h3&gt;</span>
+                            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted mb-0"</span><span class="hl-tag">&gt;</span><span class="hl-text">Tahun Pengalaman</span><span class="hl-tag">&lt;/p&gt;</span>
+                        <span class="hl-tag">&lt;/div&gt;</span>
+                    <span class="hl-tag">&lt;/div&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/section&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>bg-light</code> — Background abu-abu muda untuk membedakan section.</li>
+                            <li><code>col-lg-6</code> — Kolom mengambil setengah lebar di layar besar (≥ 992px).</li>
+                            <li><code>align-items-center</code> — Menyelaraskan kolom kiri dan kanan secara vertikal.</li>
+                            <li><code>h-100</code> — Card mengisi tinggi penuh kolom (equal height).</li>
+                            <li><code>list-unstyled</code> — Menghilangkan bullet default dari list.</li>
+                            <li><code>g-3</code> — Gap/jarak 12px antara card statistik (gutter).</li>
+                            <li><code>shadow-sm</code> — Shadow ringan untuk efek elevasi.</li>
+                            <li><code>fs-1</code> — Font size level 1 (2.5rem) untuk ikon statistik.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 8: kontak.php ========== -->
+                <div class="step-section fade-in-up" id="step-8">
+                    <div class="step-header">
+                        <div class="step-number">8</div>
+                        <div class="step-header-content">
+                            <h2>Membuat kontak.php</h2>
+                            <div class="step-subtitle">Section informasi kontak perusahaan</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>kontak.php</strong> menampilkan informasi kontak dalam <strong>3 card</strong> yang berisi Alamat, Telepon, dan Email. Layout menggunakan grid 3 kolom yang responsif — pada layar kecil akan stack menjadi 1 kolom.
+                    </p>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">kontak.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-cmt">&lt;!-- ===================== KONTAK PERUSAHAAN ===================== --&gt;</span>
+<span class="hl-tag">&lt;section</span> <span class="hl-attr">id</span><span class="hl-op">=</span><span class="hl-val">"kontak"</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"py-5"</span><span class="hl-tag">&gt;</span>
+    <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"container"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-cmt">&lt;!-- Judul Section --&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-center mb-5"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;h2</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold"</span><span class="hl-tag">&gt;</span><span class="hl-text">Kontak Perusahaan</span><span class="hl-tag">&lt;/h2&gt;</span>
+            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted"</span><span class="hl-tag">&gt;</span><span class="hl-text">Hubungi kami untuk informasi lebih lanjut</span><span class="hl-tag">&lt;/p&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"row justify-content-center"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-cmt">&lt;!-- Card Alamat --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-lg-4 col-md-6 mb-4"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card text-center border-0 shadow-sm h-100 p-4"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-geo-alt-fill text-primary fs-1 mb-3"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                    <span class="hl-tag">&lt;h5</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold"</span><span class="hl-tag">&gt;</span><span class="hl-text">Alamat</span><span class="hl-tag">&lt;/h5&gt;</span>
+                    <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted"</span><span class="hl-tag">&gt;</span><span class="hl-text">Jl. Veteran No. 1, Malang</span><span class="hl-tag">&lt;br&gt;</span><span class="hl-text">Jawa Timur, Indonesia</span><span class="hl-tag">&lt;/p&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-cmt">&lt;!-- Card Telepon --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-lg-4 col-md-6 mb-4"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card text-center border-0 shadow-sm h-100 p-4"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-telephone-fill text-primary fs-1 mb-3"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                    <span class="hl-tag">&lt;h5</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold"</span><span class="hl-tag">&gt;</span><span class="hl-text">Telepon</span><span class="hl-tag">&lt;/h5&gt;</span>
+                    <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted"</span><span class="hl-tag">&gt;</span><span class="hl-text">(0341) 123-4567</span><span class="hl-tag">&lt;br&gt;</span><span class="hl-text">0812-3456-7890</span><span class="hl-tag">&lt;/p&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-cmt">&lt;!-- Card Email --&gt;</span>
+            <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"col-lg-4 col-md-6 mb-4"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"card text-center border-0 shadow-sm h-100 p-4"</span><span class="hl-tag">&gt;</span>
+                    <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-envelope-fill text-primary fs-1 mb-3"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                    <span class="hl-tag">&lt;h5</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"fw-bold"</span><span class="hl-tag">&gt;</span><span class="hl-text">Email</span><span class="hl-tag">&lt;/h5&gt;</span>
+                    <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-muted"</span><span class="hl-tag">&gt;</span><span class="hl-text">info@autokredit.co.id</span><span class="hl-tag">&lt;br&gt;</span><span class="hl-text">cs@autokredit.co.id</span><span class="hl-tag">&lt;/p&gt;</span>
+                <span class="hl-tag">&lt;/div&gt;</span>
+            <span class="hl-tag">&lt;/div&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;/div&gt;</span>
+<span class="hl-tag">&lt;/section&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>col-lg-4 col-md-6</code> — 3 kolom di desktop, 2 kolom di tablet, 1 kolom di mobile.</li>
+                            <li><code>justify-content-center</code> — Card berada di tengah jika jumlahnya tidak memenuhi row.</li>
+                            <li><code>border-0</code> — Menghilangkan border default card Bootstrap.</li>
+                            <li><code>h-100</code> — Semua card memiliki tinggi yang sama (equal height).</li>
+                            <li><code>p-4</code> — Padding 24px di semua sisi card.</li>
+                            <li>Setiap card berisi ikon, judul, dan informasi kontak.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 9: footer.php ========== -->
+                <div class="step-section fade-in-up" id="step-9">
+                    <div class="step-header">
+                        <div class="step-number">9</div>
+                        <div class="step-header-content">
+                            <h2>Membuat footer.php</h2>
+                            <div class="step-subtitle">Footer, copyright, dan Bootstrap JS</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>footer.php</strong> menutup halaman dengan footer yang berisi logo, copyright dinamis (tahun otomatis menggunakan <code>date('Y')</code>), dan tag penutup <code>&lt;/body&gt;&lt;/html&gt;</code>. File ini juga memuat <strong>Bootstrap JS CDN</strong> yang diperlukan untuk fitur interaktif seperti navbar toggler dan carousel.
+                    </p>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">footer.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre>    <span class="hl-cmt">&lt;!-- ===================== FOOTER ===================== --&gt;</span>
+    <span class="hl-tag">&lt;footer</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bg-dark text-white py-4"</span><span class="hl-tag">&gt;</span>
+        <span class="hl-tag">&lt;div</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"container text-center"</span><span class="hl-tag">&gt;</span>
+            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-1"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-tag">&lt;i</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"bi bi-car-front-fill me-1"</span><span class="hl-tag">&gt;&lt;/i&gt;</span>
+                <span class="hl-tag">&lt;strong&gt;</span><span class="hl-text">Auto</span><span class="hl-tag">&lt;span</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"text-primary"</span><span class="hl-tag">&gt;</span><span class="hl-text">Kredit</span><span class="hl-tag">&lt;/span&gt;&lt;/strong&gt;</span> <span class="hl-ent">&amp;mdash;</span> <span class="hl-text">Simulasi Kredit Mobil</span>
+            <span class="hl-tag">&lt;/p&gt;</span>
+            <span class="hl-tag">&lt;p</span> <span class="hl-attr">class</span><span class="hl-op">=</span><span class="hl-val">"mb-0 text-muted small"</span><span class="hl-tag">&gt;</span>
+                <span class="hl-ent">&amp;copy;</span> <span class="hl-php">&lt;?=</span> <span class="hl-fn">date</span>(<span class="hl-str">'Y'</span>) <span class="hl-php">?&gt;</span> <span class="hl-text">AutoKredit. All rights reserved. | UKK Junior Web Developer</span>
+            <span class="hl-tag">&lt;/p&gt;</span>
+        <span class="hl-tag">&lt;/div&gt;</span>
+    <span class="hl-tag">&lt;/footer&gt;</span>
+
+    <span class="hl-cmt">&lt;!-- Bootstrap 5 JS CDN --&gt;</span>
+    <span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span><span class="hl-op">=</span><span class="hl-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span>
+<span class="hl-tag">&lt;/body&gt;</span>
+<span class="hl-tag">&lt;/html&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>bg-dark text-white</code> — Footer dengan background gelap dan teks putih.</li>
+                            <li><code>py-4</code> — Padding vertical 24px.</li>
+                            <li><code>date('Y')</code> — Fungsi PHP yang menampilkan tahun saat ini secara otomatis.</li>
+                            <li><code>&amp;mdash;</code> — Entity HTML untuk karakter dash panjang (—).</li>
+                            <li><code>&amp;copy;</code> — Entity HTML untuk simbol copyright (©).</li>
+                            <li><code>bootstrap.bundle.min.js</code> — File JS Bootstrap yang sudah termasuk Popper.js (untuk dropdown, tooltip, dll).</li>
+                            <li>Tag <code>&lt;/body&gt;</code> dan <code>&lt;/html&gt;</code> menutup tag yang dibuka di <strong>header.php</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 10: style.css ========== -->
+                <div class="step-section fade-in-up" id="step-10">
+                    <div class="step-header">
+                        <div class="step-number">10</div>
+                        <div class="step-header-content">
+                            <h2>Membuat style.css</h2>
+                            <div class="step-subtitle">Custom stylesheet untuk melengkapi Bootstrap</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>style.css</strong> berisi styling tambahan yang tidak tersedia di Bootstrap, seperti <strong>gradient background</strong> pada carousel, <strong>underline decorator</strong> pada judul section, <strong>hover effect</strong> pada card, dan styling khusus untuk tabel hasil. File ini juga mengatur font family menjadi <strong>Inter</strong> dan menambahkan <strong>responsive adjustments</strong>.
+                    </p>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">style.css</span>
+                            <span class="file-card-badge badge-css">CSS</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-cmt">/* =============================================
+   AutoKredit - Custom Stylesheet
+   Styling tambahan untuk melengkapi Bootstrap 5
+   ============================================= */</span>
+
+<span class="hl-cmt">/* ----- Base / Global Styles ----- */</span>
+<span class="hl-sel">body</span> {
+    <span class="hl-prop">font-family</span>: <span class="hl-str">'Inter'</span>, <span class="hl-text">sans-serif</span>;
+    <span class="hl-prop">scroll-behavior</span>: <span class="hl-val">smooth</span>;
+}
+
+<span class="hl-cmt">/* ----- Carousel / Slider Styles ----- */</span>
+<span class="hl-sel">.carousel-slide</span> {
+    <span class="hl-prop">display</span>: <span class="hl-val">flex</span>;
+    <span class="hl-prop">align-items</span>: <span class="hl-val">center</span>;
+    <span class="hl-prop">justify-content</span>: <span class="hl-val">center</span>;
+    <span class="hl-prop">min-height</span>: <span class="hl-num">400px</span>;
+    <span class="hl-prop">color</span>: <span class="hl-num">#fff</span>;
+    <span class="hl-prop">text-align</span>: <span class="hl-val">center</span>;
+    <span class="hl-prop">padding</span>: <span class="hl-num">40px</span> <span class="hl-num">20px</span>;
+}
+
+<span class="hl-sel">.slide-1</span> {
+    <span class="hl-prop">background</span>: <span class="hl-fn">linear-gradient</span>(<span class="hl-num">135deg</span>, <span class="hl-num">#0d6efd</span> <span class="hl-num">0%</span>, <span class="hl-num">#0a3d91</span> <span class="hl-num">100%</span>);
+}
+
+<span class="hl-sel">.slide-2</span> {
+    <span class="hl-prop">background</span>: <span class="hl-fn">linear-gradient</span>(<span class="hl-num">135deg</span>, <span class="hl-num">#198754</span> <span class="hl-num">0%</span>, <span class="hl-num">#0a4a2e</span> <span class="hl-num">100%</span>);
+}
+
+<span class="hl-sel">.slide-3</span> {
+    <span class="hl-prop">background</span>: <span class="hl-fn">linear-gradient</span>(<span class="hl-num">135deg</span>, <span class="hl-num">#6610f2</span> <span class="hl-num">0%</span>, <span class="hl-num">#3a0a80</span> <span class="hl-num">100%</span>);
+}
+
+<span class="hl-sel">.carousel-caption-custom h1</span> {
+    <span class="hl-prop">font-size</span>: <span class="hl-num">2.5rem</span>;
+    <span class="hl-prop">font-weight</span>: <span class="hl-num">700</span>;
+    <span class="hl-prop">margin-bottom</span>: <span class="hl-num">15px</span>;
+}
+
+<span class="hl-sel">.carousel-caption-custom p</span> {
+    <span class="hl-prop">font-size</span>: <span class="hl-num">1.15rem</span>;
+    <span class="hl-prop">margin-bottom</span>: <span class="hl-num">25px</span>;
+    <span class="hl-prop">opacity</span>: <span class="hl-num">0.9</span>;
+}
+
+<span class="hl-cmt">/* ----- Section Spacing ----- */</span>
+<span class="hl-sel">section h2</span> {
+    <span class="hl-prop">position</span>: <span class="hl-val">relative</span>;
+    <span class="hl-prop">display</span>: <span class="hl-val">inline-block</span>;
+}
+
+<span class="hl-sel">#simulasi .text-center h2::after</span>,
+<span class="hl-sel">#tentang .text-center h2::after</span>,
+<span class="hl-sel">#kontak .text-center h2::after</span> {
+    <span class="hl-prop">content</span>: <span class="hl-str">''</span>;
+    <span class="hl-prop">display</span>: <span class="hl-val">block</span>;
+    <span class="hl-prop">width</span>: <span class="hl-num">60px</span>;
+    <span class="hl-prop">height</span>: <span class="hl-num">3px</span>;
+    <span class="hl-prop">background-color</span>: <span class="hl-num">#0d6efd</span>;
+    <span class="hl-prop">margin</span>: <span class="hl-num">10px</span> <span class="hl-val">auto</span> <span class="hl-num">0</span>;
+    <span class="hl-prop">border-radius</span>: <span class="hl-num">2px</span>;
+}
+
+<span class="hl-cmt">/* ----- Card Hover Effect ----- */</span>
+<span class="hl-sel">.card</span> {
+    <span class="hl-prop">transition</span>: <span class="hl-val">transform</span> <span class="hl-num">0.2s</span> <span class="hl-val">ease</span>, <span class="hl-val">box-shadow</span> <span class="hl-num">0.2s</span> <span class="hl-val">ease</span>;
+}
+
+<span class="hl-sel">.card:hover</span> {
+    <span class="hl-prop">transform</span>: <span class="hl-fn">translateY</span>(<span class="hl-num">-3px</span>);
+    <span class="hl-prop">box-shadow</span>: <span class="hl-num">0</span> <span class="hl-num">6px</span> <span class="hl-num">20px</span> <span class="hl-fn">rgba</span>(<span class="hl-num">0</span>, <span class="hl-num">0</span>, <span class="hl-num">0</span>, <span class="hl-num">0.1</span>) <span class="hl-kw">!important</span>;
+}
+
+<span class="hl-cmt">/* Jangan hover effect pada card form &amp; hasil */</span>
+<span class="hl-sel">#simulasi > .container > .row > .col-lg-8 > .card:hover</span> {
+    <span class="hl-prop">transform</span>: <span class="hl-val">none</span>;
+}
+
+<span class="hl-cmt">/* ----- Result Table ----- */</span>
+<span class="hl-sel">.table-success td</span> {
+    <span class="hl-prop">background-color</span>: <span class="hl-num">#d1e7dd</span> <span class="hl-kw">!important</span>;
+}
+
+<span class="hl-cmt">/* ----- Footer ----- */</span>
+<span class="hl-sel">footer</span> {
+    <span class="hl-prop">border-top</span>: <span class="hl-num">3px</span> <span class="hl-val">solid</span> <span class="hl-num">#0d6efd</span>;
+}
+
+<span class="hl-cmt">/* ----- Responsive ----- */</span>
+<span class="hl-kw">@media</span> (<span class="hl-prop">max-width</span>: <span class="hl-num">768px</span>) {
+    <span class="hl-sel">.carousel-caption-custom h1</span> {
+        <span class="hl-prop">font-size</span>: <span class="hl-num">1.75rem</span>;
+    }
+
+    <span class="hl-sel">.carousel-caption-custom p</span> {
+        <span class="hl-prop">font-size</span>: <span class="hl-num">1rem</span>;
+    }
+
+    <span class="hl-sel">.carousel-slide</span> {
+        <span class="hl-prop">min-height</span>: <span class="hl-num">300px</span>;
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>font-family: 'Inter'</code> — Menggunakan font Inter dari Google Fonts.</li>
+                            <li><code>scroll-behavior: smooth</code> — Smooth scrolling saat klik anchor link.</li>
+                            <li><code>linear-gradient(135deg, ...)</code> — Gradien diagonal 135° dengan 2 warna.</li>
+                            <li><code>min-height: 400px</code> — Tinggi minimal slide agar terlihat sebagai hero section.</li>
+                            <li><code>::after</code> — Pseudo-element untuk membuat garis biru di bawah judul section.</li>
+                            <li><code>transition: transform 0.2s ease</code> — Animasi smooth saat hover card.</li>
+                            <li><code>translateY(-3px)</code> — Mengangkat card 3px ke atas saat hover.</li>
+                            <li><code>#simulasi > .container > ...</code> — Selector spesifik untuk menonaktifkan hover pada card form.</li>
+                            <li><code>@media (max-width: 768px)</code> — Media query untuk menyesuaikan ukuran di layar kecil.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== STEP 11: index.php ========== -->
+                <div class="step-section fade-in-up" id="step-11">
+                    <div class="step-header">
+                        <div class="step-number">11</div>
+                        <div class="step-header-content">
+                            <h2>Membuat index.php</h2>
+                            <div class="step-subtitle">Entry point — menggabungkan semua file</div>
+                        </div>
+                    </div>
+                    <p class="step-description">
+                        File <strong>index.php</strong> adalah <strong>entry point</strong> atau titik masuk utama website. File ini menggunakan fungsi <code>include</code> PHP untuk menggabungkan semua file komponen menjadi <strong>satu halaman HTML yang utuh</strong>. Tidak ada logika rumit di file ini — hanya urutan include yang menentukan susunan halaman.
+                    </p>
+
+                    <div class="callout callout-success">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <p><strong>Selesai!</strong> Setelah membuat file ini, project Anda sudah lengkap. Buka <code>http://localhost/lat-ukk/</code> di browser untuk melihat hasilnya.</p>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-card-header">
+                            <i class="bi bi-file-earmark-code file-card-icon"></i>
+                            <span class="file-card-name">index.php</span>
+                            <span class="file-card-badge badge-php">PHP</span>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-btn" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+                            <pre><span class="hl-php">&lt;?php</span>
+<span class="hl-cmt">/**
+ * ==========================================================
+ * FILE: index.php (Halaman Utama)
+ * ==========================================================
+ *
+ * File ini adalah entry point / halaman utama dari website
+ * simulasi kredit mobil AutoKredit.
+ *
+ * STRUKTUR FILE:
+ * - header.php  → Tag HTML, &lt;head&gt;, CSS, dan font
+ * - navbar.php  → Menu navigasi (Beranda, Tentang, Kontak)
+ * - slider.php  → Gambar slider / carousel
+ * - form.php    → Form input kredit (Harga, DP, Tenor)
+ *   └ proses.php → Logika perhitungan angsuran (di-include oleh form.php)
+ *     └ hasil.php → Tampilan tabel hasil perhitungan (di-include oleh proses.php)
+ * - tentang.php → Section Tentang Perusahaan
+ * - kontak.php  → Section Kontak Perusahaan
+ * - footer.php  → Footer dan Bootstrap JS
+ *
+ * CARA KERJA:
+ * PHP include() digunakan untuk menggabungkan semua file
+ * menjadi satu halaman HTML yang utuh.
+ * ==========================================================
+ */</span>
+<span class="hl-php">?&gt;</span>
+
+<span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'header.php'</span>; <span class="hl-php">?&gt;</span>
+
+<span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'navbar.php'</span>; <span class="hl-php">?&gt;</span>
+
+<span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'slider.php'</span>; <span class="hl-php">?&gt;</span>
+
+<span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'form.php'</span>; <span class="hl-php">?&gt;</span>
+
+<span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'tentang.php'</span>; <span class="hl-php">?&gt;</span>
+
+<span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'kontak.php'</span>; <span class="hl-php">?&gt;</span>
+
+<span class="hl-php">&lt;?php</span> <span class="hl-kw">include</span> <span class="hl-str">'footer.php'</span>; <span class="hl-php">?&gt;</span></pre>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <h4><i class="bi bi-lightbulb-fill"></i> Penjelasan Kode</h4>
+                        <ul>
+                            <li><code>include 'header.php'</code> — Memasukkan isi file header.php ke posisi ini.</li>
+                            <li>Urutan include menentukan <strong>urutan tampilan</strong> di halaman (atas ke bawah).</li>
+                            <li><strong>Keuntungan include</strong>:
+                                <ul>
+                                    <li>Kode tidak duplikat (DRY — Don't Repeat Yourself).</li>
+                                    <li>Mudah di-maintenance — ubah satu file, efek di semua halaman.</li>
+                                    <li>Kode lebih bersih dan terorganisir.</li>
+                                </ul>
+                            </li>
+                            <li><code>form.php</code> secara internal sudah meng-include <code>proses.php</code>, dan <code>proses.php</code> meng-include <code>hasil.php</code> (chain include).</li>
+                            <li>File ini <strong>tidak perlu tag HTML/head/body</strong> karena sudah ada di header.php dan footer.php.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- ==================== FOOTER ==================== -->
+            <footer class="site-footer">
+                <div class="container">
+                    <div class="footer-logo">
+                        <i class="bi bi-car-front-fill"></i> Tutorial AutoKredit
+                    </div>
+                    <div class="footer-text">Panduan lengkap membuat project Simulasi Kredit Mobil</div>
+                    <hr class="footer-divider">
+                    <div class="footer-text">&copy; 2026 AutoKredit — UKK Junior Web Developer</div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <script>
+        // ============================================
+        // COPY BUTTON FUNCTIONALITY
+        // ============================================
+
+        document.querySelectorAll('.copy-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var pre = this.closest('.code-block').querySelector('pre');
+                var text = pre.textContent || pre.innerText;
+                navigator.clipboard.writeText(text).then(function () {
+                    btn.innerHTML = '<i class="bi bi-check2"></i> Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(function () {
+                        btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            });
+        });
+
+        // ============================================
+        // SIDEBAR INTERACTIONS
+        // ============================================
+
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        sidebarToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('open');
+        });
+
+        sidebarOverlay.addEventListener('click', function () {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+        });
+
+        // Close sidebar on link click (mobile)
+        document.querySelectorAll('.sidebar-nav a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 900) {
+                    sidebar.classList.remove('open');
+                    sidebarOverlay.classList.remove('open');
+                }
+            });
+        });
+
+        // ============================================
+        // SCROLL INTERACTIONS
+        // ============================================
+
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Progress bar
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', function () {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = progress + '%';
+        });
+
+        // Active sidebar link on scroll
+        const sections = document.querySelectorAll('.step-section, .page-header, .file-structure-section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+        window.addEventListener('scroll', function () {
+            let current = '';
+            sections.forEach(function (section) {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(function (link) {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Fade in on scroll
+        const fadeElements = document.querySelectorAll('.fade-in-up');
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(function (el) {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>

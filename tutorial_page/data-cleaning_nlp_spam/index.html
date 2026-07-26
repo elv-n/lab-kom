@@ -1,0 +1,2028 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial Data Cleaning NLP — SMS Spam Indonesia (Python)</title>
+    <meta
+      name="description"
+      content="Panduan lengkap 12 tahapan data cleaning teks NLP pada dataset SMS Spam Indonesia menggunakan Python. Persiapan untuk klasifikasi Naive Bayes + TF-IDF." />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header class="header" id="header">
+      <div class="header__brand">
+        <span class="header__brand-icon"><i data-lucide="message-circle-warning"></i></span>
+        <span>NLP Spam Classifier</span>
+      </div>
+      <div class="header__actions">
+        <span class="theme-toggle__label" id="theme-label">Light</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========== OVERLAY (mobile) ========== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ========== LAYOUT ========== -->
+    <div class="layout">
+      <!-- ========== LEFT SIDEBAR ========== -->
+      <aside class="sidebar-left" id="sidebar-left">
+        <p class="sidebar__title">Tahapan Tutorial</p>
+        <ul class="sidebar__nav" id="sidebar-nav">
+          <li>
+            <a class="sidebar__link" href="#dataset-preview">
+              <span
+                class="sidebar__link-number"
+                style="
+                  background-color: var(--color-foreground);
+                  color: var(--color-background);
+                  border: none;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                ">
+                <i data-lucide="table-2" style="width: 14px; height: 14px"></i>
+              </span>
+              <span class="sidebar__link-text">Preview Dataset</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-0">
+              <span
+                class="sidebar__link-number"
+                style="background-color: var(--color-secondary); color: var(--color-background)">
+                0
+              </span>
+              <span class="sidebar__link-text">Load & Eksplorasi</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-1">
+              <span class="sidebar__link-number">1</span>
+              <span class="sidebar__link-text">Cek Missing & Duplikat</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-2">
+              <span class="sidebar__link-number">2</span>
+              <span class="sidebar__link-text">Hapus Missing & Duplikat</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-3">
+              <span class="sidebar__link-number">3</span>
+              <span class="sidebar__link-text">Case Folding</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-4">
+              <span class="sidebar__link-number">4</span>
+              <span class="sidebar__link-text">Cleaning (Hapus Noise)</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-5">
+              <span class="sidebar__link-number">5</span>
+              <span class="sidebar__link-text">Tokenisasi</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-6">
+              <span class="sidebar__link-number">6</span>
+              <span class="sidebar__link-text">Normalisasi Slang</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-7">
+              <span class="sidebar__link-number">7</span>
+              <span class="sidebar__link-text">Stopword Removal</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-8">
+              <span class="sidebar__link-number">8</span>
+              <span class="sidebar__link-text">Stemming</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-9">
+              <span class="sidebar__link-number">9</span>
+              <span class="sidebar__link-text">Gabung Token</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-10">
+              <span class="sidebar__link-number">10</span>
+              <span class="sidebar__link-text">Label Encoding</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar__link" href="#step-11">
+              <span class="sidebar__link-number">11</span>
+              <span class="sidebar__link-text">Validasi & Simpan</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- ========== MAIN CONTENT ========== -->
+      <main class="main" id="main-content">
+        <!-- HERO -->
+        <section class="hero">
+          <span class="hero__badge">
+            <i data-lucide="book-open" style="width: 14px; height: 14px; margin-right: 4px"></i>
+            Tutorial Lengkap
+          </span>
+          <h1 class="hero__title">
+            Data Cleaning NLP
+            <br />
+            <span class="hero__title-accent">SMS Spam Indonesia</span>
+          </h1>
+          <p class="hero__subtitle">Panduan tahapan data cleaning teks menggunakan Python — persiapan pipeline Naive Bayes + TF-IDF.</p>
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <span class="hero__stat-value">1145</span>
+              <span class="hero__stat-label">Total Baris</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">2</span>
+              <span class="hero__stat-label">Kolom</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">12</span>
+              <span class="hero__stat-label">Tahapan</span>
+            </div>
+            <div class="hero__stat">
+              <span class="hero__stat-value">Python</span>
+              <span class="hero__stat-label">Tool Utama</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DATASET PREVIEW -->
+        <section class="dataset-preview" id="dataset-preview">
+          <h2 class="dataset-preview__title">
+            <i data-lucide="table"></i>
+            Preview Dataset
+          </h2>
+          <p>
+            Berikut adalah 6 baris pertama dari dataset SMS Spam Indonesia. Dataset memiliki 2 kolom:
+            <strong>Kategori</strong> (label spam/ham) dan <strong>Pesan</strong> (isi SMS).
+          </p>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Kategori</th>
+                  <th>Pesan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td class="cell-missing">spam</td>
+                  <td>Plg Yth: Simcard anda mendptkan bonus poin plus-plus 555 dr:PT.INDOSAT pin anda:277fg49...</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td class="cell-new">ham</td>
+                  <td>Iya ih ko sedih sih gtau kapan lg ke bandung :(</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td class="cell-new">ham</td>
+                  <td>Kalau mau bikin model/controller mending per apa y?</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td class="cell-new">ham</td>
+                  <td>Selamat nama1. Semoga selalu menempuh hidup yang bahagia dan selalu menyenangkan</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td class="cell-missing">spam</td>
+                  <td>Tingkatkan nilai isi ulang Anda selanjutnya minimal Rp10ribu untuk bisa mendapatkan Paket MURAH PAS...</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td class="cell-missing">spam</td>
+                  <td>Uangnya di Trnsfer di BNI ini aja a/n RASTINA NO.REK.0253 7915 37...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="info-box info-box--info">
+            <i class="info-box__icon" data-lucide="info"></i>
+            <p class="info-box__text">
+              <strong>Distribusi Label:</strong>
+              Dataset terdiri dari <strong>574 spam</strong> (50.1%) dan <strong>569 ham</strong> (49.9%) — cukup seimbang
+              sehingga tidak memerlukan teknik balancing khusus.
+            </p>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 0: Load & Eksplorasi Dataset -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-0">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div
+                class="step-card__number"
+                style="background-color: var(--color-secondary); color: var(--color-background)">
+                00
+              </div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Load & Eksplorasi Dataset</h2>
+                <p class="step-card__subtitle">Membaca file CSV dan memahami struktur data</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Mengapa Ini Penting?
+                </h3>
+                <p class="step-card__desc">
+                  Langkah pertama dalam setiap proyek data science adalah <strong>memahami data</strong>. Kita perlu tahu
+                  jumlah baris, kolom, tipe data, serta distribusi label (spam vs ham) sebelum melakukan preprocessing.
+                  Ini membantu kita menentukan strategi cleaning yang tepat untuk pipeline <strong>TF-IDF + Naive Bayes</strong>.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Import library</strong> dan baca file CSV:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="import pandas as pd
+
+df = pd.read_csv('sms_spam_indo.csv')
+print(df.shape)
+print(df.head())">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">import</span> <span class="function">pandas</span> <span class="keyword">as</span> pd
+
+df = pd.<span class="function">read_csv</span>(<span class="string">'sms_spam_indo.csv'</span>)
+<span class="function">print</span>(df.<span class="function">shape</span>)
+<span class="function">print</span>(df.<span class="function">head</span>())</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">(1145, 2)
+
+  Kategori                                              Pesan
+0     spam  Plg Yth: Simcard anda mendptkan bonus poin p...
+1      ham      Iya ih ko sedih sih gtau kapan lg ke bandung :(
+2      ham   Kalau mau bikin model/controller mending per apa y?
+3      ham  Selamat nama1. Semoga selalu menempuh hidup y...
+4     spam  Tingkatkan nilai isi ulang Anda selanjutnya m...</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Cek info & distribusi label:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="print(df.info())
+print(df['Kategori'].value_counts())">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="function">print</span>(df.<span class="function">info</span>())
+<span class="function">print</span>(df[<span class="string">'Kategori'</span>].<span class="function">value_counts</span>())</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 1145 entries, 0 to 1144
+Data columns (total 2 columns):
+ #   Column    Non-Null Count  Dtype
+---  ------    --------------  -----
+ 0   Kategori  1145 non-null   object
+ 1   Pesan     1145 non-null   object
+dtypes: object(2)
+memory usage: 18.0+ KB
+
+Kategori
+spam    574
+ham     569
+Name: count, dtype: int64</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Hasil Eksplorasi
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Properti</th>
+                        <th>Nilai</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Jumlah Baris</td>
+                        <td><strong>1.145</strong></td>
+                      </tr>
+                      <tr>
+                        <td>Jumlah Kolom</td>
+                        <td><strong>2</strong> (Kategori, Pesan)</td>
+                      </tr>
+                      <tr>
+                        <td>Tipe Data</td>
+                        <td>object (string) untuk kedua kolom</td>
+                      </tr>
+                      <tr>
+                        <td>Spam</td>
+                        <td class="cell-missing"><strong>574</strong> (50.1%)</td>
+                      </tr>
+                      <tr>
+                        <td>Ham</td>
+                        <td class="cell-new"><strong>569</strong> (49.9%)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 1: Cek Missing Values & Duplikat -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-1">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">01</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Cek Missing Values & Duplikat</h2>
+                <p class="step-card__subtitle">Identifikasi data kosong dan baris duplikat</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Missing values dan data duplikat adalah masalah umum pada dataset. Pada data teks NLP, baris kosong
+                  akan menyebabkan error saat tokenisasi, dan duplikat dapat membuat model <strong>Naive Bayes</strong>
+                  memberikan bobot berlebih pada teks tertentu — menyebabkan <strong>overfitting</strong>.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Python</span>
+                    <button class="formula-block__copy" data-copy="# Cek missing values per kolom
+print(df.isnull().sum())
+print()
+
+# Cek jumlah baris duplikat
+print(f'Jumlah duplikat: {df.duplicated().sum()}')">
+                      <i data-lucide="copy"></i>
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword"># Cek missing values per kolom</span>
+<span class="function">print</span>(df.<span class="function">isnull</span>().<span class="function">sum</span>())
+<span class="function">print</span>()
+
+<span class="keyword"># Cek jumlah baris duplikat</span>
+<span class="function">print</span>(<span class="string">f'Jumlah duplikat: </span>{df.<span class="function">duplicated</span>().<span class="function">sum</span>()}<span class="string">'</span>)</pre>
+                </div>
+                <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                  <div class="formula-block__header" style="background-color: var(--color-success)">
+                    <span>▶ Output</span>
+                  </div>
+                  <pre class="formula-block__code" style="font-size: 13px">Kategori    0
+Pesan       0
+dtype: int64
+
+Jumlah duplikat: 87</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Hasil Pemeriksaan
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kolom</th>
+                        <th>Missing Values</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Kategori</td>
+                        <td>0</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td>Pesan</td>
+                        <td>0</td>
+                        <td>✅ Lengkap</td>
+                      </tr>
+                      <tr>
+                        <td class="cell-highlight">Baris Duplikat</td>
+                        <td class="cell-missing">87</td>
+                        <td>⚠️ Perlu Dihapus</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 2: Hapus Missing & Duplikat -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-2">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">02</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Hapus Missing Values & Duplikat</h2>
+                <p class="step-card__subtitle">Membersihkan data kosong dan baris duplikat</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Meskipun tidak ada missing values pada dataset ini, kita tetap menambahkan kode <code>dropna()</code>
+                  sebagai <strong>best practice</strong> untuk pipeline yang reusable. Baris duplikat (87 baris) harus
+                  dihapus agar model tidak bias terhadap teks yang muncul berulang.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Python</span>
+                    <button class="formula-block__copy" data-copy="# Hapus missing values (jika ada)
+df.dropna(inplace=True)
+
+# Hapus baris duplikat
+df.drop_duplicates(inplace=True)
+
+# Reset index setelah penghapusan
+df.reset_index(drop=True, inplace=True)
+
+print(f'Jumlah data setelah cleaning: {len(df)}')
+print(f'Distribusi label:')
+print(df['Kategori'].value_counts())">
+                      <i data-lucide="copy"></i>
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword"># Hapus missing values (jika ada)</span>
+df.<span class="function">dropna</span>(inplace=<span class="number">True</span>)
+
+<span class="keyword"># Hapus baris duplikat</span>
+df.<span class="function">drop_duplicates</span>(inplace=<span class="number">True</span>)
+
+<span class="keyword"># Reset index setelah penghapusan</span>
+df.<span class="function">reset_index</span>(drop=<span class="number">True</span>, inplace=<span class="number">True</span>)
+
+<span class="function">print</span>(<span class="string">f'Jumlah data setelah cleaning: </span>{<span class="function">len</span>(df)}<span class="string">'</span>)
+<span class="function">print</span>(<span class="string">f'Distribusi label:'</span>)
+<span class="function">print</span>(df[<span class="string">'Kategori'</span>].<span class="function">value_counts</span>())</pre>
+                </div>
+                <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                  <div class="formula-block__header" style="background-color: var(--color-success)">
+                    <span>▶ Output</span>
+                  </div>
+                  <pre class="formula-block__code" style="font-size: 13px">Jumlah data setelah cleaning: 1058
+Distribusi label:
+Kategori
+spam    530
+ham     528
+Name: count, dtype: int64</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Perbandingan
+                </h3>
+                <div class="comparison">
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--before">
+                      <i data-lucide="x-circle" style="width: 14px; height: 14px"></i>
+                      Sebelum
+                    </div>
+                    <div style="padding: var(--space-md)">
+                      <p style="margin: 0; font-size: 14px"><strong>1.145</strong> baris</p>
+                      <p style="margin: 0; font-size: 14px; color: var(--color-foreground-muted)">87 duplikat</p>
+                    </div>
+                  </div>
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--after">
+                      <i data-lucide="check-circle-2" style="width: 14px; height: 14px"></i>
+                      Sesudah
+                    </div>
+                    <div style="padding: var(--space-md)">
+                      <p style="margin: 0; font-size: 14px"><strong>1.058</strong> baris</p>
+                      <p style="margin: 0; font-size: 14px; color: var(--color-foreground-muted)">0 duplikat ✅</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 3: Case Folding -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-3">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">03</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Case Folding</h2>
+                <p class="step-card__subtitle">Mengubah semua teks menjadi huruf kecil (lowercase)</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  <strong>TF-IDF bersifat case-sensitive</strong> — kata "Selamat", "SELAMAT", dan "selamat" akan
+                  dianggap sebagai <strong>3 kata berbeda</strong>. Ini menyebabkan fitur yang redundan dan mengurangi
+                  akurasi model. Dengan <em>case folding</em>, semua variasi menjadi satu kata yang sama: <code>selamat</code>.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Python</span>
+                    <button class="formula-block__copy" data-copy="# Case folding — ubah semua teks ke lowercase
+df['Pesan'] = df['Pesan'].str.lower()
+
+print(df['Pesan'].head(3))">
+                      <i data-lucide="copy"></i>
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword"># Case folding — ubah semua teks ke lowercase</span>
+df[<span class="string">'Pesan'</span>] = df[<span class="string">'Pesan'</span>].str.<span class="function">lower</span>()
+
+<span class="function">print</span>(df[<span class="string">'Pesan'</span>].<span class="function">head</span>(<span class="number">3</span>))</pre>
+                </div>
+                <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                  <div class="formula-block__header" style="background-color: var(--color-success)">
+                    <span>▶ Output</span>
+                  </div>
+                  <pre class="formula-block__code" style="font-size: 13px">0    plg yth: simcard anda mendptkan bonus poin p...
+1        iya ih ko sedih sih gtau kapan lg ke bandung :(
+2     kalau mau bikin model/controller mending per apa y?
+Name: Pesan, dtype: object</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Contoh Hasil
+                </h3>
+                <div class="comparison">
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--before">
+                      <i data-lucide="x-circle" style="width: 14px; height: 14px"></i>
+                      Sebelum
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 14px; font-family: var(--font-code)">
+                      <strong>P</strong>lg <strong>Y</strong>th: <strong>S</strong>imcard anda mendptkan <strong>B</strong>onus...
+                    </div>
+                  </div>
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--after">
+                      <i data-lucide="check-circle-2" style="width: 14px; height: 14px"></i>
+                      Sesudah
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 14px; font-family: var(--font-code)">
+                      plg yth: simcard anda mendptkan bonus...
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 4: Cleaning (Hapus Noise) -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-4">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">04</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Cleaning — Hapus Noise</h2>
+                <p class="step-card__subtitle">Menghapus URL, angka, tanda baca, emoji, dan karakter khusus</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  SMS spam sering mengandung <strong>URL, nomor telepon, angka promosi, emoji, dan karakter khusus</strong>
+                  yang tidak membawa informasi linguistik untuk <strong>TF-IDF</strong>. Elemen-elemen ini hanya menambah
+                  noise pada fitur dan memperbesar dimensi vocabulary tanpa meningkatkan kemampuan diskriminatif model
+                  <strong>Naive Bayes</strong>.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Python</span>
+                    <button class="formula-block__copy" data-copy="import re
+
+def clean_text(text):
+    # Hapus URL
+    text = re.sub(r'http\S+|www\.\S+', '', text)
+    # Hapus mention & hashtag
+    text = re.sub(r'@\w+|#\w+', '', text)
+    # Hapus angka
+    text = re.sub(r'\d+', '', text)
+    # Hapus tanda baca & karakter khusus
+    text = re.sub(r'[^\w\s]', '', text)
+    # Hapus whitespace berlebih
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+df['Pesan'] = df['Pesan'].apply(clean_text)
+print(df['Pesan'].head(3))">
+                      <i data-lucide="copy"></i>
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">import</span> <span class="function">re</span>
+
+<span class="keyword">def</span> <span class="function">clean_text</span>(text):
+    <span class="keyword"># Hapus URL</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'http\S+|www\.\S+'</span>, <span class="string">''</span>, text)
+    <span class="keyword"># Hapus mention & hashtag</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'@\w+|#\w+'</span>, <span class="string">''</span>, text)
+    <span class="keyword"># Hapus angka</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'\d+'</span>, <span class="string">''</span>, text)
+    <span class="keyword"># Hapus tanda baca & karakter khusus</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'[^\w\s]'</span>, <span class="string">''</span>, text)
+    <span class="keyword"># Hapus whitespace berlebih</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'\s+'</span>, <span class="string">' '</span>, text).<span class="function">strip</span>()
+    <span class="keyword">return</span> text
+
+df[<span class="string">'Pesan'</span>] = df[<span class="string">'Pesan'</span>].<span class="function">apply</span>(clean_text)
+<span class="function">print</span>(df[<span class="string">'Pesan'</span>].<span class="function">head</span>(<span class="number">3</span>))</pre>
+                </div>
+                <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                  <div class="formula-block__header" style="background-color: var(--color-success)">
+                    <span>▶ Output</span>
+                  </div>
+                  <pre class="formula-block__code" style="font-size: 13px">0    plg yth simcard anda mendptkan bonus poin plus...
+1            iya ih ko sedih sih gtau kapan lg ke bandung
+2       kalau mau bikin modelcontroller mending per apa y
+Name: Pesan, dtype: object</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Contoh Detail
+                </h3>
+                <div class="comparison">
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--before">
+                      <i data-lucide="x-circle" style="width: 14px; height: 14px"></i>
+                      Sebelum
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code); word-break: break-all">
+                      plg yth: simcard anda mendptkan bonus poin plus-plus 555 dr:pt.indosat pin anda:277fg49 u/info klik di www.indosat-555.blogspot.com atau hub:021-3338-0074.
+                    </div>
+                  </div>
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--after">
+                      <i data-lucide="check-circle-2" style="width: 14px; height: 14px"></i>
+                      Sesudah
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code); word-break: break-all">
+                      plg yth simcard anda mendptkan bonus poin plusplus drptindosat pin anda uinfo klik di atau hub
+                    </div>
+                  </div>
+                </div>
+                <div class="info-box info-box--tip">
+                  <i class="info-box__icon" data-lucide="lightbulb"></i>
+                  <p class="info-box__text">
+                    <strong>Tips:</strong>
+                    Urutan regex penting! Hapus URL <strong>sebelum</strong> hapus tanda baca agar pola URL bisa dikenali dengan benar.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 5: Tokenisasi -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-5">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">05</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Tokenisasi</h2>
+                <p class="step-card__subtitle">Memecah kalimat menjadi kumpulan kata (token)</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  <strong>Tokenisasi</strong> adalah proses memecah teks menjadi unit-unit kecil yang disebut
+                  <em>token</em> (biasanya kata). Ini adalah langkah fundamental dalam NLP karena semua proses
+                  selanjutnya (normalisasi slang, stopword removal, stemming) bekerja pada level token.
+                  Untuk bahasa Indonesia, kita bisa menggunakan <code>str.split()</code> karena pemisah antar kata
+                  sudah cukup jelas (spasi).
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Python</span>
+                    <button class="formula-block__copy" data-copy="# Tokenisasi — pecah kalimat menjadi list kata
+df['Pesan_Tokens'] = df['Pesan'].str.split()
+
+print(df['Pesan_Tokens'].head(3))">
+                      <i data-lucide="copy"></i>
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword"># Tokenisasi — pecah kalimat menjadi list kata</span>
+df[<span class="string">'Pesan_Tokens'</span>] = df[<span class="string">'Pesan'</span>].str.<span class="function">split</span>()
+
+<span class="function">print</span>(df[<span class="string">'Pesan_Tokens'</span>].<span class="function">head</span>(<span class="number">3</span>))</pre>
+                </div>
+                <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                  <div class="formula-block__header" style="background-color: var(--color-success)">
+                    <span>▶ Output</span>
+                  </div>
+                  <pre class="formula-block__code" style="font-size: 13px">0    [plg, yth, simcard, anda, mendptkan, bonus, po...
+1    [iya, ih, ko, sedih, sih, gtau, kapan, lg, ke,...
+2    [kalau, mau, bikin, modelcontroller, mending, p...
+Name: Pesan_Tokens, dtype: object</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Contoh Hasil
+                </h3>
+                <div class="comparison">
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--before">
+                      <i data-lucide="type" style="width: 14px; height: 14px"></i>
+                      String (Sebelum)
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      "iya ih ko sedih sih gtau kapan lg ke bandung"
+                    </div>
+                  </div>
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--after">
+                      <i data-lucide="list" style="width: 14px; height: 14px"></i>
+                      List Token (Sesudah)
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      ['iya', 'ih', 'ko', 'sedih', 'sih', 'gtau', 'kapan', 'lg', 'ke', 'bandung']
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 6: Normalisasi Kata Gaul / Singkatan -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-6">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">06</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Normalisasi Kata Gaul & Singkatan</h2>
+                <p class="step-card__subtitle">Mengubah kata informal/singkatan ke bentuk baku (yg → yang, tdk → tidak)</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Mengapa Ini Penting?
+                </h3>
+                <p class="step-card__desc">
+                  Teks SMS Indonesia sangat informal — penuh dengan <strong>singkatan</strong> (<em>yg</em>, <em>tdk</em>,
+                  <em>utk</em>) dan <strong>kata gaul</strong> (<em>gak</em>, <em>aja</em>, <em>banget</em>). Tanpa
+                  normalisasi, <strong>TF-IDF</strong> akan menganggap <code>yg</code> dan <code>yang</code> sebagai
+                  <strong>dua kata berbeda</strong> — padahal artinya sama. Ini menyebabkan:
+                  <br>• Vocabulary membengkak dengan variasi kata yang redundan
+                  <br>• Frekuensi kata terpecah sehingga bobot TF-IDF tidak akurat
+                  <br>• <strong>Naive Bayes</strong> kehilangan pola penting karena probabilitas kata terdilusi
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Buat kamus (dictionary)</strong> kata gaul & singkatan ke bentuk baku:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="# Kamus normalisasi kata gaul & singkatan Indonesia
+slang_dict = {
+    'yg': 'yang', 'tdk': 'tidak', 'gak': 'tidak', 'gk': 'tidak',
+    'ga': 'tidak', 'ngga': 'tidak', 'nggak': 'tidak', 'kagak': 'tidak',
+    'dgn': 'dengan', 'dg': 'dengan', 'utk': 'untuk', 'tuk': 'untuk',
+    'buat': 'untuk', 'dr': 'dari', 'dr.': 'dari', 'dri': 'dari',
+    'sy': 'saya', 'sya': 'saya', 'gw': 'saya', 'gue': 'saya',
+    'aku': 'saya', 'ku': 'saya', 'kmu': 'kamu', 'km': 'kamu',
+    'lo': 'kamu', 'lu': 'kamu',
+    'sdh': 'sudah', 'udh': 'sudah', 'udah': 'sudah',
+    'blm': 'belum', 'belom': 'belum',
+    'bs': 'bisa', 'bsa': 'bisa',
+    'krn': 'karena', 'soalnya': 'karena', 'krna': 'karena',
+    'tp': 'tapi', 'tpi': 'tapi',
+    'jg': 'juga', 'jga': 'juga',
+    'lg': 'lagi', 'lgi': 'lagi',
+    'aja': 'saja', 'doang': 'saja', 'doank': 'saja',
+    'bgt': 'banget', 'bngt': 'banget', 'banget': 'sangat',
+    'sm': 'sama', 'sma': 'sama',
+    'kalo': 'kalau', 'klo': 'kalau',
+    'gmn': 'bagaimana', 'gimana': 'bagaimana',
+    'dmn': 'dimana', 'dmna': 'dimana',
+    'kpn': 'kapan',
+    'skrg': 'sekarang', 'skg': 'sekarang',
+    'hrs': 'harus', 'msti': 'harus',
+    'org': 'orang', 'orng': 'orang',
+    'trs': 'terus', 'trus': 'terus',
+    'msh': 'masih', 'masi': 'masih',
+    'dl': 'dulu', 'dlu': 'dulu',
+    'emg': 'memang', 'emang': 'memang',
+    'pake': 'pakai', 'pk': 'pakai',
+    'sampe': 'sampai', 'ampe': 'sampai',
+    'kayak': 'seperti', 'kyk': 'seperti',
+    'gitu': 'begitu', 'gtu': 'begitu',
+    'gini': 'begini', 'gni': 'begini',
+    'dpt': 'dapat', 'dpat': 'dapat',
+    'bkn': 'bukan', 'bukn': 'bukan',
+    'blg': 'bilang', 'bilng': 'bilang',
+    'krm': 'kirim', 'krim': 'kirim',
+    'hub': 'hubungi', 'hbg': 'hubungi',
+    'nmr': 'nomor', 'nomer': 'nomor', 'no': 'nomor',
+    'hp': 'handphone', 'ponsel': 'handphone',
+    'sms': 'pesan', 'msg': 'pesan',
+    'tlp': 'telepon', 'nelp': 'telepon', 'telp': 'telepon',
+    'info': 'informasi', 'inf': 'informasi',
+    'promo': 'promosi',
+    'dapet': 'dapat', 'dpet': 'dapat',
+    'mendpt': 'mendapat', 'mendptkan': 'mendapatkan',
+    'gtau': 'tidak tahu', 'gatau': 'tidak tahu',
+    'makasih': 'terima kasih', 'makasi': 'terima kasih',
+    'trmks': 'terima kasih', 'thx': 'terima kasih',
+    'trims': 'terima kasih',
+}
+
+print(f'Jumlah kata dalam kamus: {len(slang_dict)}')">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Kamus normalisasi kata gaul & singkatan Indonesia</span>
+slang_dict = {
+    <span class="string">'yg'</span>: <span class="string">'yang'</span>,     <span class="string">'tdk'</span>: <span class="string">'tidak'</span>,    <span class="string">'gak'</span>: <span class="string">'tidak'</span>,
+    <span class="string">'gk'</span>: <span class="string">'tidak'</span>,     <span class="string">'ga'</span>: <span class="string">'tidak'</span>,     <span class="string">'ngga'</span>: <span class="string">'tidak'</span>,
+    <span class="string">'dgn'</span>: <span class="string">'dengan'</span>,   <span class="string">'dg'</span>: <span class="string">'dengan'</span>,    <span class="string">'utk'</span>: <span class="string">'untuk'</span>,
+    <span class="string">'dr'</span>: <span class="string">'dari'</span>,      <span class="string">'sy'</span>: <span class="string">'saya'</span>,     <span class="string">'sdh'</span>: <span class="string">'sudah'</span>,
+    <span class="string">'udh'</span>: <span class="string">'sudah'</span>,    <span class="string">'blm'</span>: <span class="string">'belum'</span>,   <span class="string">'bs'</span>: <span class="string">'bisa'</span>,
+    <span class="string">'krn'</span>: <span class="string">'karena'</span>,   <span class="string">'tp'</span>: <span class="string">'tapi'</span>,     <span class="string">'jg'</span>: <span class="string">'juga'</span>,
+    <span class="string">'lg'</span>: <span class="string">'lagi'</span>,      <span class="string">'aja'</span>: <span class="string">'saja'</span>,    <span class="string">'bgt'</span>: <span class="string">'sangat'</span>,
+    <span class="string">'sm'</span>: <span class="string">'sama'</span>,      <span class="string">'klo'</span>: <span class="string">'kalau'</span>,   <span class="string">'kalo'</span>: <span class="string">'kalau'</span>,
+    <span class="string">'gmn'</span>: <span class="string">'bagaimana'</span>, <span class="string">'dmn'</span>: <span class="string">'dimana'</span>,
+    <span class="string">'skrg'</span>: <span class="string">'sekarang'</span>, <span class="string">'hrs'</span>: <span class="string">'harus'</span>,
+    <span class="string">'org'</span>: <span class="string">'orang'</span>,    <span class="string">'trs'</span>: <span class="string">'terus'</span>,
+    <span class="string">'msh'</span>: <span class="string">'masih'</span>,    <span class="string">'dl'</span>: <span class="string">'dulu'</span>,
+    <span class="string">'emang'</span>: <span class="string">'memang'</span>, <span class="string">'pake'</span>: <span class="string">'pakai'</span>,
+    <span class="string">'sampe'</span>: <span class="string">'sampai'</span>, <span class="string">'kayak'</span>: <span class="string">'seperti'</span>,
+    <span class="string">'gitu'</span>: <span class="string">'begitu'</span>,  <span class="string">'gini'</span>: <span class="string">'begini'</span>,
+    <span class="string">'dpt'</span>: <span class="string">'dapat'</span>,    <span class="string">'hub'</span>: <span class="string">'hubungi'</span>,
+    <span class="string">'nmr'</span>: <span class="string">'nomor'</span>,    <span class="string">'tlp'</span>: <span class="string">'telepon'</span>,
+    <span class="string">'gtau'</span>: <span class="string">'tidak tahu'</span>,
+    <span class="string">'makasih'</span>: <span class="string">'terima kasih'</span>,
+    <span class="string">'trmks'</span>: <span class="string">'terima kasih'</span>,
+    <span class="keyword"># ... tambahkan sesuai kebutuhan</span>
+}
+
+<span class="function">print</span>(<span class="string">f'Jumlah kata dalam kamus: </span>{<span class="function">len</span>(slang_dict)}<span class="string">'</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">Jumlah kata dalam kamus: 65</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Terapkan normalisasi</strong> pada setiap token:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="def normalize_slang(tokens):
+    return [slang_dict.get(word, word) for word in tokens]
+
+df['Pesan_Tokens'] = df['Pesan_Tokens'].apply(normalize_slang)
+
+# Lihat perbandingan sebelum vs sesudah
+print(df['Pesan_Tokens'].head(3))">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">def</span> <span class="function">normalize_slang</span>(tokens):
+    <span class="keyword">return</span> [slang_dict.<span class="function">get</span>(word, word) <span class="keyword">for</span> word <span class="keyword">in</span> tokens]
+
+df[<span class="string">'Pesan_Tokens'</span>] = df[<span class="string">'Pesan_Tokens'</span>].<span class="function">apply</span>(normalize_slang)
+
+<span class="keyword"># Lihat perbandingan sebelum vs sesudah</span>
+<span class="function">print</span>(df[<span class="string">'Pesan_Tokens'</span>].<span class="function">head</span>(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">0    [plg, yth, simcard, anda, mendapatkan, bonus, ...
+1    [iya, ih, ko, sedih, sih, tidak, tahu, kapan, ...
+2    [kalau, mau, bikin, modelcontroller, mending, ...
+Name: Pesan_Tokens, dtype: object</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Contoh Normalisasi
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kata Asli (Slang)</th>
+                        <th>→</th>
+                        <th>Hasil Normalisasi</th>
+                        <th>Konteks SMS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="cell-missing">yg</td>
+                        <td>→</td>
+                        <td class="cell-new">yang</td>
+                        <td><em>"...yg sering kalah Togel..."</em></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-missing">tdk</td>
+                        <td>→</td>
+                        <td class="cell-new">tidak</td>
+                        <td><em>"...tp tdk trsambung..."</em></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-missing">sdh</td>
+                        <td>→</td>
+                        <td class="cell-new">sudah</td>
+                        <td><em>"...sy sdh buktikan..."</em></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-missing">utk</td>
+                        <td>→</td>
+                        <td class="cell-new">untuk</td>
+                        <td><em>"...utk nelp ke nmr Tri..."</em></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-missing">lg</td>
+                        <td>→</td>
+                        <td class="cell-new">lagi</td>
+                        <td><em>"...kapan lg ke bandung..."</em></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-missing">aja</td>
+                        <td>→</td>
+                        <td class="cell-new">saja</td>
+                        <td><em>"...Hanya hari ini saja!..."</em></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-missing">gtau</td>
+                        <td>→</td>
+                        <td class="cell-new">tidak tahu</td>
+                        <td><em>"...gtau kapan lg..."</em></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-missing">gmn</td>
+                        <td>→</td>
+                        <td class="cell-new">bagaimana</td>
+                        <td><em>"...gmn teh..."</em></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Perbandingan Kalimat
+                </h3>
+                <div class="comparison">
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--before">
+                      <i data-lucide="x-circle" style="width: 14px; height: 14px"></i>
+                      Sebelum Normalisasi
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      ['iya', 'ih', 'ko', 'sedih', 'sih', '<strong style="color: var(--color-danger)">gtau</strong>', 'kapan', '<strong style="color: var(--color-danger)">lg</strong>', 'ke', 'bandung']
+                    </div>
+                  </div>
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--after">
+                      <i data-lucide="check-circle-2" style="width: 14px; height: 14px"></i>
+                      Sesudah Normalisasi
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      ['iya', 'ih', 'ko', 'sedih', 'sih', '<strong style="color: var(--color-success)">tidak</strong>', '<strong style="color: var(--color-success)">tahu</strong>', 'kapan', '<strong style="color: var(--color-success)">lagi</strong>', 'ke', 'bandung']
+                    </div>
+                  </div>
+                </div>
+                <div class="info-box info-box--warn">
+                  <i class="info-box__icon" data-lucide="alert-triangle"></i>
+                  <p class="info-box__text">
+                    <strong>Perhatian:</strong>
+                    Kamus slang ini bersifat <strong>manual dan tidak lengkap</strong>. Anda bisa memperkaya kamus
+                    dengan menganalisis kata-kata unik di dataset:
+                    <br>
+                    <code>all_words = [w for tokens in df['Pesan_Tokens'] for w in tokens]</code>
+                    <br>
+                    <code>pd.Series(all_words).value_counts().tail(50)</code>
+                    <br><br>
+                    Atau menggunakan kamus slang publik dari repository seperti
+                    <strong>kamus-alay</strong> di GitHub.
+                  </p>
+                </div>
+                <div class="info-box info-box--tip" style="margin-top: var(--space-sm)">
+                  <i class="info-box__icon" data-lucide="lightbulb"></i>
+                  <p class="info-box__text">
+                    <strong>Tips:</strong>
+                    Fungsi <code>slang_dict.get(word, word)</code> artinya: jika kata ada di kamus → kembalikan
+                    bentuk baku, jika tidak ada → kembalikan kata aslinya. Jadi kata yang sudah baku tidak berubah.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 7: Stopword Removal -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-7">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">07</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Stopword Removal</h2>
+                <p class="step-card__subtitle">Menghapus kata-kata umum yang tidak bermakna diskriminatif</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  <strong>Stopwords</strong> adalah kata-kata umum seperti <em>"yang"</em>, <em>"dan"</em>, <em>"di"</em>,
+                  <em>"ke"</em>, <em>"ini"</em>, <em>"itu"</em> yang muncul di hampir semua dokumen. Dalam konteks
+                  <strong>TF-IDF</strong>, kata-kata ini memiliki <strong>IDF rendah</strong> (karena muncul di banyak
+                  dokumen) sehingga kontribusi mereka terhadap vektor fitur sangat kecil. Menghapusnya akan:
+                  <br>• <strong>Mengurangi dimensi fitur</strong> (vocabulary lebih kecil)
+                  <br>• <strong>Mempercepat</strong> proses training
+                  <br>• <strong>Meningkatkan fokus</strong> pada kata-kata diskriminatif (misal: "hadiah", "gratis" untuk spam)
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Install & import library NLTK</strong> untuk stopwords bahasa Indonesia:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+
+stop_words = set(stopwords.words('indonesian'))
+print(f'Jumlah stopwords: {len(stop_words)}')
+print(sorted(list(stop_words))[:20])">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">import</span> <span class="function">nltk</span>
+<span class="function">nltk</span>.<span class="function">download</span>(<span class="string">'stopwords'</span>)
+<span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> stopwords
+
+stop_words = <span class="function">set</span>(stopwords.<span class="function">words</span>(<span class="string">'indonesian'</span>))
+<span class="function">print</span>(<span class="string">f'Jumlah stopwords: </span>{<span class="function">len</span>(stop_words)}<span class="string">'</span>)
+<span class="function">print</span>(<span class="function">sorted</span>(<span class="function">list</span>(stop_words))[:<span class="number">20</span>])</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">[nltk_data] Downloading package stopwords to /root/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+
+Jumlah stopwords: 758
+['ada', 'adalah', 'adanya', 'adapun', 'agak', 'agaknya',
+ 'agar', 'akan', 'akankah', 'akhir', 'akhiri', 'akhirnya',
+ 'aku', 'akulah', 'amat', 'amatlah', 'anda', 'andalah',
+ 'antar', 'antara']</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Hapus stopwords</strong> dari setiap token:
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="def remove_stopwords(tokens):
+    return [word for word in tokens if word not in stop_words]
+
+df['Pesan_Tokens'] = df['Pesan_Tokens'].apply(remove_stopwords)
+print(df['Pesan_Tokens'].head(3))">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">def</span> <span class="function">remove_stopwords</span>(tokens):
+    <span class="keyword">return</span> [word <span class="keyword">for</span> word <span class="keyword">in</span> tokens <span class="keyword">if</span> word <span class="keyword">not in</span> stop_words]
+
+df[<span class="string">'Pesan_Tokens'</span>] = df[<span class="string">'Pesan_Tokens'</span>].<span class="function">apply</span>(remove_stopwords)
+<span class="function">print</span>(df[<span class="string">'Pesan_Tokens'</span>].<span class="function">head</span>(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">0    [plg, yth, simcard, mendapatkan, bonus, poin, ...
+1                     [ih, ko, sedih, sih, tahu, kapan, bandung]
+2         [bikin, modelcontroller, mending, apa]
+Name: Pesan_Tokens, dtype: object</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Contoh Hasil
+                </h3>
+                <div class="comparison">
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--before">
+                      <i data-lucide="x-circle" style="width: 14px; height: 14px"></i>
+                      Sebelum (10 kata)
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      ['iya', 'ih', 'ko', 'sedih', 'sih', 'tidak', 'tahu', 'kapan', '<strong style="color: var(--color-danger)">lagi</strong>', '<strong style="color: var(--color-danger)">ke</strong>', 'bandung']
+                    </div>
+                  </div>
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--after">
+                      <i data-lucide="check-circle-2" style="width: 14px; height: 14px"></i>
+                      Sesudah (7 kata)
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      ['ih', 'ko', 'sedih', 'sih', 'tahu', 'kapan', 'bandung']
+                    </div>
+                  </div>
+                </div>
+                <div class="info-box info-box--warn">
+                  <i class="info-box__icon" data-lucide="alert-triangle"></i>
+                  <p class="info-box__text">
+                    <strong>Perhatian:</strong>
+                    Karena kita sudah menormalisasi slang di Step 6 (misal <code>lg → lagi</code>, <code>ke</code>),
+                    stopword removal sekarang bisa menangkap kata-kata yang sebelumnya lolos dalam bentuk singkatan!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 8: Stemming -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-8">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">08</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Stemming</h2>
+                <p class="step-card__subtitle">Mengembalikan kata ke bentuk dasar (root word)</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  <strong>Stemming</strong> adalah proses menghilangkan imbuhan (awalan, akhiran, sisipan) untuk
+                  mendapatkan kata dasar. Misalnya: <em>mendapatkan</em> → <em>dapat</em>,
+                  <em>penawaran</em> → <em>tawar</em>. Untuk bahasa Indonesia, kita menggunakan library
+                  <strong>Sastrawi</strong> yang memahami aturan morfologi bahasa Indonesia.
+                  <br><br>
+                  Dalam konteks <strong>TF-IDF</strong>, stemming <strong>mengurangi dimensi fitur</strong> dengan
+                  menggabungkan variasi kata yang bermakna sama ke satu token. Ini membantu <strong>Naive Bayes</strong>
+                  belajar pola yang lebih general.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Install & inisialisasi Sastrawi stemmer:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Terminal</span>
+                          <button class="formula-block__copy" data-copy="pip install Sastrawi">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="function">pip</span> <span class="keyword">install</span> <span class="string">Sastrawi</span></pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Terapkan stemming pada token:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+
+# Buat stemmer (cukup sekali)
+factory = StemmerFactory()
+stemmer = factory.createStemmer()
+
+def stem_tokens(tokens):
+    return [stemmer.stem(word) for word in tokens]
+
+df['Pesan_Tokens'] = df['Pesan_Tokens'].apply(stem_tokens)
+print(df['Pesan_Tokens'].head(3))">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword">from</span> Sastrawi.Stemmer.StemmerFactory <span class="keyword">import</span> <span class="function">StemmerFactory</span>
+
+<span class="keyword"># Buat stemmer (cukup sekali)</span>
+factory = <span class="function">StemmerFactory</span>()
+stemmer = factory.<span class="function">createStemmer</span>()
+
+<span class="keyword">def</span> <span class="function">stem_tokens</span>(tokens):
+    <span class="keyword">return</span> [stemmer.<span class="function">stem</span>(word) <span class="keyword">for</span> word <span class="keyword">in</span> tokens]
+
+df[<span class="string">'Pesan_Tokens'</span>] = df[<span class="string">'Pesan_Tokens'</span>].<span class="function">apply</span>(stem_tokens)
+<span class="function">print</span>(df[<span class="string">'Pesan_Tokens'</span>].<span class="function">head</span>(<span class="number">3</span>))</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">0    [plg, yth, simcard, dapat, bonus, poin, plus, ...
+1                    [ih, ko, sedih, sih, tahu, kapan, bandung]
+2                         [bikin, modelcontroller, mending, apa]
+Name: Pesan_Tokens, dtype: object</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Contoh Hasil Stemming
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kata Asli</th>
+                        <th>→</th>
+                        <th>Hasil Stemming</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>mendapatkan</td>
+                        <td>→</td>
+                        <td class="cell-new">dapat</td>
+                      </tr>
+                      <tr>
+                        <td>penawaran</td>
+                        <td>→</td>
+                        <td class="cell-new">tawar</td>
+                      </tr>
+                      <tr>
+                        <td>menghubungi</td>
+                        <td>→</td>
+                        <td class="cell-new">hubung</td>
+                      </tr>
+                      <tr>
+                        <td>pemenang</td>
+                        <td>→</td>
+                        <td class="cell-new">menang</td>
+                      </tr>
+                      <tr>
+                        <td>selamat</td>
+                        <td>→</td>
+                        <td class="cell-new">selamat</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="info-box info-box--info">
+                  <i class="info-box__icon" data-lucide="info"></i>
+                  <p class="info-box__text">
+                    <strong>Catatan:</strong>
+                    Proses stemming Sastrawi bisa memakan waktu karena menganalisis setiap kata satu per satu.
+                    Untuk dataset besar, pertimbangkan menggunakan caching atau parallel processing.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 9: Gabung Token -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-9">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">09</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Gabung Token Kembali</h2>
+                <p class="step-card__subtitle">Menggabungkan list token menjadi string kalimat kembali</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Setelah selesai preprocessing pada level token, kita perlu <strong>menggabungkan kembali</strong>
+                  token menjadi string. Ini karena <code>TfidfVectorizer</code> dari scikit-learn menerima input berupa
+                  <strong>string</strong>, bukan list. Kita menggunakan <code>' '.join()</code> untuk menyatukan token
+                  dengan spasi sebagai pemisah.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Python</span>
+                    <button class="formula-block__copy" data-copy="# Gabung token kembali menjadi string
+df['Pesan_Clean'] = df['Pesan_Tokens'].apply(lambda x: ' '.join(x))
+
+# Hapus kolom token sementara (opsional)
+df.drop(columns=['Pesan_Tokens'], inplace=True)
+
+print(df[['Pesan', 'Pesan_Clean']].head(3))">
+                      <i data-lucide="copy"></i>
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword"># Gabung token kembali menjadi string</span>
+df[<span class="string">'Pesan_Clean'</span>] = df[<span class="string">'Pesan_Tokens'</span>].<span class="function">apply</span>(<span class="keyword">lambda</span> x: <span class="string">' '</span>.<span class="function">join</span>(x))
+
+<span class="keyword"># Hapus kolom token sementara (opsional)</span>
+df.<span class="function">drop</span>(columns=[<span class="string">'Pesan_Tokens'</span>], inplace=<span class="number">True</span>)
+
+<span class="function">print</span>(df[[<span class="string">'Pesan'</span>, <span class="string">'Pesan_Clean'</span>]].<span class="function">head</span>(<span class="number">3</span>))</pre>
+                </div>
+                <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                  <div class="formula-block__header" style="background-color: var(--color-success)">
+                    <span>▶ Output</span>
+                  </div>
+                  <pre class="formula-block__code" style="font-size: 13px">                                               Pesan  \
+0  plg yth simcard anda mendptkan bonus poin plus...
+1      iya ih ko sedih sih gtau kapan lg ke bandung
+2     kalau mau bikin modelcontroller mending per apa
+
+                                          Pesan_Clean
+0  plg yth simcard dapat bonus poin plus drptindo...
+1                 ih ko sedih sih tahu kapan bandung
+2                    bikin modelcontroller mending apa</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Contoh Hasil
+                </h3>
+                <div class="comparison">
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--before">
+                      <i data-lucide="list" style="width: 14px; height: 14px"></i>
+                      Token (List)
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      ['ih', 'ko', 'sedih', 'sih', 'tahu', 'kapan', 'bandung']
+                    </div>
+                  </div>
+                  <div class="comparison__panel">
+                    <div class="comparison__label comparison__label--after">
+                      <i data-lucide="type" style="width: 14px; height: 14px"></i>
+                      String (Gabung)
+                    </div>
+                    <div style="padding: var(--space-md); font-size: 13px; font-family: var(--font-code)">
+                      "ih ko sedih sih tahu kapan bandung"
+                    </div>
+                  </div>
+                </div>
+                <div class="info-box info-box--tip">
+                  <i class="info-box__icon" data-lucide="lightbulb"></i>
+                  <p class="info-box__text">
+                    <strong>Tips:</strong>
+                    Kolom <code>Pesan_Clean</code> inilah yang akan menjadi input untuk <strong>TfidfVectorizer</strong>
+                    di tutorial selanjutnya. Kolom <code>Pesan</code> (asli) bisa dipertahankan untuk referensi.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 10: Label Encoding -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-10">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">10</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Label Encoding</h2>
+                <p class="step-card__subtitle">Mengubah label kategorikal menjadi numerik</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Model <strong>Naive Bayes</strong> di scikit-learn membutuhkan label dalam format
+                  <strong>numerik</strong>. Kita perlu mengubah label <code>spam</code> dan <code>ham</code> menjadi
+                  angka: <strong>spam → 1</strong>, <strong>ham → 0</strong>. Kita menggunakan <code>map()</code> untuk
+                  mapping yang eksplisit dan mudah dipahami.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Python</span>
+                    <button class="formula-block__copy" data-copy="# Label encoding: spam → 1, ham → 0
+df['Label'] = df['Kategori'].map({'spam': 1, 'ham': 0})
+
+print(df[['Kategori', 'Label']].head(6))
+print(f'\nDistribusi label numerik:')
+print(df['Label'].value_counts())">
+                      <i data-lucide="copy"></i>
+                      Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword"># Label encoding: spam → 1, ham → 0</span>
+df[<span class="string">'Label'</span>] = df[<span class="string">'Kategori'</span>].<span class="function">map</span>({<span class="string">'spam'</span>: <span class="number">1</span>, <span class="string">'ham'</span>: <span class="number">0</span>})
+
+<span class="function">print</span>(df[[<span class="string">'Kategori'</span>, <span class="string">'Label'</span>]].<span class="function">head</span>(<span class="number">6</span>))
+<span class="function">print</span>(<span class="string">f'\nDistribusi label numerik:'</span>)
+<span class="function">print</span>(df[<span class="string">'Label'</span>].<span class="function">value_counts</span>())</pre>
+                </div>
+                <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                  <div class="formula-block__header" style="background-color: var(--color-success)">
+                    <span>▶ Output</span>
+                  </div>
+                  <pre class="formula-block__code" style="font-size: 13px">  Kategori  Label
+0     spam      1
+1      ham      0
+2      ham      0
+3      ham      0
+4     spam      1
+5     spam      1
+
+Distribusi label numerik:
+Label
+1    530
+0    528
+Name: count, dtype: int64</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Hasil Encoding
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Kategori</th>
+                        <th>→</th>
+                        <th>Label</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="cell-missing">spam</td>
+                        <td>→</td>
+                        <td class="cell-missing"><strong>1</strong></td>
+                      </tr>
+                      <tr>
+                        <td class="cell-new">ham</td>
+                        <td>→</td>
+                        <td class="cell-new"><strong>0</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="info-box info-box--info">
+                  <i class="info-box__icon" data-lucide="info"></i>
+                  <p class="info-box__text">
+                    <strong>Mengapa manual map?</strong>
+                    Bisa juga menggunakan <code>LabelEncoder</code> dari scikit-learn, tetapi <code>map()</code> lebih
+                    eksplisit — kita tahu persis mapping-nya: spam=1 (positif/target), ham=0 (negatif/normal).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================= -->
+        <!-- STEP 11: Validasi & Simpan -->
+        <!-- ============================= -->
+        <section class="step-section" id="step-11">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">11</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Validasi & Simpan Dataset</h2>
+                <p class="step-card__subtitle">Verifikasi hasil cleaning dan simpan dataset bersih</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="lightbulb"></i>
+                  Penjelasan
+                </h3>
+                <p class="step-card__desc">
+                  Langkah terakhir adalah <strong>memvalidasi</strong> hasil data cleaning secara menyeluruh dan
+                  <strong>menyimpan</strong> dataset bersih ke file CSV baru. Dataset ini siap digunakan untuk
+                  tahap selanjutnya: <strong>TF-IDF vectorization</strong> dan training model
+                  <strong>Multinomial Naive Bayes</strong>.
+                </p>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="code-2"></i>
+                  Kode Python
+                </h3>
+                <ol class="excel-steps">
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Validasi data akhir:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="# Cek info akhir
+print('=== INFO DATASET AKHIR ===')
+print(f'Shape: {df.shape}')
+print(f'Kolom: {list(df.columns)}')
+print(f'\nMissing values:\n{df.isnull().sum()}')
+print(f'\nDistribusi label:\n{df[&quot;Label&quot;].value_counts()}')
+print(f'\nContoh data bersih:')
+print(df[['Pesan_Clean', 'Label']].head())">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Cek info akhir</span>
+<span class="function">print</span>(<span class="string">'=== INFO DATASET AKHIR ==='</span>)
+<span class="function">print</span>(<span class="string">f'Shape: </span>{df.shape}<span class="string">'</span>)
+<span class="function">print</span>(<span class="string">f'Kolom: </span>{<span class="function">list</span>(df.columns)}<span class="string">'</span>)
+<span class="function">print</span>(<span class="string">f'\nMissing values:\n</span>{df.<span class="function">isnull</span>().<span class="function">sum</span>()}<span class="string">'</span>)
+<span class="function">print</span>(<span class="string">f'\nDistribusi label:\n</span>{df[<span class="string">"Label"</span>].<span class="function">value_counts</span>()}<span class="string">'</span>)
+<span class="function">print</span>(<span class="string">f'\nContoh data bersih:'</span>)
+<span class="function">print</span>(df[[<span class="string">'Pesan_Clean'</span>, <span class="string">'Label'</span>]].<span class="function">head</span>())</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">=== INFO DATASET AKHIR ===
+Shape: (1058, 4)
+Kolom: ['Kategori', 'Pesan', 'Pesan_Clean', 'Label']
+
+Missing values:
+Kategori      0
+Pesan         0
+Pesan_Clean   0
+Label         0
+dtype: int64
+
+Distribusi label:
+Label
+1    530
+0    528
+Name: count, dtype: int64
+
+Contoh data bersih:
+                                          Pesan_Clean  Label
+0  plg yth simcard dapat bonus poin plus drptindo...      1
+1                 ih ko sedih sih tahu kapan bandung      0
+2                    bikin modelcontroller mending apa      0
+3              selamat nama semoga tempuh hidup bahagia      0
+4  tingkat nilai isi ulang lanjut minimal ribu bis...      1</pre>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="excel-step">
+                    <div class="excel-step__content">
+                      <p class="excel-step__text">
+                        <strong>Simpan ke CSV:</strong>
+                      </p>
+                      <div class="formula-block">
+                        <div class="formula-block__header">
+                          <span>Python</span>
+                          <button class="formula-block__copy" data-copy="# Simpan dataset bersih
+df_clean = df[['Pesan_Clean', 'Label']]
+df_clean.to_csv('sms_spam_clean.csv', index=False)
+
+print('✅ Dataset bersih telah disimpan ke sms_spam_clean.csv')
+print(f'   Jumlah data: {len(df_clean)}')">
+                            <i data-lucide="copy"></i>
+                            Copy
+                          </button>
+                        </div>
+                        <pre class="formula-block__code"><span class="keyword"># Simpan dataset bersih</span>
+df_clean = df[[<span class="string">'Pesan_Clean'</span>, <span class="string">'Label'</span>]]
+df_clean.<span class="function">to_csv</span>(<span class="string">'sms_spam_clean.csv'</span>, index=<span class="number">False</span>)
+
+<span class="function">print</span>(<span class="string">'✅ Dataset bersih telah disimpan ke sms_spam_clean.csv'</span>)
+<span class="function">print</span>(<span class="string">f'   Jumlah data: </span>{<span class="function">len</span>(df_clean)}<span class="string">'</span>)</pre>
+                      </div>
+                      <div class="formula-block" style="margin-top: 16px; border-color: var(--color-success)">
+                        <div class="formula-block__header" style="background-color: var(--color-success)">
+                          <span>▶ Output</span>
+                        </div>
+                        <pre class="formula-block__code" style="font-size: 13px">✅ Dataset bersih telah disimpan ke sms_spam_clean.csv
+   Jumlah data: 1058</pre>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="bar-chart-2"></i>
+                  Preview Dataset Bersih (Final)
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Pesan_Clean</th>
+                        <th>Label</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>0</td>
+                        <td>plg yth simcard dapat bonus poin plus drptindosat pin info klik hubungi</td>
+                        <td class="cell-missing">1</td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>ih ko sedih sih tahu kapan bandung</td>
+                        <td class="cell-new">0</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>bikin modelcontroller mending apa</td>
+                        <td class="cell-new">0</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>selamat nama semoga tempuh hidup bahagia senang</td>
+                        <td class="cell-new">0</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>tingkat nilai isi ulang lanjut minimal ribu bisa dapat paket murah pas info</td>
+                        <td class="cell-missing">1</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title">
+                  <i data-lucide="check-circle-2"></i>
+                  Ringkasan Data Cleaning
+                </h3>
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Properti</th>
+                        <th>Sebelum</th>
+                        <th>Sesudah</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Jumlah Baris</td>
+                        <td class="cell-missing">1.145</td>
+                        <td class="cell-new">1.058</td>
+                      </tr>
+                      <tr>
+                        <td>Kolom Output</td>
+                        <td>Kategori, Pesan</td>
+                        <td class="cell-new">Pesan_Clean, Label</td>
+                      </tr>
+                      <tr>
+                        <td>Duplikat</td>
+                        <td class="cell-missing">87</td>
+                        <td class="cell-new">0</td>
+                      </tr>
+                      <tr>
+                        <td>Case</td>
+                        <td>Campuran</td>
+                        <td class="cell-new">Lowercase</td>
+                      </tr>
+                      <tr>
+                        <td>URL/Angka/Simbol</td>
+                        <td class="cell-missing">Ada</td>
+                        <td class="cell-new">Dihapus</td>
+                      </tr>
+                      <tr>
+                        <td>Kata Gaul/Singkatan</td>
+                        <td class="cell-missing">yg, tdk, sdh, ...</td>
+                        <td class="cell-new">yang, tidak, sudah ✅</td>
+                      </tr>
+                      <tr>
+                        <td>Stopwords</td>
+                        <td class="cell-missing">Ada</td>
+                        <td class="cell-new">Dihapus</td>
+                      </tr>
+                      <tr>
+                        <td>Stemming</td>
+                        <td class="cell-missing">Belum</td>
+                        <td class="cell-new">Sastrawi ✅</td>
+                      </tr>
+                      <tr>
+                        <td>Label</td>
+                        <td>spam/ham (string)</td>
+                        <td class="cell-new">1/0 (numerik)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="info-box info-box--tip">
+                  <i class="info-box__icon" data-lucide="lightbulb"></i>
+                  <p class="info-box__text">
+                    <strong>Langkah Selanjutnya:</strong>
+                    Dataset <code>sms_spam_clean.csv</code> siap digunakan untuk tutorial berikutnya:
+                    <strong>TF-IDF Vectorization + Klasifikasi Multinomial Naive Bayes</strong>.
+                    Kolom <code>Pesan_Clean</code> akan menjadi input untuk <code>TfidfVectorizer</code> dan
+                    kolom <code>Label</code> sebagai target prediksi.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- ========== RIGHT SIDEBAR ========== -->
+      <aside class="sidebar-right" id="sidebar-right">
+        <div class="progress-box">
+          <h4 class="progress-box__title">
+            Progress Membaca
+            <span id="progress-text">0 / 12</span>
+          </h4>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="progress-box" style="margin-top: var(--space-xl)">
+          <h4 class="progress-box__title">
+            Pipeline NLP
+            <i data-lucide="workflow"></i>
+          </h4>
+          <div style="font-size: 13px; font-family: var(--font-code); line-height: 2">
+            <span style="background: var(--color-primary); color: #1a1a1a; padding: 2px 6px; font-weight: 700; border: 2px solid var(--color-border)">1. Data Cleaning</span>
+            <span style="display: block; text-align: center; color: var(--color-foreground-muted)">↓</span>
+            <span style="background: var(--color-surface); padding: 2px 6px; border: 2px solid var(--color-border); color: var(--color-foreground-muted)">2. TF-IDF</span>
+            <span style="display: block; text-align: center; color: var(--color-foreground-muted)">↓</span>
+            <span style="background: var(--color-surface); padding: 2px 6px; border: 2px solid var(--color-border); color: var(--color-foreground-muted)">3. Naive Bayes</span>
+          </div>
+        </div>
+
+        <div class="progress-box" style="margin-top: var(--space-xl)">
+          <h4 class="progress-box__title">
+            Library yang Digunakan
+            <i data-lucide="package"></i>
+          </h4>
+          <ul style="font-size: 13px; list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: var(--space-sm)">
+            <li style="padding: 4px 8px; background: var(--color-surface); border: 2px solid var(--color-border); font-family: var(--font-code); font-weight: 600">pandas</li>
+            <li style="padding: 4px 8px; background: var(--color-surface); border: 2px solid var(--color-border); font-family: var(--font-code); font-weight: 600">re (regex)</li>
+            <li style="padding: 4px 8px; background: var(--color-surface); border: 2px solid var(--color-border); font-family: var(--font-code); font-weight: 600">nltk</li>
+            <li style="padding: 4px 8px; background: var(--color-surface); border: 2px solid var(--color-border); font-family: var(--font-code); font-weight: 600">Sastrawi</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Tutorial Data Cleaning NLP — SMS Spam Indonesia</p>
+      <p>Persiapan pipeline: TF-IDF + Multinomial Naive Bayes</p>
+    </footer>
+
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top"><i data-lucide="arrow-up"></i></button>
+
+    <script src="../../js/script-nlp-spam.js"></script>
+  </body>
+</html>

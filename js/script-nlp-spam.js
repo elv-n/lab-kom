@@ -1,5 +1,5 @@
 /* ========================================
-   TITANIC DATA CLEANING TUTORIAL
+   NLP SPAM DATA CLEANING TUTORIAL
    Interactive Script
    ======================================== */
 
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Element References ---
   const themeToggle = document.getElementById('theme-toggle');
   const themeLabel = document.getElementById('theme-label');
-  const sidebar = document.getElementById('sidebar');
+  const sidebarLeft = document.getElementById('sidebar-left');
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const overlay = document.getElementById('overlay');
   const scrollTopBtn = document.getElementById('scroll-top');
@@ -24,12 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // DARK MODE
   // ========================================
   function getStoredTheme() {
-    return localStorage.getItem('titanic-theme') || 'light';
+    return localStorage.getItem('nlp-spam-theme') || 'light';
   }
 
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('titanic-theme', theme);
+    localStorage.setItem('nlp-spam-theme', theme);
     themeLabel.textContent = theme === 'dark' ? 'Dark' : 'Light';
   }
 
@@ -45,21 +45,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // MOBILE SIDEBAR
   // ========================================
   function openSidebar() {
-    sidebar.classList.add('open');
+    sidebarLeft.classList.add('open');
     mobileMenuBtn.classList.add('active');
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function closeSidebar() {
-    sidebar.classList.remove('open');
+    sidebarLeft.classList.remove('open');
     mobileMenuBtn.classList.remove('active');
     overlay.classList.remove('active');
     document.body.style.overflow = '';
   }
 
   mobileMenuBtn.addEventListener('click', () => {
-    if (sidebar.classList.contains('open')) {
+    if (sidebarLeft.classList.contains('open')) {
       closeSidebar();
     } else {
       openSidebar();

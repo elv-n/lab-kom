@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial: Membuat Aplikasi CRUD Film dengan PHP & MySQL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .tutorial-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .tutorial-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .tutorial-header p {
+            font-size: 16px;
+            color: #bdc3c7;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .toc {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-left: 4px solid #2c3e50;
+            padding: 20px 30px;
+            margin: 30px 0;
+        }
+
+        .toc h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .toc ol { padding-left: 20px; }
+        .toc li { margin-bottom: 6px; }
+        .toc a { text-decoration: none; color: #2980b9; }
+        .toc a:hover { text-decoration: underline; }
+
+        .step {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 30px 0;
+            padding: 25px 30px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background-color: #2c3e50;
+            color: white;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .step h2 {
+            display: inline;
+            font-size: 20px;
+            color: #2c3e50;
+            vertical-align: middle;
+        }
+
+        .step h3 {
+            font-size: 16px;
+            color: #555;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .step p { margin: 10px 0; }
+
+        .filename {
+            display: inline-block;
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            padding: 4px 12px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            color: #c0392b;
+            margin: 10px 0;
+        }
+
+        /* CODE BLOCK */
+        pre.code-block {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            margin: 10px 0 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            border-left: 4px solid #27ae60;
+            position: relative;
+            white-space: pre;
+            tab-size: 4;
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3b3b3b;
+            color: #d4d4d4;
+            border: 1px solid #555;
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .kw { color: #569cd6; }
+        .fn { color: #dcdcaa; }
+        .str { color: #ce9178; }
+        .var { color: #9cdcfe; }
+        .cm { color: #6a9955; }
+        .tag { color: #569cd6; }
+        .attr { color: #9cdcfe; }
+        .val { color: #ce9178; }
+        .ph { color: #c586c0; }
+
+        .info-box {
+            background-color: #eaf4fc;
+            border-left: 4px solid #2980b9;
+            padding: 12px 16px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .info-box strong { color: #2980b9; }
+
+        .warning-box {
+            background-color: #fdf2e9;
+            border-left: 4px solid #e67e22;
+            padding: 12px 16px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .warning-box strong { color: #e67e22; }
+
+        .file-tree {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px 20px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+
+        .tutorial-footer {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-size: 13px;
+            border-top: 1px solid #ddd;
+            margin-top: 40px;
+        }
+
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            color: #c0392b;
+        }
+
+        .step ol { padding-left: 20px; margin: 10px 0; }
+        .step ol li { margin-bottom: 8px; }
+        .back-top { display: block; text-align: right; margin-top: 15px; font-size: 13px; }
+        .back-top a { color: #999; text-decoration: none; }
+        .back-top a:hover { color: #333; }
+    </style>
+</head>
+
+<body>
+
+    <div class="tutorial-header">
+        <h1>Tutorial: Membuat Aplikasi CRUD Film</h1>
+        <p>PHP & MySQL | Langkah demi Langkah</p>
+    </div>
+
+    <div class="container">
+
+        <!-- PENDAHULUAN -->
+        <div class="step">
+            <h2>Pendahuluan</h2>
+            <p>Dalam tutorial ini, kita akan membuat aplikasi web sederhana untuk mengelola data film menggunakan <strong>PHP</strong> dan <strong>MySQL</strong>. Aplikasi ini memiliki fitur <strong>CRUD</strong> (Create, Read, Update, Delete).</p>
+            <h3>Apa yang akan kita buat?</h3>
+            <ol>
+                <li><strong>Tambah Film</strong> &mdash; Menambahkan data film baru ke database</li>
+                <li><strong>Lihat Data</strong> &mdash; Menampilkan semua data film dalam tabel</li>
+                <li><strong>Edit Film</strong> &mdash; Mengubah data film yang sudah ada</li>
+                <li><strong>Hapus Film</strong> &mdash; Menghapus data film dari database</li>
+            </ol>
+            <h3>Prasyarat</h3>
+            <ol>
+                <li>Sudah menginstall <strong>Laragon</strong> (atau XAMPP)</li>
+                <li>Laragon sudah berjalan (Apache & MySQL aktif)</li>
+                <li>Memiliki text editor (Notepad++, VS Code, dll)</li>
+            </ol>
+            <h3>Struktur File</h3>
+            <div class="file-tree">
+                app-film/<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── koneksi.php<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── index.php<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── lihat-data.php<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── edit-data.php<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;└── hapus-data.php
+            </div>
+        </div>
+
+        <!-- DAFTAR ISI -->
+        <div class="toc" id="daftar-isi">
+            <h2>Daftar Isi</h2>
+            <ol>
+                <li><a href="#langkah-1">Membuat Folder Project</a></li>
+                <li><a href="#langkah-2">Membuat Database & Tabel</a></li>
+                <li><a href="#langkah-3">Membuat File Koneksi Database (koneksi.php)</a></li>
+                <li><a href="#langkah-4">Membuat Halaman Tambah Film (index.php)</a></li>
+                <li><a href="#langkah-5">Membuat Halaman Lihat Data (lihat-data.php)</a></li>
+                <li><a href="#langkah-6">Membuat Halaman Edit Film (edit-data.php)</a></li>
+                <li><a href="#langkah-7">Membuat Halaman Hapus Film (hapus-data.php)</a></li>
+                <li><a href="#langkah-8">Uji Coba Aplikasi</a></li>
+            </ol>
+        </div>
+
+        <!-- LANGKAH 1 -->
+        <div class="step" id="langkah-1">
+            <span class="step-number">1</span>
+            <h2>Membuat Folder Project</h2>
+            <p>Langkah pertama, kita perlu membuat folder untuk menyimpan semua file project.</p>
+            <ol>
+                <li>Buka <strong>File Explorer</strong></li>
+                <li>Pergi ke folder Laragon: <code>C:\laragon\www\</code></li>
+                <li>Buat folder baru dengan nama: <code>app-film</code></li>
+            </ol>
+            <div class="info-box">
+                <strong>Info:</strong> Folder <code>www</code> adalah document root dari Laragon. Semua project web harus disimpan di sini agar bisa diakses melalui browser.
+            </div>
+            <p>Setelah folder dibuat, aplikasi bisa diakses di browser dengan alamat: <code>http://localhost/app-film/</code></p>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- LANGKAH 2 -->
+        <div class="step" id="langkah-2">
+            <span class="step-number">2</span>
+            <h2>Membuat Database & Tabel</h2>
+            <p>Sebelum menulis code PHP, kita perlu menyiapkan database MySQL terlebih dahulu.</p>
+            <h3>2.1 Buka phpMyAdmin</h3>
+            <ol>
+                <li>Pastikan Laragon sudah berjalan</li>
+                <li>Buka browser, ketik: <code>http://localhost/phpmyadmin</code></li>
+                <li>Login (default: username <code>root</code>, password kosong)</li>
+            </ol>
+            <h3>2.2 Buat Database Baru</h3>
+            <ol>
+                <li>Klik tab <strong>"Database"</strong> di bagian atas</li>
+                <li>Pada kolom "Create database", ketik: <code>db.film</code></li>
+                <li>Klik tombol <strong>"Create"</strong></li>
+            </ol>
+            <h3>2.3 Buat Tabel</h3>
+            <ol>
+                <li>Setelah database <code>db.film</code> terbuat, klik database tersebut</li>
+                <li>Klik tab <strong>"SQL"</strong></li>
+                <li>Ketik query SQL berikut, lalu klik <strong>"Go"</strong>:</li>
+            </ol>
+<pre class="code-block">
+<span class="kw">CREATE TABLE</span> data_film (
+    id <span class="kw">INT</span>(11) <span class="kw">AUTO_INCREMENT PRIMARY KEY</span>,
+    judul <span class="kw">VARCHAR</span>(255) <span class="kw">NOT NULL</span>,
+    tahun <span class="kw">INT</span>(4) <span class="kw">NOT NULL</span>
+);
+</pre>
+            <div class="info-box">
+                <strong>Penjelasan:</strong>
+                <br>&bull; <code>id</code> &mdash; nomor unik otomatis untuk setiap film (AUTO_INCREMENT)
+                <br>&bull; <code>judul</code> &mdash; menyimpan judul film (teks, max 255 karakter)
+                <br>&bull; <code>tahun</code> &mdash; menyimpan tahun rilis film (angka, 4 digit)
+            </div>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- LANGKAH 3: koneksi.php -->
+        <div class="step" id="langkah-3">
+            <span class="step-number">3</span>
+            <h2>Membuat File Koneksi Database</h2>
+            <div class="filename">koneksi.php</div>
+            <p>File ini bertugas menghubungkan PHP dengan database MySQL. File ini akan dipanggil oleh semua halaman lain.</p>
+            <h3>Buat file baru: koneksi.php</h3>
+            <p>Buka text editor, buat file baru, simpan dengan nama <code>koneksi.php</code> di folder <code>app-film</code>. Kemudian ketik code berikut:</p>
+<pre class="code-block">
+<span class="ph">&lt;?php</span>
+<span class="var">$koneksi</span> = <span class="fn">mysqli_connect</span>(<span class="str">"localhost"</span>, <span class="str">"root"</span>, <span class="str">""</span>, <span class="str">"db.film"</span>);
+
+<span class="kw">if</span> (!<span class="var">$koneksi</span>) {
+    <span class="fn">die</span>(<span class="str">"Koneksi gagal: "</span> . <span class="fn">mysqli_connect_error</span>());
+}
+</pre>
+            <div class="info-box">
+                <strong>Penjelasan:</strong>
+                <br>&bull; <code>mysqli_connect()</code> &mdash; fungsi PHP untuk terhubung ke MySQL
+                <br>&bull; Parameter: <code>"localhost"</code> (server), <code>"root"</code> (username), <code>""</code> (password kosong), <code>"db.film"</code> (nama database)
+                <br>&bull; <code>die()</code> &mdash; menghentikan program jika koneksi gagal
+            </div>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- LANGKAH 4: index.php -->
+        <div class="step" id="langkah-4">
+            <span class="step-number">4</span>
+            <h2>Membuat Halaman Tambah Film</h2>
+            <div class="filename">index.php</div>
+            <p>Halaman ini adalah halaman utama aplikasi. Berisi form untuk menambahkan data film baru ke database.</p>
+            <h3>Buat file baru: index.php</h3>
+            <p>Ketik seluruh code berikut ke dalam file <code>index.php</code>:</p>
+<pre class="code-block">
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"id"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span>
+          <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Tambah Film - App Film<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="tag">&lt;body&gt;</span>
+
+    <span class="cm">&lt;!-- Header --&gt;</span>
+    <span class="tag">&lt;header&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>App Film<span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Aplikasi Manajemen Data Film<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/header&gt;</span>
+
+    <span class="cm">&lt;!-- Navbar --&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"index.php"</span><span class="tag">&gt;</span><span class="tag">&lt;b&gt;</span>Tambah Film<span class="tag">&lt;/b&gt;</span><span class="tag">&lt;/a&gt;</span> |
+        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"lihat-data.php"</span><span class="tag">&gt;</span>Lihat Data<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+
+    <span class="tag">&lt;hr&gt;</span>
+
+    <span class="cm">&lt;!-- Konten Utama --&gt;</span>
+    <span class="tag">&lt;main&gt;</span>
+        <span class="tag">&lt;h2&gt;</span>Tambah Data Film<span class="tag">&lt;/h2&gt;</span>
+
+        <span class="ph">&lt;?php</span>
+        <span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$_POST</span>[<span class="str">'submit'</span>])) {
+            <span class="var">$judul</span> = <span class="var">$_POST</span>[<span class="str">'judul'</span>];
+            <span class="var">$tahun</span> = <span class="var">$_POST</span>[<span class="str">'tahun'</span>];
+
+            <span class="cm">// Koneksi ke database</span>
+            <span class="kw">include</span> <span class="str">'koneksi.php'</span>;
+
+            <span class="cm">// Query untuk menambahkan data film</span>
+            <span class="var">$query</span> = <span class="str">"INSERT INTO data_film (judul, tahun)
+                     VALUES ('<span class="var">$judul</span>', '<span class="var">$tahun</span>')"</span>;
+            <span class="kw">if</span> (<span class="fn">mysqli_query</span>(<span class="var">$koneksi</span>, <span class="var">$query</span>)) {
+                <span class="kw">echo</span> <span class="str">"&lt;p&gt;Data film &lt;b&gt;"</span>
+                   . <span class="fn">htmlspecialchars</span>(<span class="var">$judul</span>)
+                   . <span class="str">"&lt;/b&gt; berhasil ditambahkan!&lt;/p&gt;"</span>;
+            } <span class="kw">else</span> {
+                <span class="kw">echo</span> <span class="str">"&lt;p&gt;Error: "</span>
+                   . <span class="fn">mysqli_error</span>(<span class="var">$koneksi</span>)
+                   . <span class="str">"&lt;/p&gt;"</span>;
+            }
+
+            <span class="cm">// Menutup koneksi</span>
+            <span class="fn">mysqli_close</span>(<span class="var">$koneksi</span>);
+        }
+        <span class="ph">?&gt;</span>
+
+        <span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="val">""</span> <span class="attr">method</span>=<span class="val">"post"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;p&gt;</span>
+                <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"judul"</span><span class="tag">&gt;</span>Judul Film:<span class="tag">&lt;/label&gt;</span><span class="tag">&lt;br&gt;</span>
+                <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span>
+                       <span class="attr">id</span>=<span class="val">"judul"</span>
+                       <span class="attr">name</span>=<span class="val">"judul"</span>
+                       <span class="attr">placeholder</span>=<span class="val">"Masukkan judul film"</span>
+                       <span class="attr">required</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;/p&gt;</span>
+
+            <span class="tag">&lt;p&gt;</span>
+                <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"tahun"</span><span class="tag">&gt;</span>Tahun Rilis:<span class="tag">&lt;/label&gt;</span><span class="tag">&lt;br&gt;</span>
+                <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"number"</span>
+                       <span class="attr">id</span>=<span class="val">"tahun"</span>
+                       <span class="attr">name</span>=<span class="val">"tahun"</span>
+                       <span class="attr">placeholder</span>=<span class="val">"Contoh: 2024"</span>
+                       <span class="attr">required</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;/p&gt;</span>
+
+            <span class="tag">&lt;p&gt;</span>
+                <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"submit"</span>
+                       <span class="attr">name</span>=<span class="val">"submit"</span>
+                       <span class="attr">value</span>=<span class="val">"Tambah Film"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;/form&gt;</span>
+    <span class="tag">&lt;/main&gt;</span>
+
+    <span class="tag">&lt;hr&gt;</span>
+
+    <span class="cm">&lt;!-- Footer --&gt;</span>
+    <span class="tag">&lt;footer&gt;</span>
+        <span class="tag">&lt;p&gt;</span>&amp;copy; 2026 App Film. Dibuat untuk belajar PHP.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span>
+</pre>
+            <div class="info-box">
+                <strong>Penjelasan:</strong>
+                <br>&bull; <code>&lt;header&gt;</code> &mdash; bagian atas halaman, berisi judul aplikasi
+                <br>&bull; <code>&lt;nav&gt;</code> &mdash; navigasi/menu untuk berpindah antar halaman
+                <br>&bull; <code>&lt;main&gt;</code> &mdash; konten utama halaman
+                <br>&bull; <code>&lt;footer&gt;</code> &mdash; bagian bawah halaman
+                <br>&bull; <code>isset($_POST['submit'])</code> &mdash; mengecek apakah form sudah dikirim
+                <br>&bull; <code>INSERT INTO</code> &mdash; query SQL untuk menambahkan data baru
+                <br>&bull; <code>htmlspecialchars()</code> &mdash; mencegah karakter HTML berbahaya
+                <br>&bull; <code>action=""</code> &mdash; form dikirim ke halaman yang sama
+                <br>&bull; <code>method="post"</code> &mdash; data dikirim secara tersembunyi
+                <br>&bull; <code>required</code> &mdash; field wajib diisi
+            </div>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- LANGKAH 5: lihat-data.php -->
+        <div class="step" id="langkah-5">
+            <span class="step-number">5</span>
+            <h2>Membuat Halaman Lihat Data</h2>
+            <div class="filename">lihat-data.php</div>
+            <p>Halaman ini menampilkan semua data film yang tersimpan di database dalam bentuk tabel. Di sini juga terdapat tombol Edit dan Hapus untuk setiap data.</p>
+            <h3>Buat file baru: lihat-data.php</h3>
+            <p>Ketik seluruh code berikut ke dalam file <code>lihat-data.php</code>:</p>
+<pre class="code-block">
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"id"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span>
+          <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Lihat Data - App Film<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="tag">&lt;body&gt;</span>
+
+    <span class="cm">&lt;!-- Header --&gt;</span>
+    <span class="tag">&lt;header&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>App Film<span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Aplikasi Manajemen Data Film<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/header&gt;</span>
+
+    <span class="cm">&lt;!-- Navbar --&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"index.php"</span><span class="tag">&gt;</span>Tambah Film<span class="tag">&lt;/a&gt;</span> |
+        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"lihat-data.php"</span><span class="tag">&gt;</span><span class="tag">&lt;b&gt;</span>Lihat Data<span class="tag">&lt;/b&gt;</span><span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+
+    <span class="tag">&lt;hr&gt;</span>
+
+    <span class="cm">&lt;!-- Konten Utama --&gt;</span>
+    <span class="tag">&lt;main&gt;</span>
+        <span class="tag">&lt;h2&gt;</span>Daftar Data Film<span class="tag">&lt;/h2&gt;</span>
+
+        <span class="ph">&lt;?php</span> <span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$_GET</span>[<span class="str">'pesan'</span>])): <span class="ph">?&gt;</span>
+            <span class="ph">&lt;?php</span> <span class="kw">if</span> (<span class="var">$_GET</span>[<span class="str">'pesan'</span>] === <span class="str">'update_berhasil'</span>): <span class="ph">?&gt;</span>
+                <span class="tag">&lt;p&gt;</span>Data film berhasil diupdate!<span class="tag">&lt;/p&gt;</span>
+            <span class="ph">&lt;?php</span> <span class="kw">elseif</span> (<span class="var">$_GET</span>[<span class="str">'pesan'</span>] === <span class="str">'hapus_berhasil'</span>): <span class="ph">?&gt;</span>
+                <span class="tag">&lt;p&gt;</span>Data film berhasil dihapus!<span class="tag">&lt;/p&gt;</span>
+            <span class="ph">&lt;?php</span> <span class="kw">endif</span>; <span class="ph">?&gt;</span>
+        <span class="ph">&lt;?php</span> <span class="kw">endif</span>; <span class="ph">?&gt;</span>
+
+        <span class="ph">&lt;?php</span>
+        <span class="kw">include</span> <span class="str">'koneksi.php'</span>;
+        <span class="var">$query</span> = <span class="str">"SELECT * FROM data_film"</span>;
+        <span class="var">$result</span> = <span class="fn">mysqli_query</span>(<span class="var">$koneksi</span>, <span class="var">$query</span>);
+
+        <span class="kw">if</span> (<span class="fn">mysqli_num_rows</span>(<span class="var">$result</span>) &gt; 0) {
+            <span class="kw">echo</span> <span class="str">"&lt;table border='1' cellpadding='8' cellspacing='0'&gt;
+                    &lt;tr&gt;
+                        &lt;th&gt;No&lt;/th&gt;
+                        &lt;th&gt;Judul Film&lt;/th&gt;
+                        &lt;th&gt;Tahun Rilis&lt;/th&gt;
+                        &lt;th&gt;Aksi&lt;/th&gt;
+                    &lt;/tr&gt;"</span>;
+
+            <span class="var">$no</span> = 1;
+            <span class="kw">while</span> (<span class="var">$row</span> = <span class="fn">mysqli_fetch_assoc</span>(<span class="var">$result</span>)) {
+                <span class="kw">echo</span> <span class="str">"&lt;tr&gt;
+                        &lt;td&gt;"</span> . <span class="var">$no</span>++ . <span class="str">"&lt;/td&gt;
+                        &lt;td&gt;"</span>
+                    . <span class="fn">htmlspecialchars</span>(<span class="var">$row</span>[<span class="str">'judul'</span>])
+                    . <span class="str">"&lt;/td&gt;
+                        &lt;td&gt;"</span>
+                    . <span class="fn">htmlspecialchars</span>(<span class="var">$row</span>[<span class="str">'tahun'</span>])
+                    . <span class="str">"&lt;/td&gt;
+                        &lt;td&gt;
+                            &lt;a href='edit-data.php?id="</span>
+                    . <span class="var">$row</span>[<span class="str">'id'</span>]
+                    . <span class="str">"'&gt;Edit&lt;/a&gt; | 
+                            &lt;a href='hapus-data.php?id="</span>
+                    . <span class="var">$row</span>[<span class="str">'id'</span>]
+                    . <span class="str">"' onclick=\"return confirm(
+                        'Apakah Anda yakin ingin menghapus film ini?'
+                    )\"&gt;Hapus&lt;/a&gt;
+                        &lt;/td&gt;
+                      &lt;/tr&gt;"</span>;
+            }
+            <span class="kw">echo</span> <span class="str">"&lt;/table&gt;"</span>;
+        } <span class="kw">else</span> {
+            <span class="kw">echo</span> <span class="str">"&lt;p&gt;Belum ada data film."</span>
+               . <span class="str">" &lt;a href='index.php'&gt;"</span>
+               . <span class="str">"Tambah film pertama →"</span>
+               . <span class="str">"&lt;/a&gt;&lt;/p&gt;"</span>;
+        }
+
+        <span class="fn">mysqli_close</span>(<span class="var">$koneksi</span>);
+        <span class="ph">?&gt;</span>
+    <span class="tag">&lt;/main&gt;</span>
+
+    <span class="tag">&lt;hr&gt;</span>
+
+    <span class="cm">&lt;!-- Footer --&gt;</span>
+    <span class="tag">&lt;footer&gt;</span>
+        <span class="tag">&lt;p&gt;</span>&amp;copy; 2026 App Film. Dibuat untuk belajar PHP.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span>
+</pre>
+            <div class="info-box">
+                <strong>Penjelasan:</strong>
+                <br>&bull; <code>SELECT * FROM data_film</code> &mdash; mengambil semua data dari tabel
+                <br>&bull; <code>mysqli_num_rows()</code> &mdash; menghitung jumlah baris data
+                <br>&bull; <code>mysqli_fetch_assoc()</code> &mdash; mengambil satu baris data sebagai array
+                <br>&bull; <code>while</code> &mdash; perulangan untuk menampilkan semua baris data
+                <br>&bull; <code>$no++</code> &mdash; nomor urut yang bertambah otomatis
+                <br>&bull; <code>onclick="return confirm(...)"</code> &mdash; menampilkan dialog konfirmasi sebelum menghapus
+                <br>&bull; <code>$_GET['pesan']</code> &mdash; menampilkan notifikasi dari redirect edit/hapus
+            </div>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- LANGKAH 6: edit-data.php -->
+        <div class="step" id="langkah-6">
+            <span class="step-number">6</span>
+            <h2>Membuat Halaman Edit Film</h2>
+            <div class="filename">edit-data.php</div>
+            <p>Halaman ini berisi form untuk mengubah data film yang sudah ada. Data film yang akan diedit diambil berdasarkan <code>id</code> yang dikirim melalui URL.</p>
+            <h3>Buat file baru: edit-data.php</h3>
+            <div class="warning-box">
+                <strong>Penting!</strong> File ini berbeda dari file sebelumnya. Code PHP untuk proses update <strong>harus ditulis di paling atas</strong>, sebelum code HTML. Ini karena kita menggunakan <code>header()</code> untuk redirect, yang harus dipanggil sebelum ada output HTML.
+            </div>
+            <p>Ketik seluruh code berikut ke dalam file <code>edit-data.php</code>:</p>
+<pre class="code-block">
+<span class="ph">&lt;?php</span>
+<span class="kw">include</span> <span class="str">'koneksi.php'</span>;
+
+<span class="cm">// Proses update data (taruh di atas sebelum HTML agar bisa redirect)</span>
+<span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$_POST</span>[<span class="str">'submit'</span>])) {
+    <span class="var">$id</span> = <span class="var">$_POST</span>[<span class="str">'id'</span>];
+    <span class="var">$judul</span> = <span class="var">$_POST</span>[<span class="str">'judul'</span>];
+    <span class="var">$tahun</span> = <span class="var">$_POST</span>[<span class="str">'tahun'</span>];
+
+    <span class="cm">// Query untuk mengupdate data film</span>
+    <span class="var">$query</span> = <span class="str">"UPDATE data_film
+               SET judul = '<span class="var">$judul</span>',
+                   tahun = '<span class="var">$tahun</span>'
+               WHERE id = '<span class="var">$id</span>'"</span>;
+    <span class="kw">if</span> (<span class="fn">mysqli_query</span>(<span class="var">$koneksi</span>, <span class="var">$query</span>)) {
+        <span class="fn">header</span>(<span class="str">"Location: lihat-data.php?pesan=update_berhasil"</span>);
+        <span class="kw">exit</span>;
+    } <span class="kw">else</span> {
+        <span class="var">$error</span> = <span class="fn">mysqli_error</span>(<span class="var">$koneksi</span>);
+    }
+}
+<span class="ph">?&gt;</span>
+<span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"id"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span>
+          <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Edit Film - App Film<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="tag">&lt;body&gt;</span>
+
+    <span class="cm">&lt;!-- Header --&gt;</span>
+    <span class="tag">&lt;header&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>App Film<span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Aplikasi Manajemen Data Film<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/header&gt;</span>
+
+    <span class="cm">&lt;!-- Navbar --&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"index.php"</span><span class="tag">&gt;</span>Tambah Film<span class="tag">&lt;/a&gt;</span> |
+        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"lihat-data.php"</span><span class="tag">&gt;</span>Lihat Data<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+
+    <span class="tag">&lt;hr&gt;</span>
+
+    <span class="cm">&lt;!-- Konten Utama --&gt;</span>
+    <span class="tag">&lt;main&gt;</span>
+        <span class="tag">&lt;h2&gt;</span>Edit Data Film<span class="tag">&lt;/h2&gt;</span>
+
+        <span class="ph">&lt;?php</span> <span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$error</span>)): <span class="ph">?&gt;</span>
+            <span class="tag">&lt;p&gt;</span>Error: <span class="ph">&lt;?php</span> <span class="kw">echo</span> <span class="var">$error</span>; <span class="ph">?&gt;</span><span class="tag">&lt;/p&gt;</span>
+        <span class="ph">&lt;?php</span> <span class="kw">endif</span>; <span class="ph">?&gt;</span>
+
+        <span class="ph">&lt;?php</span>
+        <span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$_GET</span>[<span class="str">'id'</span>])) {
+            <span class="var">$id</span> = <span class="var">$_GET</span>[<span class="str">'id'</span>];
+            <span class="var">$query</span> = <span class="str">"SELECT * FROM data_film
+                       WHERE id = '<span class="var">$id</span>'"</span>;
+            <span class="var">$result</span> = <span class="fn">mysqli_query</span>(<span class="var">$koneksi</span>, <span class="var">$query</span>);
+            <span class="kw">if</span> (<span class="fn">mysqli_num_rows</span>(<span class="var">$result</span>) &gt; 0) {
+                <span class="var">$row</span> = <span class="fn">mysqli_fetch_assoc</span>(<span class="var">$result</span>);
+        <span class="ph">?&gt;</span>
+                <span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="val">""</span> <span class="attr">method</span>=<span class="val">"post"</span><span class="tag">&gt;</span>
+                    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"hidden"</span>
+                           <span class="attr">name</span>=<span class="val">"id"</span>
+                           <span class="attr">value</span>=<span class="val">"<span class="ph">&lt;?php</span> <span class="kw">echo</span> <span class="var">$row</span>[<span class="str">'id'</span>]; <span class="ph">?&gt;</span>"</span><span class="tag">&gt;</span>
+
+                    <span class="tag">&lt;p&gt;</span>
+                        <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"judul"</span><span class="tag">&gt;</span>Judul Film:<span class="tag">&lt;/label&gt;</span><span class="tag">&lt;br&gt;</span>
+                        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span>
+                               <span class="attr">id</span>=<span class="val">"judul"</span>
+                               <span class="attr">name</span>=<span class="val">"judul"</span>
+                               <span class="attr">value</span>=<span class="val">"<span class="ph">&lt;?php</span> <span class="kw">echo</span> <span class="fn">htmlspecialchars</span>(<span class="var">$row</span>[<span class="str">'judul'</span>]); <span class="ph">?&gt;</span>"</span>
+                               <span class="attr">required</span><span class="tag">&gt;</span>
+                    <span class="tag">&lt;/p&gt;</span>
+
+                    <span class="tag">&lt;p&gt;</span>
+                        <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"tahun"</span><span class="tag">&gt;</span>Tahun Rilis:<span class="tag">&lt;/label&gt;</span><span class="tag">&lt;br&gt;</span>
+                        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"number"</span>
+                               <span class="attr">id</span>=<span class="val">"tahun"</span>
+                               <span class="attr">name</span>=<span class="val">"tahun"</span>
+                               <span class="attr">value</span>=<span class="val">"<span class="ph">&lt;?php</span> <span class="kw">echo</span> <span class="fn">htmlspecialchars</span>(<span class="var">$row</span>[<span class="str">'tahun'</span>]); <span class="ph">?&gt;</span>"</span>
+                               <span class="attr">required</span><span class="tag">&gt;</span>
+                    <span class="tag">&lt;/p&gt;</span>
+
+                    <span class="tag">&lt;p&gt;</span>
+                        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"submit"</span>
+                               <span class="attr">name</span>=<span class="val">"submit"</span>
+                               <span class="attr">value</span>=<span class="val">"💾 Update Film"</span><span class="tag">&gt;</span>
+                        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"lihat-data.php"</span><span class="tag">&gt;</span>Batal<span class="tag">&lt;/a&gt;</span>
+                    <span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;/form&gt;</span>
+        <span class="ph">&lt;?php</span>
+            } <span class="kw">else</span> {
+                <span class="kw">echo</span> <span class="str">"&lt;p&gt;Data film tidak ditemukan."</span>
+                   . <span class="str">" &lt;a href='lihat-data.php'&gt;"</span>
+                   . <span class="str">"Kembali →&lt;/a&gt;&lt;/p&gt;"</span>;
+            }
+        } <span class="kw">else</span> {
+            <span class="kw">echo</span> <span class="str">"&lt;p&gt;ID film tidak valid."</span>
+               . <span class="str">" &lt;a href='lihat-data.php'&gt;"</span>
+               . <span class="str">"Kembali →&lt;/a&gt;&lt;/p&gt;"</span>;
+        }
+
+        <span class="fn">mysqli_close</span>(<span class="var">$koneksi</span>);
+        <span class="ph">?&gt;</span>
+    <span class="tag">&lt;/main&gt;</span>
+
+    <span class="tag">&lt;hr&gt;</span>
+
+    <span class="cm">&lt;!-- Footer --&gt;</span>
+    <span class="tag">&lt;footer&gt;</span>
+        <span class="tag">&lt;p&gt;</span>&amp;copy; 2026 App Film. Dibuat untuk belajar PHP.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span>
+</pre>
+            <div class="info-box">
+                <strong>Penjelasan:</strong>
+                <br>&bull; <code>header("Location: ...")</code> &mdash; mengarahkan (redirect) browser ke halaman lain
+                <br>&bull; <code>exit</code> &mdash; menghentikan eksekusi code setelah redirect
+                <br>&bull; <code>$_GET['id']</code> &mdash; mengambil id film dari URL (contoh: <code>edit-data.php?id=1</code>)
+                <br>&bull; <code>input type="hidden"</code> &mdash; menyimpan id yang tidak terlihat oleh user
+                <br>&bull; <code>value="&lt;?php echo ... ?&gt;"</code> &mdash; mengisi form dengan data yang sudah ada
+                <br>&bull; Tombol "Batal" mengarahkan kembali ke halaman lihat data
+            </div>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- LANGKAH 7: hapus-data.php -->
+        <div class="step" id="langkah-7">
+            <span class="step-number">7</span>
+            <h2>Membuat Halaman Hapus Film</h2>
+            <div class="filename">hapus-data.php</div>
+            <p>File ini tidak memiliki tampilan HTML. Fungsinya hanya menghapus data dari database, lalu langsung mengarahkan (redirect) kembali ke halaman lihat data.</p>
+            <h3>Buat file baru: hapus-data.php</h3>
+            <p>Ketik seluruh code berikut ke dalam file <code>hapus-data.php</code>:</p>
+<pre class="code-block">
+<span class="ph">&lt;?php</span>
+<span class="kw">include</span> <span class="str">'koneksi.php'</span>;
+
+<span class="kw">if</span> (<span class="fn">isset</span>(<span class="var">$_GET</span>[<span class="str">'id'</span>])) {
+    <span class="var">$id</span> = <span class="var">$_GET</span>[<span class="str">'id'</span>];
+    <span class="var">$query</span> = <span class="str">"DELETE FROM data_film WHERE id = '<span class="var">$id</span>'"</span>;
+    <span class="kw">if</span> (<span class="fn">mysqli_query</span>(<span class="var">$koneksi</span>, <span class="var">$query</span>)) {
+        <span class="fn">header</span>(
+            <span class="str">"Location: lihat-data.php?pesan=hapus_berhasil"</span>
+        );
+        <span class="kw">exit</span>;
+    } <span class="kw">else</span> {
+        <span class="kw">echo</span> <span class="str">"Error: "</span> . <span class="fn">mysqli_error</span>(<span class="var">$koneksi</span>);
+    }
+} <span class="kw">else</span> {
+    <span class="fn">header</span>(<span class="str">"Location: lihat-data.php"</span>);
+    <span class="kw">exit</span>;
+}
+
+<span class="fn">mysqli_close</span>(<span class="var">$koneksi</span>);
+<span class="ph">?&gt;</span>
+</pre>
+            <div class="info-box">
+                <strong>Penjelasan:</strong>
+                <br>&bull; <code>DELETE FROM data_film WHERE id = ...</code> &mdash; query SQL untuk menghapus data berdasarkan id
+                <br>&bull; Setelah hapus berhasil, langsung redirect ke <code>lihat-data.php</code> dengan pesan sukses
+                <br>&bull; Jika tidak ada id, langsung redirect ke halaman lihat data (mencegah akses langsung)
+                <br>&bull; File ini tidak memiliki HTML karena user tidak perlu melihat halaman ini
+            </div>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- LANGKAH 8: Uji Coba -->
+        <div class="step" id="langkah-8">
+            <span class="step-number">8</span>
+            <h2>Uji Coba Aplikasi</h2>
+            <p>Setelah semua file selesai dibuat, saatnya menguji aplikasi!</p>
+            <h3>8.1 Pastikan Laragon Berjalan</h3>
+            <ol>
+                <li>Buka Laragon</li>
+                <li>Klik tombol <strong>"Start All"</strong></li>
+                <li>Pastikan Apache dan MySQL berwarna hijau (aktif)</li>
+            </ol>
+            <h3>8.2 Buka Aplikasi di Browser</h3>
+            <ol>
+                <li>Buka browser (Chrome, Firefox, dll)</li>
+                <li>Ketik di address bar: <code>http://localhost/app-film/</code></li>
+                <li>Tekan Enter</li>
+            </ol>
+            <h3>8.3 Uji Fitur Tambah Film</h3>
+            <ol>
+                <li>Di halaman utama, isi <strong>Judul Film</strong> (contoh: "Avengers: Endgame")</li>
+                <li>Isi <strong>Tahun Rilis</strong> (contoh: 2019)</li>
+                <li>Klik tombol <strong>"Tambah Film"</strong></li>
+                <li>Pastikan muncul pesan "Data film berhasil ditambahkan!"</li>
+                <li>Tambahkan 2-3 film lagi untuk testing</li>
+            </ol>
+            <h3>8.4 Uji Fitur Lihat Data</h3>
+            <ol>
+                <li>Klik link <strong>"Lihat Data"</strong> di navbar</li>
+                <li>Pastikan semua film yang sudah ditambahkan muncul dalam tabel</li>
+                <li>Periksa kolom No, Judul Film, Tahun Rilis, dan Aksi</li>
+            </ol>
+            <h3>8.5 Uji Fitur Edit Film</h3>
+            <ol>
+                <li>Di halaman Lihat Data, klik <strong>"Edit"</strong> pada salah satu film</li>
+                <li>Ubah judul atau tahun rilis</li>
+                <li>Klik tombol <strong>"💾 Update Film"</strong></li>
+                <li>Pastikan otomatis kembali ke halaman Lihat Data</li>
+                <li>Pastikan muncul pesan "Data film berhasil diupdate!"</li>
+                <li>Periksa apakah data sudah berubah di tabel</li>
+            </ol>
+            <h3>8.6 Uji Fitur Hapus Film</h3>
+            <ol>
+                <li>Di halaman Lihat Data, klik <strong>"Hapus"</strong> pada salah satu film</li>
+                <li>Akan muncul dialog konfirmasi, klik <strong>"OK"</strong></li>
+                <li>Pastikan otomatis kembali ke halaman Lihat Data</li>
+                <li>Pastikan muncul pesan "Data film berhasil dihapus!"</li>
+                <li>Periksa apakah data sudah hilang dari tabel</li>
+            </ol>
+            <div class="warning-box">
+                <strong>Troubleshooting:</strong>
+                <br>&bull; <strong>Halaman blank/putih?</strong> &mdash; Cek apakah ada typo di code PHP (terutama tanda kutip dan titik koma)
+                <br>&bull; <strong>Error koneksi database?</strong> &mdash; Pastikan nama database <code>db.film</code> sudah benar dan MySQL sudah aktif
+                <br>&bull; <strong>Tabel tidak muncul?</strong> &mdash; Pastikan sudah membuat tabel <code>data_film</code> di phpMyAdmin
+                <br>&bull; <strong>Data tidak tersimpan?</strong> &mdash; Cek nama kolom di query SQL harus sama persis dengan nama kolom di tabel
+            </div>
+            <div class="back-top"><a href="#daftar-isi">&uarr; Kembali ke Daftar Isi</a></div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="tutorial-footer">
+            <p>Tutorial Membuat Aplikasi CRUD Film dengan PHP & MySQL</p>
+            <p>Selamat! Kamu sudah berhasil membuat aplikasi web pertamamu!</p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT COPY BUTTON -->
+    <script>
+        document.querySelectorAll('pre.code-block').forEach(function(block) {
+            var btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.innerText = 'Copy';
+            
+            btn.addEventListener('click', function() {
+                var text = "";
+                block.childNodes.forEach(function(node) {
+                    if (node !== btn) {
+                        text += node.textContent;
+                    }
+                });
+                
+                // Hapus newline ekstra di akhir jika ada
+                text = text.replace(/\n$/, "");
+
+                navigator.clipboard.writeText(text).then(function() {
+                    btn.innerText = 'Copied!';
+                    setTimeout(function() {
+                        btn.innerText = 'Copy';
+                    }, 2000);
+                });
+            });
+
+            block.appendChild(btn);
+        });
+    </script>
+
+</body>
+
+</html>
