@@ -1,0 +1,1861 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pengumpulan Tugas — OurLabs</title>
+    <meta name="description" content="Upload dan rekap pengumpulan tugas siswa melalui OurLabs" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet" />
+    <style>
+      /* ============================================
+         BRUTAL HONEY — Tugas Page Styles
+         ============================================ */
+      :root {
+        --primary: #facc15;
+        --primary-hover: #eab308;
+        --bg: #fefce8;
+        --surface: #ffffff;
+        --fg: #1a1a1a;
+        --fg-muted: #4b5563;
+        --border: #1a1a1a;
+        --success: #22c55e;
+        --danger: #ef4444;
+        --info: #3b82f6;
+        --warning: #f59e0b;
+        --shadow-1: 2px 2px 0px 0px var(--border);
+        --shadow-2: 4px 4px 0px 0px var(--border);
+        --shadow-3: 6px 6px 0px 0px var(--border);
+        --font: "DM Sans", sans-serif;
+        --transition: 150ms ease;
+        --header-h: 64px;
+      }
+
+      [data-theme="dark"] {
+        --bg: #1a1a1a;
+        --surface: #262626;
+        --fg: #fefce8;
+        --fg-muted: #a1a1aa;
+        --border: #fefce8;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font);
+        font-size: 16px;
+        color: var(--fg);
+        background: var(--bg);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        transition:
+          background var(--transition),
+          color var(--transition);
+      }
+
+      /* ---- HEADER ---- */
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        background: var(--primary);
+        border-bottom: 3px solid var(--border);
+        color: #1a1a1a;
+      }
+
+      .header__left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .header__brand {
+        font-size: 18px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: -0.5px;
+        text-decoration: none;
+        color: #1a1a1a;
+      }
+
+      .header__brand:hover {
+        background: transparent;
+      }
+
+      .header__sep {
+        width: 2px;
+        height: 24px;
+        background: #1a1a1a;
+        opacity: 0.3;
+      }
+
+      .header__page-title {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .header__right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* Back button */
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        font-family: var(--font);
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #1a1a1a;
+        background: var(--surface);
+        border: 2px solid #1a1a1a;
+        box-shadow: 2px 2px 0 0 #1a1a1a;
+        cursor: pointer;
+        transition:
+          transform var(--transition),
+          box-shadow var(--transition);
+      }
+
+      .btn-back:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 3px 3px 0 0 #1a1a1a;
+        background: var(--surface);
+        color: #1a1a1a;
+      }
+
+      .btn-back:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 0 #1a1a1a;
+      }
+
+      .btn-back svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Theme toggle */
+      .theme-toggle {
+        position: relative;
+        width: 48px;
+        height: 26px;
+        background: var(--surface);
+        border: 2px solid #1a1a1a;
+        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 0 #1a1a1a;
+        transition:
+          transform var(--transition),
+          box-shadow var(--transition);
+      }
+
+      .theme-toggle:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 3px 3px 0 0 #1a1a1a;
+      }
+
+      .theme-toggle::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 3px;
+        width: 18px;
+        height: 18px;
+        background: #1a1a1a;
+        border-radius: 50%;
+        transition: transform 250ms ease;
+      }
+
+      [data-theme="dark"] .theme-toggle {
+        background: #111827;
+      }
+
+      [data-theme="dark"] .theme-toggle::after {
+        transform: translateX(20px);
+        background: #fefce8;
+      }
+
+      /* ---- MAIN CONTAINER ---- */
+      .main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+      }
+
+      /* ---- PAGE HERO ---- */
+      .page-hero {
+        margin-bottom: 32px;
+        animation: fadeUp 0.4s ease-out;
+      }
+
+      .page-hero__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        background: var(--fg);
+        color: var(--bg);
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 2px solid var(--border);
+        margin-bottom: 16px;
+      }
+
+      [data-theme="dark"] .page-hero__badge {
+        background: var(--primary);
+        color: #1a1a1a;
+      }
+
+      .page-hero h1 {
+        font-size: clamp(28px, 5vw, 36px);
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 8px;
+      }
+
+      .page-hero p {
+        font-size: 16px;
+        color: var(--fg-muted);
+        font-weight: 500;
+      }
+
+      /* ---- TABS ---- */
+      .tabs {
+        display: flex;
+        gap: 0;
+        margin-bottom: 24px;
+        animation: fadeUp 0.4s ease-out 0.1s both;
+      }
+
+      .tab-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 20px;
+        font-family: var(--font);
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        background: var(--surface);
+        color: var(--fg-muted);
+        border: 3px solid var(--border);
+        cursor: pointer;
+        transition: all var(--transition);
+        position: relative;
+      }
+
+      .tab-btn:first-child {
+        border-right: none;
+      }
+
+      .tab-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .tab-btn.active {
+        background: var(--primary);
+        color: #1a1a1a;
+        box-shadow: var(--shadow-1);
+        z-index: 1;
+      }
+
+      .tab-btn:not(.active):hover {
+        background: var(--bg);
+      }
+
+      /* ---- TAB CONTENT ---- */
+      .tab-content {
+        display: none;
+        animation: fadeUp 0.3s ease-out;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      /* ---- CARD ---- */
+      .card {
+        background: var(--surface);
+        border: 3px solid var(--border);
+        box-shadow: var(--shadow-2);
+        animation: fadeUp 0.4s ease-out 0.2s both;
+      }
+
+      .card__header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        border-bottom: 3px solid var(--border);
+        background: var(--bg);
+      }
+
+      .card__header-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        border: 2px solid var(--border);
+        box-shadow: var(--shadow-1);
+        flex-shrink: 0;
+      }
+
+      .card__header-icon svg {
+        width: 20px;
+        height: 20px;
+        color: #1a1a1a;
+      }
+
+      .card__title {
+        font-size: 18px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .card__body {
+        padding: 24px 20px;
+      }
+
+      /* ---- FORM GROUP ---- */
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group:last-child {
+        margin-bottom: 0;
+      }
+
+      .form-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--fg);
+      }
+
+      .form-label__step {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+        font-weight: 800;
+        background: var(--fg);
+        color: var(--bg);
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      [data-theme="dark"] .form-label__step {
+        background: var(--primary);
+        color: #1a1a1a;
+      }
+
+      .form-label__step.done {
+        background: var(--success);
+        color: #1a1a1a;
+      }
+
+      /* ---- SELECT ---- */
+      .select-wrapper {
+        position: relative;
+      }
+
+      .select-wrapper::after {
+        content: "";
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 7px solid var(--fg);
+        pointer-events: none;
+      }
+
+      .form-select {
+        width: 100%;
+        padding: 12px 40px 12px 14px;
+        font-family: var(--font);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--fg);
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 0;
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+        transition: all var(--transition);
+        box-shadow: var(--shadow-1);
+      }
+
+      .form-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow:
+          var(--shadow-2),
+          0 0 0 2px var(--primary);
+      }
+
+      .form-select:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: var(--bg);
+      }
+
+      .form-select option {
+        font-weight: 500;
+      }
+
+      /* ---- UPLOAD AREA ---- */
+      .upload-area {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 40px 20px;
+        border: 3px dashed var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        transition: all 200ms ease;
+        min-height: 160px;
+      }
+
+      .upload-area:hover {
+        border-color: var(--primary);
+        background: color-mix(in srgb, var(--primary) 8%, var(--bg));
+      }
+
+      .upload-area.dragover {
+        border-style: solid;
+        border-color: var(--primary);
+        background: color-mix(in srgb, var(--primary) 15%, var(--bg));
+        transform: scale(1.01);
+        box-shadow: var(--shadow-2);
+      }
+
+      .upload-area.has-file {
+        border-style: solid;
+        border-color: var(--success);
+        background: color-mix(in srgb, var(--success) 8%, var(--bg));
+      }
+
+      .upload-area__icon {
+        width: 40px;
+        height: 40px;
+        color: var(--fg-muted);
+        transition: color var(--transition);
+      }
+
+      .upload-area.dragover .upload-area__icon,
+      .upload-area.has-file .upload-area__icon {
+        color: var(--primary);
+      }
+
+      .upload-area.has-file .upload-area__icon {
+        color: var(--success);
+      }
+
+      .upload-area__text {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--fg-muted);
+        text-align: center;
+      }
+
+      .upload-area__text strong {
+        color: var(--fg);
+        font-weight: 800;
+      }
+
+      .upload-area__hint {
+        font-size: 12px;
+        color: var(--fg-muted);
+        font-weight: 500;
+      }
+
+      .upload-area input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      /* File preview */
+      .file-preview {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        box-shadow: var(--shadow-1);
+        margin-top: 12px;
+      }
+
+      .file-preview.show {
+        display: flex;
+      }
+
+      .file-preview__icon {
+        width: 28px;
+        height: 28px;
+        color: var(--primary);
+        flex-shrink: 0;
+      }
+
+      .file-preview__info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .file-preview__name {
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .file-preview__size {
+        font-size: 12px;
+        color: var(--fg-muted);
+        font-weight: 500;
+      }
+
+      .file-preview__remove {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: 2px solid var(--border);
+        color: var(--danger);
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all var(--transition);
+      }
+
+      .file-preview__remove:hover {
+        background: var(--danger);
+        color: #fff;
+      }
+
+      .file-preview__remove svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* ---- SUBMIT BUTTON ---- */
+      .btn-submit {
+        width: 100%;
+        padding: 16px 24px;
+        margin-top: 24px;
+        font-family: var(--font);
+        font-size: 16px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #1a1a1a;
+        background: var(--primary);
+        border: 3px solid var(--border);
+        box-shadow: var(--shadow-2);
+        cursor: pointer;
+        transition: all var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-submit:hover:not(:disabled) {
+        transform: translate(-2px, -2px);
+        box-shadow: var(--shadow-3);
+        background: var(--primary-hover);
+      }
+
+      .btn-submit:active:not(:disabled) {
+        transform: translate(2px, 2px);
+        box-shadow: 1px 1px 0 0 var(--border);
+      }
+
+      .btn-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-submit svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .btn-submit.loading {
+        pointer-events: none;
+      }
+
+      /* ---- SPINNER ---- */
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid #1a1a1a;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      /* ---- REKAP SECTION ---- */
+      .rekap-filters {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .rekap-stats {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .rekap-stat {
+        flex: 1;
+        padding: 16px;
+        background: var(--surface);
+        border: 3px solid var(--border);
+        box-shadow: var(--shadow-2);
+        text-align: center;
+      }
+
+      .rekap-stat__value {
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+
+      .rekap-stat__value--success {
+        color: var(--success);
+      }
+
+      .rekap-stat__value--danger {
+        color: var(--danger);
+      }
+
+      .rekap-stat__value--total {
+        color: var(--primary);
+        text-shadow: 1px 1px 0 var(--border);
+      }
+
+      .rekap-stat__label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--fg-muted);
+      }
+
+      /* Progress bar */
+      .rekap-progress {
+        margin-bottom: 24px;
+      }
+
+      .rekap-progress__bar {
+        height: 14px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        overflow: hidden;
+      }
+
+      .rekap-progress__fill {
+        height: 100%;
+        background: var(--success);
+        width: 0%;
+        transition: width 600ms ease;
+      }
+
+      .rekap-progress__label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 6px;
+        color: var(--fg-muted);
+      }
+
+      /* Rekap table */
+      .table-wrapper {
+        overflow-x: auto;
+        border: 3px solid var(--border);
+        box-shadow: var(--shadow-2);
+        background: var(--surface);
+      }
+
+      .rekap-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      .rekap-table thead {
+        background: var(--fg);
+        color: var(--bg);
+      }
+
+      [data-theme="dark"] .rekap-table thead {
+        background: var(--primary);
+        color: #1a1a1a;
+      }
+
+      .rekap-table th {
+        padding: 10px 14px;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 12px;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      .rekap-table td {
+        padding: 10px 14px;
+        border-bottom: 2px solid var(--border);
+        vertical-align: middle;
+      }
+
+      .rekap-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .rekap-table tbody tr:hover {
+        background: var(--bg);
+      }
+
+      /* Status badges */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 10px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        border: 2px solid var(--border);
+      }
+
+      .badge--success {
+        background: var(--success);
+        color: #1a1a1a;
+      }
+
+      .badge--danger {
+        background: var(--danger);
+        color: #fff;
+      }
+
+      .link-file {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--info);
+        text-decoration: none;
+        padding: 2px 8px;
+        border: 2px solid var(--info);
+        transition: all var(--transition);
+      }
+
+      .link-file:hover {
+        background: var(--info);
+        color: #fff;
+      }
+
+      .link-file svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* ---- TOAST ---- */
+      .toast-container {
+        position: fixed;
+        top: calc(var(--header-h) + 16px);
+        right: 16px;
+        z-index: 200;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .toast {
+        padding: 14px 20px;
+        background: var(--surface);
+        border: 3px solid var(--border);
+        box-shadow: var(--shadow-2);
+        font-size: 14px;
+        font-weight: 700;
+        max-width: 360px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideIn 0.3s ease-out;
+      }
+
+      .toast--success {
+        border-left: 6px solid var(--success);
+      }
+
+      .toast--error {
+        border-left: 6px solid var(--danger);
+      }
+
+      .toast--info {
+        border-left: 6px solid var(--info);
+      }
+
+      .toast svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+
+      .toast--success svg {
+        color: var(--success);
+      }
+
+      .toast--error svg {
+        color: var(--danger);
+      }
+
+      /* ---- EMPTY STATE ---- */
+      .empty-state {
+        text-align: center;
+        padding: 48px 20px;
+        color: var(--fg-muted);
+      }
+
+      .empty-state svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+        opacity: 0.4;
+      }
+
+      .empty-state p {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      /* Loading skeleton */
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+        background: var(--bg);
+        border: 2px solid var(--border);
+        height: 46px;
+      }
+
+      .skeleton::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          color-mix(in srgb, var(--primary) 15%, transparent),
+          transparent
+        );
+        animation: shimmer 1.5s infinite;
+      }
+
+      /* ---- FOOTER ---- */
+      .footer {
+        text-align: center;
+        padding: 24px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--fg-muted);
+        border-top: 3px solid var(--border);
+        margin-top: 48px;
+      }
+
+      .footer a {
+        color: var(--fg);
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+      }
+
+      /* ---- ANIMATIONS ---- */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes shimmer {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(100%);
+        }
+      }
+
+      /* ---- RESPONSIVE ---- */
+      @media (max-width: 640px) {
+        .header {
+          padding: 0 16px;
+        }
+
+        .header__page-title {
+          display: none;
+        }
+
+        .main {
+          padding: 24px 16px 64px;
+        }
+
+        .rekap-filters {
+          grid-template-columns: 1fr;
+        }
+
+        .rekap-stats {
+          flex-direction: column;
+        }
+
+        .rekap-table {
+          font-size: 13px;
+        }
+
+        .rekap-table th,
+        .rekap-table td {
+          padding: 8px 10px;
+        }
+
+        .tabs {
+          flex-direction: column;
+        }
+
+        .tab-btn:first-child {
+          border-right: 3px solid var(--border);
+          border-bottom: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ HEADER ============ -->
+    <header class="header">
+      <div class="header__left">
+        <a href="../index.html" class="header__brand">⬡ OurLabs</a>
+        <div class="header__sep"></div>
+        <span class="header__page-title">Pengumpulan Tugas</span>
+      </div>
+      <div class="header__right">
+        <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle dark mode"></div>
+        <a href="../index.html" class="btn-back">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Kembali
+        </a>
+      </div>
+    </header>
+
+    <!-- ============ MAIN ============ -->
+    <main class="main">
+      <!-- Page Hero -->
+      <div class="page-hero">
+        <div class="page-hero__badge">📋 Sistem Tugas</div>
+        <h1>Pengumpulan Tugas</h1>
+        <p>Upload tugas dan lihat status pengumpulan kelas kamu.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="upload" id="tab-upload-btn">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+          </svg>
+          Upload Tugas
+        </button>
+        <button class="tab-btn" data-tab="rekap" id="tab-rekap-btn">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+          </svg>
+          Rekap
+        </button>
+      </div>
+
+      <!-- ========== TAB: UPLOAD ========== -->
+      <div class="tab-content active" id="tab-upload">
+        <div class="card">
+          <div class="card__header">
+            <div class="card__header-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <path d="M14 2v6h6M12 18v-6M9 15l3-3 3 3" />
+              </svg>
+            </div>
+            <div class="card__title">Form Upload Tugas</div>
+          </div>
+          <div class="card__body">
+            <form id="upload-form" onsubmit="return false;">
+              <!-- Step 1: Mapel -->
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="form-label__step" id="step-1">1</span>
+                  Pilih Mata Pelajaran
+                </label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="select-mapel" required>
+                    <option value="">— Pilih Mapel —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Step 2: Judul Tugas -->
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="form-label__step" id="step-2">2</span>
+                  Pilih Judul Tugas
+                </label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="select-tugas" disabled required>
+                    <option value="">— Pilih Mapel dulu —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Step 3: Kelas -->
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="form-label__step" id="step-3">3</span>
+                  Pilih Kelas
+                </label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="select-kelas" disabled required>
+                    <option value="">— Pilih Tugas dulu —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Step 4: Nama Siswa -->
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="form-label__step" id="step-4">4</span>
+                  Pilih Nama Siswa
+                </label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="select-siswa" disabled required>
+                    <option value="">— Pilih Kelas dulu —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Step 5: Upload File -->
+              <div class="form-group">
+                <label class="form-label">
+                  <span class="form-label__step" id="step-5">5</span>
+                  Upload File Tugas
+                </label>
+                <div class="upload-area" id="upload-area">
+                  <input type="file" id="file-input" accept="*/*" />
+                  <svg
+                    class="upload-area__icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <div class="upload-area__text">
+                    <strong>Drag & drop file</strong>
+                    atau klik untuk memilih
+                  </div>
+                  <div class="upload-area__hint">Maks. 10MB — Semua format file diterima</div>
+                </div>
+                <div class="file-preview" id="file-preview">
+                  <svg
+                    class="file-preview__icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                    <path d="M14 2v6h6" />
+                  </svg>
+                  <div class="file-preview__info">
+                    <div class="file-preview__name" id="file-name">—</div>
+                    <div class="file-preview__size" id="file-size">—</div>
+                  </div>
+                  <button type="button" class="file-preview__remove" id="file-remove" title="Hapus file">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="btn-submit" id="btn-submit" disabled>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                </svg>
+                Kirim Tugas
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== TAB: REKAP ========== -->
+      <div class="tab-content" id="tab-rekap">
+        <div class="card">
+          <div class="card__header">
+            <div class="card__header-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+              </svg>
+            </div>
+            <div class="card__title">Rekap Pengumpulan</div>
+          </div>
+          <div class="card__body">
+            <!-- Filters -->
+            <div class="rekap-filters">
+              <div class="form-group" style="margin-bottom: 0">
+                <label class="form-label">Mapel</label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="rekap-mapel">
+                    <option value="">— Pilih —</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label class="form-label">Judul Tugas</label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="rekap-tugas" disabled>
+                    <option value="">— Pilih —</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label class="form-label">Kelas</label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="rekap-kelas" disabled>
+                    <option value="">— Pilih —</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rekap content (hidden until filters selected) -->
+            <div id="rekap-content" style="display: none">
+              <!-- Stats -->
+              <div class="rekap-stats">
+                <div class="rekap-stat">
+                  <div class="rekap-stat__value rekap-stat__value--success" id="stat-sudah">0</div>
+                  <div class="rekap-stat__label">Sudah</div>
+                </div>
+                <div class="rekap-stat">
+                  <div class="rekap-stat__value rekap-stat__value--danger" id="stat-belum">0</div>
+                  <div class="rekap-stat__label">Belum</div>
+                </div>
+                <div class="rekap-stat">
+                  <div class="rekap-stat__value rekap-stat__value--total" id="stat-total">0</div>
+                  <div class="rekap-stat__label">Total</div>
+                </div>
+              </div>
+
+              <!-- Progress -->
+              <div class="rekap-progress">
+                <div class="rekap-progress__bar">
+                  <div class="rekap-progress__fill" id="progress-fill"></div>
+                </div>
+                <div class="rekap-progress__label">
+                  <span id="progress-text">0%</span>
+                  <span id="progress-count">0/0 siswa</span>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="table-wrapper">
+                <table class="rekap-table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Siswa</th>
+                      <th>Status</th>
+                      <th>Waktu</th>
+                      <th>File</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rekap-tbody">
+                    <!-- Dynamic content -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div class="empty-state" id="rekap-empty">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <p>Pilih Mapel, Judul Tugas, dan Kelas untuk melihat rekap pengumpulan.</p>
+            </div>
+
+            <!-- Loading state -->
+            <div id="rekap-loading" style="display: none">
+              <div class="skeleton" style="margin-bottom: 12px"></div>
+              <div class="skeleton" style="margin-bottom: 12px"></div>
+              <div class="skeleton"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <a href="../index.html">OurLabs</a>
+        — Pengumpulan Tugas Online
+      </footer>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- ============ JAVASCRIPT ============ -->
+    <script>
+      // =============================================
+      // KONFIGURASI — GANTI URL SCRIPT KAMU
+      // =============================================
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbx0WaR1dGjgZDWRD6xZAMGp8AYZTg_YXdojUJbQOrHoT2JQIOS2f1HDdYdLzk5JwV64NA/exec";
+
+      // =============================================
+      // STATE
+      // =============================================
+      let mapelTugasData = {}; // { "Mapel": { "Tugas1": ["Kelas1", "Kelas2"], ... } }
+      let selectedFile = null;
+
+      // =============================================
+      // DOM ELEMENTS
+      // =============================================
+      const $ = (id) => document.getElementById(id);
+
+      // Upload form
+      const selectMapel = $("select-mapel");
+      const selectTugas = $("select-tugas");
+      const selectKelas = $("select-kelas");
+      const selectSiswa = $("select-siswa");
+      const fileInput = $("file-input");
+      const uploadArea = $("upload-area");
+      const filePreview = $("file-preview");
+      const fileName = $("file-name");
+      const fileSize = $("file-size");
+      const fileRemove = $("file-remove");
+      const btnSubmit = $("btn-submit");
+
+      // Rekap
+      const rekapMapel = $("rekap-mapel");
+      const rekapTugas = $("rekap-tugas");
+      const rekapKelas = $("rekap-kelas");
+
+      // =============================================
+      // API FUNCTIONS
+      // =============================================
+      async function apiFetch(action, params = {}) {
+        const url = new URL(SCRIPT_URL);
+        url.searchParams.set("action", action);
+        Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+        const res = await fetch(url.toString());
+        if (!res.ok) throw new Error("Gagal memuat data");
+        return res.json();
+      }
+
+      async function apiPost(data) {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error("Gagal mengirim data");
+        return res.json();
+      }
+
+      // =============================================
+      // INIT — Load initial data
+      // =============================================
+      async function init() {
+        try {
+          // Load mapel + tugas + kelas (semua dalam 1 request)
+          const mapelRes = await apiFetch("getMapelTugas");
+          if (mapelRes.success) {
+            mapelTugasData = mapelRes.data;
+            populateSelect(selectMapel, Object.keys(mapelTugasData), "— Pilih Mapel —");
+            populateSelect(rekapMapel, Object.keys(mapelTugasData), "— Pilih —");
+          } else {
+            showToast(mapelRes.error || "Gagal memuat data mapel", "error");
+          }
+        } catch (err) {
+          showToast("Gagal terhubung ke server: " + err.message, "error");
+        }
+      }
+
+      // =============================================
+      // SELECT HELPERS
+      // =============================================
+      function populateSelect(selectEl, items, placeholder) {
+        selectEl.innerHTML = `<option value="">${placeholder}</option>`;
+        items.forEach((item) => {
+          const opt = document.createElement("option");
+          opt.value = item;
+          opt.textContent = item;
+          selectEl.appendChild(opt);
+        });
+        selectEl.disabled = false;
+      }
+
+      function resetSelect(selectEl, placeholder) {
+        selectEl.innerHTML = `<option value="">${placeholder}</option>`;
+        selectEl.disabled = true;
+      }
+
+      function updateStepIndicator(stepNum, done) {
+        const step = $("step-" + stepNum);
+        if (step) {
+          if (done) {
+            step.classList.add("done");
+            step.innerHTML = "✓";
+          } else {
+            step.classList.remove("done");
+            step.innerHTML = stepNum;
+          }
+        }
+      }
+
+      // =============================================
+      // CASCADING SELECT LOGIC — UPLOAD TAB
+      // =============================================
+
+      // Step 1: Mapel changed
+      selectMapel.addEventListener("change", function () {
+        const mapel = this.value;
+        updateStepIndicator(1, !!mapel);
+
+        // Reset downstream
+        resetSelect(selectTugas, "— Pilih Judul Tugas —");
+        resetSelect(selectKelas, "— Pilih Kelas —");
+        resetSelect(selectSiswa, "— Pilih Nama Siswa —");
+        updateStepIndicator(2, false);
+        updateStepIndicator(3, false);
+        updateStepIndicator(4, false);
+        validateForm();
+
+        if (mapel && mapelTugasData[mapel]) {
+          populateSelect(selectTugas, Object.keys(mapelTugasData[mapel]), "— Pilih Judul Tugas —");
+        }
+      });
+
+      // Step 2: Tugas changed → populate kelas dari data_tugas
+      selectTugas.addEventListener("change", function () {
+        const mapel = selectMapel.value;
+        const tugas = this.value;
+        updateStepIndicator(2, !!tugas);
+
+        // Reset downstream
+        resetSelect(selectKelas, "— Pilih Kelas —");
+        resetSelect(selectSiswa, "— Pilih Nama Siswa —");
+        updateStepIndicator(3, false);
+        updateStepIndicator(4, false);
+        validateForm();
+
+        if (mapel && tugas && mapelTugasData[mapel] && mapelTugasData[mapel][tugas]) {
+          populateSelect(selectKelas, mapelTugasData[mapel][tugas], "— Pilih Kelas —");
+        }
+      });
+
+      // Step 3: Kelas changed
+      selectKelas.addEventListener("change", async function () {
+        const kelas = this.value;
+        updateStepIndicator(3, !!kelas);
+
+        resetSelect(selectSiswa, "— Memuat data siswa... —");
+        updateStepIndicator(4, false);
+        validateForm();
+
+        if (kelas) {
+          try {
+            const res = await apiFetch("getSiswa", { kelas });
+            if (res.success) {
+              populateSelect(selectSiswa, res.data, "— Pilih Nama Siswa —");
+            } else {
+              showToast(res.error || "Gagal memuat siswa", "error");
+              resetSelect(selectSiswa, "— Error —");
+            }
+          } catch (err) {
+            showToast("Gagal memuat data siswa", "error");
+            resetSelect(selectSiswa, "— Error —");
+          }
+        }
+      });
+
+      // Step 4: Siswa changed
+      selectSiswa.addEventListener("change", function () {
+        updateStepIndicator(4, !!this.value);
+        validateForm();
+      });
+
+      // =============================================
+      // FILE UPLOAD LOGIC
+      // =============================================
+      const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+      fileInput.addEventListener("change", function () {
+        handleFileSelect(this.files[0]);
+      });
+
+      // Drag & drop
+      uploadArea.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        this.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", function () {
+        this.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", function (e) {
+        e.preventDefault();
+        this.classList.remove("dragover");
+        if (e.dataTransfer.files.length > 0) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+
+      function handleFileSelect(file) {
+        if (!file) return;
+
+        if (file.size > MAX_FILE_SIZE) {
+          showToast(`File terlalu besar (${formatSize(file.size)}). Maksimal 10MB.`, "error");
+          clearFile();
+          return;
+        }
+
+        selectedFile = file;
+        fileName.textContent = file.name;
+        fileSize.textContent = formatSize(file.size);
+        filePreview.classList.add("show");
+        uploadArea.classList.add("has-file");
+        updateStepIndicator(5, true);
+        validateForm();
+      }
+
+      fileRemove.addEventListener("click", function () {
+        clearFile();
+      });
+
+      function clearFile() {
+        selectedFile = null;
+        fileInput.value = "";
+        filePreview.classList.remove("show");
+        uploadArea.classList.remove("has-file");
+        updateStepIndicator(5, false);
+        validateForm();
+      }
+
+      function formatSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      // =============================================
+      // FORM VALIDATION & SUBMIT
+      // =============================================
+      function validateForm() {
+        const valid = selectMapel.value && selectTugas.value && selectKelas.value && selectSiswa.value && selectedFile;
+        btnSubmit.disabled = !valid;
+        return valid;
+      }
+
+      btnSubmit.addEventListener("click", async function () {
+        if (!validateForm()) return;
+
+        // Disable button, show loading
+        btnSubmit.disabled = true;
+        btnSubmit.classList.add("loading");
+        btnSubmit.innerHTML = '<span class="spinner"></span> Mengirim tugas...';
+
+        try {
+          // Read file as base64
+          const base64 = await readFileAsBase64(selectedFile);
+
+          const payload = {
+            nama: selectSiswa.value,
+            kelas: selectKelas.value,
+            mapel: selectMapel.value,
+            judul_tugas: selectTugas.value,
+            fileName: selectedFile.name,
+            fileData: base64,
+            mimeType: selectedFile.type || "application/octet-stream",
+          };
+
+          const result = await apiPost(payload);
+
+          if (result.success) {
+            showToast(result.message || "Tugas berhasil dikumpulkan! ✅", "success");
+            // Reset form
+            selectMapel.value = "";
+            selectMapel.dispatchEvent(new Event("change"));
+            clearFile();
+            for (let i = 1; i <= 5; i++) updateStepIndicator(i, false);
+          } else {
+            showToast(result.error || "Gagal mengirim tugas", "error");
+          }
+        } catch (err) {
+          showToast("Error: " + err.message, "error");
+        } finally {
+          btnSubmit.classList.remove("loading");
+          btnSubmit.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+            Kirim Tugas
+          `;
+          validateForm();
+        }
+      });
+
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result.split(",")[1]);
+          reader.onerror = () => reject(new Error("Gagal membaca file"));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // =============================================
+      // REKAP TAB — CASCADING SELECT
+      // =============================================
+      rekapMapel.addEventListener("change", function () {
+        const mapel = this.value;
+        resetSelect(rekapTugas, "— Pilih —");
+        resetSelect(rekapKelas, "— Pilih —");
+        hideRekap();
+
+        if (mapel && mapelTugasData[mapel]) {
+          populateSelect(rekapTugas, Object.keys(mapelTugasData[mapel]), "— Pilih —");
+        }
+      });
+
+      rekapTugas.addEventListener("change", function () {
+        const mapel = rekapMapel.value;
+        const tugas = this.value;
+        resetSelect(rekapKelas, "— Pilih —");
+        hideRekap();
+
+        if (mapel && tugas && mapelTugasData[mapel] && mapelTugasData[mapel][tugas]) {
+          populateSelect(rekapKelas, mapelTugasData[mapel][tugas], "— Pilih —");
+        }
+      });
+
+      rekapKelas.addEventListener("change", async function () {
+        const mapel = rekapMapel.value;
+        const tugas = rekapTugas.value;
+        const kelas = this.value;
+
+        if (!mapel || !tugas || !kelas) {
+          hideRekap();
+          return;
+        }
+
+        // Show loading
+        $("rekap-empty").style.display = "none";
+        $("rekap-content").style.display = "none";
+        $("rekap-loading").style.display = "block";
+
+        try {
+          const res = await apiFetch("getRekap", { mapel, tugas, kelas });
+
+          if (res.success) {
+            renderRekap(res.data);
+          } else {
+            showToast(res.error || "Gagal memuat rekap", "error");
+            hideRekap();
+          }
+        } catch (err) {
+          showToast("Gagal memuat rekap: " + err.message, "error");
+          hideRekap();
+        }
+      });
+
+      function hideRekap() {
+        $("rekap-content").style.display = "none";
+        $("rekap-loading").style.display = "none";
+        $("rekap-empty").style.display = "block";
+      }
+
+      function renderRekap(data) {
+        const { rekap, total_siswa, total_sudah } = data;
+        const totalBelum = total_siswa - total_sudah;
+        const persen = total_siswa > 0 ? Math.round((total_sudah / total_siswa) * 100) : 0;
+
+        // Stats
+        $("stat-sudah").textContent = total_sudah;
+        $("stat-belum").textContent = totalBelum;
+        $("stat-total").textContent = total_siswa;
+
+        // Progress
+        $("progress-fill").style.width = persen + "%";
+        $("progress-text").textContent = persen + "%";
+        $("progress-count").textContent = total_sudah + "/" + total_siswa + " siswa";
+
+        // Table
+        const tbody = $("rekap-tbody");
+        tbody.innerHTML = "";
+
+        rekap.forEach((item, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="font-weight:700; text-align:center">${idx + 1}</td>
+            <td style="font-weight:600">${escapeHtml(item.nama)}</td>
+            <td>
+              ${
+                item.sudah
+                  ? '<span class="badge badge--success">✓ Sudah</span>'
+                  : '<span class="badge badge--danger">✗ Belum</span>'
+              }
+            </td>
+            <td style="font-size:13px; color:var(--fg-muted)">
+              ${item.timestamp || "—"}
+            </td>
+            <td>
+              ${
+                item.link_file
+                  ? `<a href="${escapeHtml(item.link_file)}" target="_blank" class="link-file">
+                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                         <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+                       </svg>
+                       Lihat
+                     </a>`
+                  : '<span style="color:var(--fg-muted)">—</span>'
+              }
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Show content
+        $("rekap-loading").style.display = "none";
+        $("rekap-empty").style.display = "none";
+        $("rekap-content").style.display = "block";
+      }
+
+      // =============================================
+      // TABS
+      // =============================================
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const tab = this.dataset.tab;
+
+          // Update tab buttons
+          document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+          this.classList.add("active");
+
+          // Update tab content
+          document.querySelectorAll(".tab-content").forEach((c) => c.classList.remove("active"));
+          $("tab-" + tab).classList.add("active");
+        });
+      });
+
+      // =============================================
+      // DARK MODE
+      // =============================================
+      const themeToggle = $("theme-toggle");
+
+      // Check saved preference or system preference
+      function getPreferredTheme() {
+        const saved = localStorage.getItem("ourlabs-theme");
+        if (saved) return saved;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+
+      function setTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("ourlabs-theme", theme);
+      }
+
+      setTheme(getPreferredTheme());
+
+      themeToggle.addEventListener("click", function () {
+        const current = document.documentElement.getAttribute("data-theme");
+        setTheme(current === "dark" ? "light" : "dark");
+      });
+
+      // =============================================
+      // TOAST NOTIFICATIONS
+      // =============================================
+      function showToast(message, type = "info") {
+        const container = $("toast-container");
+        const toast = document.createElement("div");
+        toast.className = "toast toast--" + type;
+
+        const iconMap = {
+          success: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>`,
+          error: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+          info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+        };
+
+        toast.innerHTML = (iconMap[type] || iconMap.info) + "<span>" + escapeHtml(message) + "</span>";
+        container.appendChild(toast);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          toast.style.transform = "translateX(100%)";
+          toast.style.transition = "all 0.3s ease";
+          setTimeout(() => toast.remove(), 300);
+        }, 5000);
+      }
+
+      // =============================================
+      // HELPERS
+      // =============================================
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // =============================================
+      // START
+      // =============================================
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>
