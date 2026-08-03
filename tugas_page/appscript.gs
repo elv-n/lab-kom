@@ -42,7 +42,7 @@
 // =============================================
 const CONFIG = {
   SPREADSHEET_ID: "1d_yc_9NVzXyontu4KP8dEabWZ1gHVgyYibXL_MzKCuk",
-  DRIVE_FOLDER_ID: "1DtuzZklLoleowCFsx4hDkCrlMLBessC",
+  DRIVE_FOLDER_ID: "1DtuzZklLoleowCFsx4hDkCrlMLBessCd",
   SHEET_SISWA: "data_siswa",
   SHEET_TUGAS: "data_tugas",
   SHEET_REKAP: "rekap_tugas",

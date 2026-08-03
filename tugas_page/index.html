@@ -1189,7 +1189,7 @@
       // KONFIGURASI — GANTI URL SCRIPT KAMU
       // =============================================
       const SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbxdfxDiRebFRLrlKBtFfzlYIJ3pSFVtF0x_lPMCGi0ZEyyIuNOqQ1oApUd6HeBZLfu9Jg/exec";
+        "https://script.google.com/macros/s/AKfycbxK6V73ouS62LdEcr0SKBDPvCc0CB6pmsN9ITfOW5TX9osUhbCy0UypCeLG4N55_yNH-Q/exec";
 
       // =============================================
       // STATE
@@ -1615,11 +1615,24 @@
 
       function formatTimestampID(ts) {
         if (!ts) return "—";
-        const bulanID = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-        
+        const bulanID = [
+          "Januari",
+          "Februari",
+          "Maret",
+          "April",
+          "Mei",
+          "Juni",
+          "Juli",
+          "Agustus",
+          "September",
+          "Oktober",
+          "November",
+          "Desember",
+        ];
+
         // Kalau string sudah mengandung nama bulan Indonesia, langsung return
-        if (typeof ts === "string" && bulanID.some(b => ts.includes(b))) return ts;
-        
+        if (typeof ts === "string" && bulanID.some((b) => ts.includes(b))) return ts;
+
         // Parse dari berbagai format (Date object, dd/MM/yyyy, ISO string, dll)
         let d;
         if (typeof ts === "string" && ts.includes("/") && !ts.includes("T")) {
@@ -1643,9 +1656,9 @@
             d.setDate(actualDay);
           }
         }
-        
+
         if (isNaN(d.getTime())) return ts;
-        
+
         const jam = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
         return d.getDate() + " " + bulanID[d.getMonth()] + " " + d.getFullYear() + ", " + jam + " WIB";
       }
