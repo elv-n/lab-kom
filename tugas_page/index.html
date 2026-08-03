@@ -6,38 +6,67 @@
     <title>Pengumpulan Tugas — OurLabs</title>
     <meta name="description" content="Upload dan rekap pengumpulan tugas siswa melalui OurLabs" />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet" />
     <style>
       /* ============================================
-         BRUTAL HONEY — Tugas Page Styles
+         VERCEL INSPIRED — Tugas Page Styles
          ============================================ */
       :root {
-        --primary: #facc15;
-        --primary-hover: #eab308;
-        --bg: #fefce8;
+        --primary: #171717;
+        --primary-deep: #000000;
+        --bg: #ffffff;
+        --bg-canvas: #ffffff;
+        --bg-bone: #fafafa;
         --surface: #ffffff;
-        --fg: #1a1a1a;
-        --fg-muted: #4b5563;
-        --border: #1a1a1a;
-        --success: #22c55e;
-        --danger: #ef4444;
-        --info: #3b82f6;
-        --warning: #f59e0b;
-        --shadow-1: 2px 2px 0px 0px var(--border);
-        --shadow-2: 4px 4px 0px 0px var(--border);
-        --shadow-3: 6px 6px 0px 0px var(--border);
-        --font: "DM Sans", sans-serif;
-        --transition: 150ms ease;
-        --header-h: 64px;
+        --surface-card: #ffffff;
+        --ink: #171717;
+        --body: #4d4d4d;
+        --charcoal: #171717;
+        --mute: #666666;
+        --ash: #666666;
+        --stone: #808080;
+        --on-primary: #ffffff;
+        --divider: #ebebeb;
+        --hairline: rgba(235, 235, 235, 0.4);
+        --hairline-strong: #171717;
+        --success: #2b9a66;
+        --danger: #ff5b4f;
+        --info: #0072f5;
+        --warning: #d97706;
+        --link: #0072f5;
+        --ring-focus: hsla(212, 100%, 48%, 1);
+        --shadow-1: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        --shadow-2: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 2px 2px 0px;
+        --shadow-3: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 2px 2px 0px, rgba(0, 0, 0, 0.04) 0px 8px 8px -8px;
+        --font: 'Geist', system-ui, -apple-system, Arial, sans-serif;
+        --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'Roboto Mono', Menlo, monospace;
+        --transition: 120ms ease;
       }
 
-      [data-theme="dark"] {
-        --bg: #1a1a1a;
-        --surface: #262626;
-        --fg: #fefce8;
-        --fg-muted: #a1a1aa;
-        --border: #fefce8;
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --primary: #ededed;
+          --primary-deep: #666666;
+          --bg: #0a0a0a;
+          --bg-canvas: #0a0a0a;
+          --bg-bone: #111111;
+          --surface: #0a0a0a;
+          --surface-card: #0a0a0a;
+          --ink: #ededed;
+          --body: #a0a0a0;
+          --charcoal: #ededed;
+          --mute: #808080;
+          --ash: #808080;
+          --stone: #666666;
+          --on-primary: #171717;
+          --divider: #2a2a2a;
+          --hairline: rgba(42, 42, 42, 0.4);
+          --hairline-strong: #ededed;
+          --shadow-1: rgba(255, 255, 255, 0.1) 0px 0px 0px 1px;
+          --shadow-2: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.2) 0px 2px 2px 0px;
+          --shadow-3: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.2) 0px 2px 2px 0px, rgba(0, 0, 0, 0.2) 0px 8px 8px -8px;
+        }
       }
 
       *,
@@ -55,158 +84,45 @@
       body {
         font-family: var(--font);
         font-size: 16px;
-        color: var(--fg);
+        color: var(--ink);
         background: var(--bg);
         min-height: 100vh;
         -webkit-font-smoothing: antialiased;
-        transition:
-          background var(--transition),
-          color var(--transition);
-      }
-
-      /* ---- HEADER ---- */
-      .header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        height: var(--header-h);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 24px;
-        background: var(--primary);
-        border-bottom: 3px solid var(--border);
-        color: #1a1a1a;
-      }
-
-      .header__left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .header__brand {
-        font-size: 18px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: -0.5px;
-        text-decoration: none;
-        color: #1a1a1a;
-      }
-
-      .header__brand:hover {
-        background: transparent;
-      }
-
-      .header__sep {
-        width: 2px;
-        height: 24px;
-        background: #1a1a1a;
-        opacity: 0.3;
-      }
-
-      .header__page-title {
-        font-size: 14px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .header__right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      /* Back button */
-      .btn-back {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 14px;
-        font-family: var(--font);
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        text-decoration: none;
-        color: #1a1a1a;
-        background: var(--surface);
-        border: 2px solid #1a1a1a;
-        box-shadow: 2px 2px 0 0 #1a1a1a;
-        cursor: pointer;
-        transition:
-          transform var(--transition),
-          box-shadow var(--transition);
-      }
-
-      .btn-back:hover {
-        transform: translate(-1px, -1px);
-        box-shadow: 3px 3px 0 0 #1a1a1a;
-        background: var(--surface);
-        color: #1a1a1a;
-      }
-
-      .btn-back:active {
-        transform: translate(1px, 1px);
-        box-shadow: 1px 1px 0 0 #1a1a1a;
-      }
-
-      .btn-back svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      /* Theme toggle */
-      .theme-toggle {
-        position: relative;
-        width: 48px;
-        height: 26px;
-        background: var(--surface);
-        border: 2px solid #1a1a1a;
-        border-radius: 999px;
-        cursor: pointer;
-        box-shadow: 2px 2px 0 0 #1a1a1a;
-        transition:
-          transform var(--transition),
-          box-shadow var(--transition);
-      }
-
-      .theme-toggle:hover {
-        transform: translate(-1px, -1px);
-        box-shadow: 3px 3px 0 0 #1a1a1a;
-      }
-
-      .theme-toggle::after {
-        content: "";
-        position: absolute;
-        top: 2px;
-        left: 3px;
-        width: 18px;
-        height: 18px;
-        background: #1a1a1a;
-        border-radius: 50%;
-        transition: transform 250ms ease;
-      }
-
-      [data-theme="dark"] .theme-toggle {
-        background: #111827;
-      }
-
-      [data-theme="dark"] .theme-toggle::after {
-        transform: translateX(20px);
-        background: #fefce8;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       /* ---- MAIN CONTAINER ---- */
       .main {
         max-width: 720px;
         margin: 0 auto;
-        padding: 32px 24px 80px;
+        padding: 96px 24px 80px;
+      }
+
+      /* ---- BACK LINK ---- */
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--mute);
+        text-decoration: none;
+        margin-bottom: 32px;
+        transition: color var(--transition);
+      }
+
+      .back-link:hover {
+        color: var(--ink);
+      }
+
+      .back-link svg {
+        width: 16px;
+        height: 16px;
       }
 
       /* ---- PAGE HERO ---- */
       .page-hero {
-        margin-bottom: 32px;
+        margin-bottom: 48px;
         animation: fadeUp 0.4s ease-out;
       }
 
@@ -215,80 +131,70 @@
         align-items: center;
         gap: 6px;
         padding: 4px 12px;
-        background: var(--fg);
+        background: var(--ink);
         color: var(--bg);
-        font-size: 11px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border: 2px solid var(--border);
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: normal;
+        border-radius: 9999px;
         margin-bottom: 16px;
       }
 
-      [data-theme="dark"] .page-hero__badge {
-        background: var(--primary);
-        color: #1a1a1a;
-      }
-
       .page-hero h1 {
-        font-size: clamp(28px, 5vw, 36px);
-        font-weight: 800;
-        line-height: 1.15;
+        font-size: clamp(32px, 5vw, 40px);
+        font-weight: 600;
+        line-height: 1.20;
+        letter-spacing: -2.4px;
+        color: var(--ink);
         margin-bottom: 8px;
       }
 
       .page-hero p {
         font-size: 16px;
-        color: var(--fg-muted);
-        font-weight: 500;
+        color: var(--body);
+        font-weight: 400;
+        line-height: 1.5;
       }
 
       /* ---- TABS ---- */
       .tabs {
         display: flex;
         gap: 0;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+        border-bottom: 1px solid var(--divider);
         animation: fadeUp 0.4s ease-out 0.1s both;
       }
 
       .tab-btn {
-        flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 14px 20px;
+        padding: 8px 16px;
         font-family: var(--font);
         font-size: 14px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-        background: var(--surface);
-        color: var(--fg-muted);
-        border: 3px solid var(--border);
+        font-weight: 500;
+        background: transparent;
+        color: var(--mute);
+        border: none;
+        border-bottom: 2px solid transparent;
         cursor: pointer;
         transition: all var(--transition);
-        position: relative;
-      }
-
-      .tab-btn:first-child {
-        border-right: none;
+        margin-bottom: -1px;
       }
 
       .tab-btn svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
       }
 
       .tab-btn.active {
-        background: var(--primary);
-        color: #1a1a1a;
-        box-shadow: var(--shadow-1);
-        z-index: 1;
+        color: var(--ink);
+        border-bottom-color: var(--ink);
       }
 
       .tab-btn:not(.active):hover {
-        background: var(--bg);
+        color: var(--charcoal);
       }
 
       /* ---- TAB CONTENT ---- */
@@ -303,47 +209,47 @@
 
       /* ---- CARD ---- */
       .card {
-        background: var(--surface);
-        border: 3px solid var(--border);
+        background: var(--surface-card);
+        border-radius: 8px;
         box-shadow: var(--shadow-2);
         animation: fadeUp 0.4s ease-out 0.2s both;
+        overflow: hidden;
       }
 
       .card__header {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 16px 20px;
-        border-bottom: 3px solid var(--border);
-        background: var(--bg);
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--divider);
       }
 
       .card__header-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: var(--primary);
-        border: 2px solid var(--border);
-        box-shadow: var(--shadow-1);
+        width: 36px;
+        height: 36px;
+        background: var(--bg-bone);
+        border-radius: 8px;
         flex-shrink: 0;
       }
 
       .card__header-icon svg {
-        width: 20px;
-        height: 20px;
-        color: #1a1a1a;
+        width: 18px;
+        height: 18px;
+        color: var(--ink);
       }
 
       .card__title {
-        font-size: 18px;
-        font-weight: 800;
-        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: -0.32px;
+        color: var(--ink);
       }
 
       .card__body {
-        padding: 24px 20px;
+        padding: 24px;
       }
 
       /* ---- FORM GROUP ---- */
@@ -360,11 +266,9 @@
         align-items: center;
         gap: 8px;
         margin-bottom: 8px;
-        font-size: 12px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--fg);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink);
       }
 
       .form-label__step {
@@ -373,22 +277,18 @@
         justify-content: center;
         width: 22px;
         height: 22px;
-        font-size: 11px;
-        font-weight: 800;
-        background: var(--fg);
-        color: var(--bg);
-        border: 2px solid var(--border);
+        font-size: 12px;
+        font-weight: 500;
+        background: var(--bg-bone);
+        color: var(--mute);
+        border-radius: 9999px;
         flex-shrink: 0;
-      }
-
-      [data-theme="dark"] .form-label__step {
-        background: var(--primary);
-        color: #1a1a1a;
+        transition: all 200ms ease;
       }
 
       .form-label__step.done {
         background: var(--success);
-        color: #1a1a1a;
+        color: #ffffff;
       }
 
       /* ---- SELECT ---- */
@@ -404,45 +304,43 @@
         transform: translateY(-50%);
         width: 0;
         height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 7px solid var(--fg);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid var(--mute);
         pointer-events: none;
       }
 
       .form-select {
         width: 100%;
-        padding: 12px 40px 12px 14px;
+        padding: 12px 40px 12px 16px;
         font-family: var(--font);
         font-size: 14px;
-        font-weight: 600;
-        color: var(--fg);
-        background: var(--surface);
-        border: 2px solid var(--border);
-        border-radius: 0;
+        font-weight: 400;
+        color: var(--ink);
+        background: var(--surface-card);
+        border: 1px solid var(--divider);
+        border-radius: 6px;
         appearance: none;
         -webkit-appearance: none;
         cursor: pointer;
         transition: all var(--transition);
-        box-shadow: var(--shadow-1);
+        height: 44px;
       }
 
       .form-select:focus {
         outline: none;
-        border-color: var(--primary);
-        box-shadow:
-          var(--shadow-2),
-          0 0 0 2px var(--primary);
+        border-color: var(--ring-focus);
+        box-shadow: 0 0 0 2px var(--ring-focus);
       }
 
       .form-select:disabled {
         opacity: 0.5;
         cursor: not-allowed;
-        background: var(--bg);
+        background: var(--bg-bone);
       }
 
       .form-select option {
-        font-weight: 500;
+        font-weight: 400;
       }
 
       /* ---- UPLOAD AREA ---- */
@@ -454,42 +352,41 @@
         justify-content: center;
         gap: 12px;
         padding: 40px 20px;
-        border: 3px dashed var(--border);
-        background: var(--bg);
+        border: 1px dashed var(--divider);
+        border-radius: 8px;
+        background: var(--bg-bone);
         cursor: pointer;
         transition: all 200ms ease;
         min-height: 160px;
       }
 
       .upload-area:hover {
-        border-color: var(--primary);
-        background: color-mix(in srgb, var(--primary) 8%, var(--bg));
+        border-color: var(--mute);
+        background: var(--bg-bone);
       }
 
       .upload-area.dragover {
         border-style: solid;
-        border-color: var(--primary);
-        background: color-mix(in srgb, var(--primary) 15%, var(--bg));
-        transform: scale(1.01);
-        box-shadow: var(--shadow-2);
+        border-color: var(--ring-focus);
+        background: hsla(212, 100%, 48%, 0.04);
+        box-shadow: 0 0 0 2px var(--ring-focus);
       }
 
       .upload-area.has-file {
         border-style: solid;
         border-color: var(--success);
-        background: color-mix(in srgb, var(--success) 8%, var(--bg));
+        background: hsla(152, 56%, 38%, 0.04);
       }
 
       .upload-area__icon {
-        width: 40px;
-        height: 40px;
-        color: var(--fg-muted);
+        width: 36px;
+        height: 36px;
+        color: var(--mute);
         transition: color var(--transition);
       }
 
-      .upload-area.dragover .upload-area__icon,
-      .upload-area.has-file .upload-area__icon {
-        color: var(--primary);
+      .upload-area.dragover .upload-area__icon {
+        color: var(--ring-focus);
       }
 
       .upload-area.has-file .upload-area__icon {
@@ -498,20 +395,20 @@
 
       .upload-area__text {
         font-size: 14px;
-        font-weight: 600;
-        color: var(--fg-muted);
+        font-weight: 400;
+        color: var(--body);
         text-align: center;
       }
 
       .upload-area__text strong {
-        color: var(--fg);
-        font-weight: 800;
+        color: var(--ink);
+        font-weight: 500;
       }
 
       .upload-area__hint {
         font-size: 12px;
-        color: var(--fg-muted);
-        font-weight: 500;
+        color: var(--mute);
+        font-weight: 400;
       }
 
       .upload-area input[type="file"] {
@@ -527,9 +424,9 @@
         align-items: center;
         gap: 12px;
         padding: 12px 16px;
-        background: var(--surface);
-        border: 2px solid var(--border);
-        box-shadow: var(--shadow-1);
+        background: var(--bg-bone);
+        border: 1px solid var(--divider);
+        border-radius: 6px;
         margin-top: 12px;
       }
 
@@ -538,9 +435,9 @@
       }
 
       .file-preview__icon {
-        width: 28px;
-        height: 28px;
-        color: var(--primary);
+        width: 24px;
+        height: 24px;
+        color: var(--ink);
         flex-shrink: 0;
       }
 
@@ -551,16 +448,18 @@
 
       .file-preview__name {
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 500;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        color: var(--ink);
       }
 
       .file-preview__size {
         font-size: 12px;
-        color: var(--fg-muted);
-        font-weight: 500;
+        color: var(--mute);
+        font-weight: 400;
+        font-family: var(--font-mono);
       }
 
       .file-preview__remove {
@@ -570,8 +469,9 @@
         align-items: center;
         justify-content: center;
         background: none;
-        border: 2px solid var(--border);
-        color: var(--danger);
+        border: 1px solid var(--divider);
+        border-radius: 6px;
+        color: var(--mute);
         cursor: pointer;
         flex-shrink: 0;
         transition: all var(--transition);
@@ -579,6 +479,7 @@
 
       .file-preview__remove:hover {
         background: var(--danger);
+        border-color: var(--danger);
         color: #fff;
       }
 
@@ -590,44 +491,40 @@
       /* ---- SUBMIT BUTTON ---- */
       .btn-submit {
         width: 100%;
-        padding: 16px 24px;
+        padding: 12px 24px;
         margin-top: 24px;
         font-family: var(--font);
-        font-size: 16px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: #1a1a1a;
-        background: var(--primary);
-        border: 3px solid var(--border);
-        box-shadow: var(--shadow-2);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--on-primary);
+        background: var(--ink);
+        border: none;
+        border-radius: 6px;
         cursor: pointer;
         transition: all var(--transition);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
+        height: 44px;
       }
 
       .btn-submit:hover:not(:disabled) {
-        transform: translate(-2px, -2px);
-        box-shadow: var(--shadow-3);
-        background: var(--primary-hover);
+        opacity: 0.85;
       }
 
       .btn-submit:active:not(:disabled) {
-        transform: translate(2px, 2px);
-        box-shadow: 1px 1px 0 0 var(--border);
+        transform: scale(0.98);
       }
 
       .btn-submit:disabled {
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: not-allowed;
       }
 
       .btn-submit svg {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
       }
 
       .btn-submit.loading {
@@ -636,9 +533,9 @@
 
       /* ---- SPINNER ---- */
       .spinner {
-        width: 20px;
-        height: 20px;
-        border: 3px solid #1a1a1a;
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--on-primary);
         border-top-color: transparent;
         border-radius: 50%;
         animation: spin 0.6s linear infinite;
@@ -655,23 +552,23 @@
       .rekap-stats {
         display: flex;
         gap: 12px;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
 
       .rekap-stat {
         flex: 1;
-        padding: 16px;
-        background: var(--surface);
-        border: 3px solid var(--border);
-        box-shadow: var(--shadow-2);
+        padding: 20px 16px;
+        background: var(--bg-bone);
+        border-radius: 8px;
         text-align: center;
       }
 
       .rekap-stat__value {
         font-size: 28px;
-        font-weight: 800;
+        font-weight: 600;
         line-height: 1;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
+        letter-spacing: -1.28px;
       }
 
       .rekap-stat__value--success {
@@ -683,16 +580,13 @@
       }
 
       .rekap-stat__value--total {
-        color: var(--primary);
-        text-shadow: 1px 1px 0 var(--border);
+        color: var(--ink);
       }
 
       .rekap-stat__label {
-        font-size: 11px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--fg-muted);
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--mute);
       }
 
       /* Progress bar */
@@ -701,15 +595,16 @@
       }
 
       .rekap-progress__bar {
-        height: 14px;
-        background: var(--surface);
-        border: 2px solid var(--border);
+        height: 8px;
+        background: var(--bg-bone);
+        border-radius: 9999px;
         overflow: hidden;
       }
 
       .rekap-progress__fill {
         height: 100%;
         background: var(--success);
+        border-radius: 9999px;
         width: 0%;
         transition: width 600ms ease;
       }
@@ -718,17 +613,18 @@
         display: flex;
         justify-content: space-between;
         font-size: 12px;
-        font-weight: 700;
-        margin-top: 6px;
-        color: var(--fg-muted);
+        font-weight: 500;
+        margin-top: 8px;
+        color: var(--mute);
+        font-family: var(--font-mono);
       }
 
       /* Rekap table */
       .table-wrapper {
         overflow-x: auto;
-        border: 3px solid var(--border);
-        box-shadow: var(--shadow-2);
-        background: var(--surface);
+        border: 1px solid var(--divider);
+        border-radius: 6px;
+        background: var(--surface-card);
       }
 
       .rekap-table {
@@ -738,28 +634,24 @@
       }
 
       .rekap-table thead {
-        background: var(--fg);
-        color: var(--bg);
-      }
-
-      [data-theme="dark"] .rekap-table thead {
-        background: var(--primary);
-        color: #1a1a1a;
+        background: var(--bg-bone);
       }
 
       .rekap-table th {
-        padding: 10px 14px;
-        font-weight: 800;
-        text-transform: uppercase;
+        padding: 10px 16px;
+        font-weight: 500;
         font-size: 12px;
         text-align: left;
         white-space: nowrap;
+        color: var(--charcoal);
+        border-bottom: 1px solid var(--divider);
       }
 
       .rekap-table td {
-        padding: 10px 14px;
-        border-bottom: 2px solid var(--border);
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--hairline);
         vertical-align: middle;
+        color: var(--ink);
       }
 
       .rekap-table tbody tr:last-child td {
@@ -767,7 +659,7 @@
       }
 
       .rekap-table tbody tr:hover {
-        background: var(--bg);
+        background: var(--bg-bone);
       }
 
       /* Status badges */
@@ -775,39 +667,35 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        padding: 3px 10px;
-        font-size: 11px;
-        font-weight: 800;
-        text-transform: uppercase;
-        border: 2px solid var(--border);
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 9999px;
       }
 
       .badge--success {
-        background: var(--success);
-        color: #1a1a1a;
+        background: hsla(152, 56%, 38%, 0.1);
+        color: var(--success);
       }
 
       .badge--danger {
-        background: var(--danger);
-        color: #fff;
+        background: hsla(5, 100%, 65%, 0.1);
+        color: var(--danger);
       }
 
       .link-file {
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--info);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--link);
         text-decoration: none;
-        padding: 2px 8px;
-        border: 2px solid var(--info);
-        transition: all var(--transition);
+        transition: opacity var(--transition);
       }
 
       .link-file:hover {
-        background: var(--info);
-        color: #fff;
+        opacity: 0.7;
       }
 
       .link-file svg {
@@ -818,7 +706,7 @@
       /* ---- TOAST ---- */
       .toast-container {
         position: fixed;
-        top: calc(var(--header-h) + 16px);
+        top: 24px;
         right: 16px;
         z-index: 200;
         display: flex;
@@ -827,34 +715,35 @@
       }
 
       .toast {
-        padding: 14px 20px;
-        background: var(--surface);
-        border: 3px solid var(--border);
-        box-shadow: var(--shadow-2);
+        padding: 12px 20px;
+        background: var(--surface-card);
+        border-radius: 8px;
+        box-shadow: var(--shadow-3);
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 500;
         max-width: 360px;
         display: flex;
         align-items: center;
         gap: 10px;
         animation: slideIn 0.3s ease-out;
+        color: var(--ink);
       }
 
       .toast--success {
-        border-left: 6px solid var(--success);
+        border-left: 3px solid var(--success);
       }
 
       .toast--error {
-        border-left: 6px solid var(--danger);
+        border-left: 3px solid var(--danger);
       }
 
       .toast--info {
-        border-left: 6px solid var(--info);
+        border-left: 3px solid var(--info);
       }
 
       .toast svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         flex-shrink: 0;
       }
 
@@ -870,28 +759,29 @@
       .empty-state {
         text-align: center;
         padding: 48px 20px;
-        color: var(--fg-muted);
+        color: var(--mute);
       }
 
       .empty-state svg {
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
         margin-bottom: 12px;
-        opacity: 0.4;
+        opacity: 0.3;
       }
 
       .empty-state p {
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 400;
+        color: var(--mute);
       }
 
       /* Loading skeleton */
       .skeleton {
         position: relative;
         overflow: hidden;
-        background: var(--bg);
-        border: 2px solid var(--border);
-        height: 46px;
+        background: var(--bg-bone);
+        border-radius: 6px;
+        height: 44px;
       }
 
       .skeleton::after {
@@ -901,7 +791,7 @@
         background: linear-gradient(
           90deg,
           transparent,
-          color-mix(in srgb, var(--primary) 15%, transparent),
+          var(--hairline),
           transparent
         );
         animation: shimmer 1.5s infinite;
@@ -910,27 +800,31 @@
       /* ---- FOOTER ---- */
       .footer {
         text-align: center;
-        padding: 24px;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--fg-muted);
-        border-top: 3px solid var(--border);
-        margin-top: 48px;
+        padding: 24px 0;
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--mute);
+        border-top: 1px solid var(--divider);
+        margin-top: 96px;
+        font-family: var(--font-mono);
       }
 
       .footer a {
-        color: var(--fg);
-        font-weight: 700;
-        text-decoration: underline;
-        text-decoration-thickness: 2px;
-        text-underline-offset: 3px;
+        color: var(--ink);
+        font-weight: 500;
+        text-decoration: none;
+        transition: opacity var(--transition);
+      }
+
+      .footer a:hover {
+        opacity: 0.7;
       }
 
       /* ---- ANIMATIONS ---- */
       @keyframes fadeUp {
         from {
           opacity: 0;
-          transform: translateY(8px);
+          transform: translateY(6px);
         }
         to {
           opacity: 1;
@@ -966,16 +860,8 @@
 
       /* ---- RESPONSIVE ---- */
       @media (max-width: 640px) {
-        .header {
-          padding: 0 16px;
-        }
-
-        .header__page-title {
-          display: none;
-        }
-
         .main {
-          padding: 24px 16px 64px;
+          padding: 48px 16px 64px;
         }
 
         .rekap-filters {
@@ -992,50 +878,39 @@
 
         .rekap-table th,
         .rekap-table td {
-          padding: 8px 10px;
+          padding: 8px 12px;
         }
 
         .tabs {
-          flex-direction: column;
+          overflow-x: auto;
         }
 
-        .tab-btn:first-child {
-          border-right: 3px solid var(--border);
-          border-bottom: none;
+        .page-hero h1 {
+          letter-spacing: -1.28px;
         }
       }
     </style>
   </head>
   <body>
-    <!-- ============ HEADER ============ -->
-    <header class="header">
-      <div class="header__left">
-        <a href="../index.html" class="header__brand">⬡ OurLabs</a>
-        <div class="header__sep"></div>
-        <span class="header__page-title">Pengumpulan Tugas</span>
-      </div>
-      <div class="header__right">
-        <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle dark mode"></div>
-        <a href="../index.html" class="btn-back">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          Kembali
-        </a>
-      </div>
-    </header>
-
     <!-- ============ MAIN ============ -->
     <main class="main">
+      <!-- Back link -->
+      <a href="../index.html" class="back-link">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Kembali
+      </a>
+
       <!-- Page Hero -->
       <div class="page-hero">
-        <div class="page-hero__badge">📋 Sistem Tugas</div>
+        <div class="page-hero__badge">Sistem Tugas</div>
         <h1>Pengumpulan Tugas</h1>
         <p>Upload tugas dan lihat status pengumpulan kelas kamu.</p>
       </div>
@@ -1047,7 +922,7 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2.5"
+            stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
@@ -1059,7 +934,7 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2.5"
+            stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
@@ -1078,7 +953,7 @@
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2.5"
+                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
@@ -1204,7 +1079,7 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2.5"
+                  stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round">
                   <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
@@ -1225,7 +1100,7 @@
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2.5"
+                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
@@ -1641,7 +1516,7 @@
         } finally {
           btnSubmit.classList.remove("loading");
           btnSubmit.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
             </svg>
             Kirim Tugas
@@ -1742,8 +1617,8 @@
         rekap.forEach((item, idx) => {
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td style="font-weight:700; text-align:center">${idx + 1}</td>
-            <td style="font-weight:600">${escapeHtml(item.nama)}</td>
+            <td style="font-weight:500; text-align:center">${idx + 1}</td>
+            <td style="font-weight:500">${escapeHtml(item.nama)}</td>
             <td>
               ${
                 item.sudah
@@ -1751,7 +1626,7 @@
                   : '<span class="badge badge--danger">✗ Belum</span>'
               }
             </td>
-            <td style="font-size:13px; color:var(--fg-muted)">
+            <td style="font-size:13px; color:var(--mute); font-family:var(--font-mono)">
               ${item.timestamp || "—"}
             </td>
             <td>
@@ -1763,7 +1638,7 @@
                        </svg>
                        Lihat
                      </a>`
-                  : '<span style="color:var(--fg-muted)">—</span>'
+                  : '<span style="color:var(--mute)">—</span>'
               }
             </td>
           `;
@@ -1794,30 +1669,6 @@
       });
 
       // =============================================
-      // DARK MODE
-      // =============================================
-      const themeToggle = $("theme-toggle");
-
-      // Check saved preference or system preference
-      function getPreferredTheme() {
-        const saved = localStorage.getItem("ourlabs-theme");
-        if (saved) return saved;
-        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-      }
-
-      function setTheme(theme) {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("ourlabs-theme", theme);
-      }
-
-      setTheme(getPreferredTheme());
-
-      themeToggle.addEventListener("click", function () {
-        const current = document.documentElement.getAttribute("data-theme");
-        setTheme(current === "dark" ? "light" : "dark");
-      });
-
-      // =============================================
       // TOAST NOTIFICATIONS
       // =============================================
       function showToast(message, type = "info") {
@@ -1826,9 +1677,9 @@
         toast.className = "toast toast--" + type;
 
         const iconMap = {
-          success: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>`,
-          error: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
-          info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+          success: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>`,
+          error: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+          info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
         };
 
         toast.innerHTML = (iconMap[type] || iconMap.info) + "<span>" + escapeHtml(message) + "</span>";
