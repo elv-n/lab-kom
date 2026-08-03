@@ -95,7 +95,7 @@
       }
 
       .main {
-        max-width: 720px;
+        max-width: 960px;
         margin: 0 auto;
         padding: 32px 24px;
       }
@@ -649,6 +649,7 @@
         border-bottom: 1px solid var(--hairline);
         vertical-align: middle;
         color: var(--ink);
+        white-space: nowrap;
       }
 
       .rekap-table tbody tr:last-child td {
@@ -1588,7 +1589,7 @@
               }
             </td>
             <td style="font-size:13px; color:var(--mute); font-family:var(--font-mono)">
-              ${item.timestamp || "—"}
+              ${formatTimestampID(item.timestamp)}
             </td>
             <td>
               ${
@@ -1610,6 +1611,43 @@
         $("rekap-loading").style.display = "none";
         $("rekap-empty").style.display = "none";
         $("rekap-content").style.display = "block";
+      }
+
+      function formatTimestampID(ts) {
+        if (!ts) return "—";
+        const bulanID = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+        
+        // Kalau string sudah mengandung nama bulan Indonesia, langsung return
+        if (typeof ts === "string" && bulanID.some(b => ts.includes(b))) return ts;
+        
+        // Parse dari berbagai format (Date object, dd/MM/yyyy, ISO string, dll)
+        let d;
+        if (typeof ts === "string" && ts.includes("/") && !ts.includes("T")) {
+          // Asumsi format dd/MM/yyyy HH:mm:ss (disimpan sebagai teks di Google Sheet)
+          const [datePart, timePart] = ts.split(" ");
+          const [dd, mm, yyyy] = datePart.split("/");
+          d = new Date(yyyy, mm - 1, dd);
+          if (timePart) {
+            const [hh, mi] = timePart.split(":");
+            d.setHours(hh, mi);
+          }
+        } else {
+          d = new Date(ts);
+          // BUGFIX: Google Sheets locale menukar Tanggal dan Bulan kalau d <= 12
+          // "03/08/2026" (3 Agustus) dianggap "March 8" oleh Sheets.
+          // Kalau masuk ke blok ini sebagai ISO string, berarti Sheets menganggapnya Date.
+          if (typeof ts === "string" && ts.includes("T")) {
+            const actualDay = d.getMonth() + 1; // Bulan di Date object adalah hari aslinya
+            const actualMonth = d.getDate() - 1; // Hari di Date object adalah bulan aslinya
+            d.setMonth(actualMonth);
+            d.setDate(actualDay);
+          }
+        }
+        
+        if (isNaN(d.getTime())) return ts;
+        
+        const jam = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+        return d.getDate() + " " + bulanID[d.getMonth()] + " " + d.getFullYear() + ", " + jam + " WIB";
       }
 
       // =============================================
