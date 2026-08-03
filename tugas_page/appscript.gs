@@ -41,11 +41,11 @@
 // KONFIGURASI — GANTI SESUAI MILIKMU
 // =============================================
 const CONFIG = {
-  SPREADSHEET_ID: 'GANTI_DENGAN_ID_SPREADSHEET',
-  DRIVE_FOLDER_ID: 'GANTI_DENGAN_ID_FOLDER_DRIVE',
-  SHEET_SISWA: 'data_siswa',
-  SHEET_TUGAS: 'data_tugas',
-  SHEET_REKAP: 'rekap_tugas',
+  SPREADSHEET_ID: "1d_yc_9NVzXyontu4KP8dEabWZ1gHVgyYibXL_MzKCuk",
+  DRIVE_FOLDER_ID: "1DtuzZklLoleowCFsx4hDkCrlMLBessC",
+  SHEET_SISWA: "data_siswa",
+  SHEET_TUGAS: "data_tugas",
+  SHEET_REKAP: "rekap_tugas",
   MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
 };
 
@@ -63,24 +63,20 @@ function doGet(e) {
     let result;
 
     switch (action) {
-      case 'getMapelTugas':
+      case "getMapelTugas":
         result = getMapelTugas();
         break;
-      case 'getKelas':
+      case "getKelas":
         result = getKelasList();
         break;
-      case 'getSiswa':
+      case "getSiswa":
         result = getSiswaByKelas(e.parameter.kelas);
         break;
-      case 'getRekap':
-        result = getRekap(
-          e.parameter.mapel,
-          e.parameter.tugas,
-          e.parameter.kelas
-        );
+      case "getRekap":
+        result = getRekap(e.parameter.mapel, e.parameter.tugas, e.parameter.kelas);
         break;
       default:
-        result = { success: false, error: 'Action tidak valid: ' + action };
+        result = { success: false, error: "Action tidak valid: " + action };
     }
 
     return sendJson(result);
@@ -106,9 +102,7 @@ function doPost(e) {
  * Helper: Return JSON response with CORS headers
  */
 function sendJson(data) {
-  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(
-    ContentService.MimeType.JSON
-  );
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
 }
 
 // =============================================
@@ -133,10 +127,12 @@ function getMapelTugas() {
   }
 
   // Header: mapel, judul_tugas, kelas
-  const headers = data[0].map(function (h) { return h.toString().toLowerCase().trim(); });
-  const mapelIdx = headers.indexOf('mapel');
-  const tugasIdx = headers.indexOf('judul_tugas');
-  const kelasIdx = headers.indexOf('kelas');
+  const headers = data[0].map(function (h) {
+    return h.toString().toLowerCase().trim();
+  });
+  const mapelIdx = headers.indexOf("mapel");
+  const tugasIdx = headers.indexOf("judul_tugas");
+  const kelasIdx = headers.indexOf("kelas");
 
   if (mapelIdx === -1 || tugasIdx === -1 || kelasIdx === -1) {
     return { success: false, error: 'Header "mapel", "judul_tugas", atau "kelas" tidak ditemukan di sheet data_tugas' };
@@ -181,8 +177,10 @@ function getKelasList() {
     return { success: true, data: [] };
   }
 
-  const headers = data[0].map(function (h) { return h.toString().toLowerCase().trim(); });
-  const kelasIdx = headers.indexOf('kelas');
+  const headers = data[0].map(function (h) {
+    return h.toString().toLowerCase().trim();
+  });
+  const kelasIdx = headers.indexOf("kelas");
 
   if (kelasIdx === -1) {
     return { success: false, error: 'Header "kelas" tidak ditemukan di sheet data_siswa' };
@@ -221,9 +219,11 @@ function getSiswaByKelas(kelas) {
     return { success: true, data: [] };
   }
 
-  const headers = data[0].map(function (h) { return h.toString().toLowerCase().trim(); });
-  const namaIdx = headers.indexOf('nama');
-  const kelasIdx = headers.indexOf('kelas');
+  const headers = data[0].map(function (h) {
+    return h.toString().toLowerCase().trim();
+  });
+  const namaIdx = headers.indexOf("nama");
+  const kelasIdx = headers.indexOf("kelas");
 
   if (namaIdx === -1 || kelasIdx === -1) {
     return { success: false, error: 'Header "nama" atau "kelas" tidak ditemukan' };
@@ -248,7 +248,7 @@ function getSiswaByKelas(kelas) {
  */
 function getRekap(mapel, tugas, kelas) {
   if (!mapel || !tugas || !kelas) {
-    return { success: false, error: 'Parameter mapel, tugas, dan kelas diperlukan' };
+    return { success: false, error: "Parameter mapel, tugas, dan kelas diperlukan" };
   }
 
   const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
@@ -260,9 +260,11 @@ function getRekap(mapel, tugas, kelas) {
   }
 
   const siswaData = siswaSheet.getDataRange().getValues();
-  const siswaHeaders = siswaData[0].map(function (h) { return h.toString().toLowerCase().trim(); });
-  const namaIdx = siswaHeaders.indexOf('nama');
-  const kelasIdx = siswaHeaders.indexOf('kelas');
+  const siswaHeaders = siswaData[0].map(function (h) {
+    return h.toString().toLowerCase().trim();
+  });
+  const namaIdx = siswaHeaders.indexOf("nama");
+  const kelasIdx = siswaHeaders.indexOf("kelas");
 
   if (namaIdx === -1 || kelasIdx === -1) {
     return { success: false, error: 'Header "nama" atau "kelas" tidak ditemukan di sheet data_siswa' };
@@ -285,14 +287,16 @@ function getRekap(mapel, tugas, kelas) {
   if (rekapSheet) {
     const rekapData = rekapSheet.getDataRange().getValues();
     if (rekapData.length > 1) {
-      const headers = rekapData[0].map(function (h) { return h.toString().toLowerCase().trim(); });
-      const tIdx = headers.indexOf('timestamp');
-      const nIdx = headers.indexOf('nama');
-      const kIdx = headers.indexOf('kelas');
-      const mIdx = headers.indexOf('mapel');
-      const jIdx = headers.indexOf('judul_tugas');
-      const fIdx = headers.indexOf('nama_file');
-      const lIdx = headers.indexOf('link_file');
+      const headers = rekapData[0].map(function (h) {
+        return h.toString().toLowerCase().trim();
+      });
+      const tIdx = headers.indexOf("timestamp");
+      const nIdx = headers.indexOf("nama");
+      const kIdx = headers.indexOf("kelas");
+      const mIdx = headers.indexOf("mapel");
+      const jIdx = headers.indexOf("judul_tugas");
+      const fIdx = headers.indexOf("nama_file");
+      const lIdx = headers.indexOf("link_file");
 
       for (var i = 1; i < rekapData.length; i++) {
         var row = rekapData[i];
@@ -327,7 +331,9 @@ function getRekap(mapel, tugas, kelas) {
     });
   }
 
-  var totalSudah = result.filter(function (r) { return r.sudah; }).length;
+  var totalSudah = result.filter(function (r) {
+    return r.sudah;
+  }).length;
 
   return {
     success: true,
@@ -350,19 +356,19 @@ function getRekap(mapel, tugas, kelas) {
 function uploadTugas(data) {
   // Validasi
   if (!data.nama || !data.kelas || !data.mapel || !data.judul_tugas) {
-    return { success: false, error: 'Data tidak lengkap. Pastikan semua field terisi.' };
+    return { success: false, error: "Data tidak lengkap. Pastikan semua field terisi." };
   }
   if (!data.fileName || !data.fileData) {
-    return { success: false, error: 'File tidak ditemukan. Silakan pilih file.' };
+    return { success: false, error: "File tidak ditemukan. Silakan pilih file." };
   }
 
   // Decode file dari base64
   var fileBlob;
   try {
     var decoded = Utilities.base64Decode(data.fileData);
-    fileBlob = Utilities.newBlob(decoded, data.mimeType || 'application/octet-stream', data.fileName);
+    fileBlob = Utilities.newBlob(decoded, data.mimeType || "application/octet-stream", data.fileName);
   } catch (err) {
-    return { success: false, error: 'Gagal memproses file: ' + err.message };
+    return { success: false, error: "Gagal memproses file: " + err.message };
   }
 
   // Buat struktur folder: Root > Mapel > Judul Tugas > Kelas
@@ -372,10 +378,10 @@ function uploadTugas(data) {
   var kelasFolder = getOrCreateFolder(tugasFolder, data.kelas);
 
   // Nama file: NamaSiswa_NamaFile
-  var safeNama = data.nama.replace(/[^a-zA-Z0-9]/g, '_');
-  var ext = data.fileName.split('.').pop();
-  var baseName = data.fileName.replace('.' + ext, '');
-  var finalFileName = safeNama + '_' + baseName + '.' + ext;
+  var safeNama = data.nama.replace(/[^a-zA-Z0-9]/g, "_");
+  var ext = data.fileName.split(".").pop();
+  var baseName = data.fileName.replace("." + ext, "");
+  var finalFileName = safeNama + "_" + baseName + "." + ext;
 
   // Cek apakah sudah ada file lama dari siswa ini, hapus jika ada
   var existingFiles = kelasFolder.getFilesByName(finalFileName);
@@ -390,29 +396,48 @@ function uploadTugas(data) {
   uploadedFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   var fileUrl = uploadedFile.getUrl();
 
-  // Catat di sheet rekap
+  // Catat di sheet rekap (upsert: update jika sudah ada, append jika belum)
   var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
   var rekapSheet = ensureRekapSheet(ss);
 
-  var timestamp = Utilities.formatDate(
-    new Date(),
-    Session.getScriptTimeZone(),
-    'dd/MM/yyyy HH:mm:ss'
-  );
+  var timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm:ss");
 
-  rekapSheet.appendRow([
-    timestamp,
-    data.nama,
-    data.kelas,
-    data.mapel,
-    data.judul_tugas,
-    finalFileName,
-    fileUrl,
-  ]);
+  var newRow = [timestamp, data.nama, data.kelas, data.mapel, data.judul_tugas, finalFileName, fileUrl];
+
+  // Cari row lama dengan nama + kelas + mapel + judul_tugas yang sama
+  var rekapData = rekapSheet.getDataRange().getValues();
+  var headers = rekapData[0].map(function (h) {
+    return h.toString().toLowerCase().trim();
+  });
+  var nIdx = headers.indexOf("nama");
+  var kIdx = headers.indexOf("kelas");
+  var mIdx = headers.indexOf("mapel");
+  var jIdx = headers.indexOf("judul_tugas");
+  var existingRowIdx = -1;
+
+  for (var i = 1; i < rekapData.length; i++) {
+    if (
+      rekapData[i][nIdx].toString().trim() === data.nama &&
+      rekapData[i][kIdx].toString().trim() === data.kelas &&
+      rekapData[i][mIdx].toString().trim() === data.mapel &&
+      rekapData[i][jIdx].toString().trim() === data.judul_tugas
+    ) {
+      existingRowIdx = i + 1; // Sheet rows are 1-indexed
+      break;
+    }
+  }
+
+  if (existingRowIdx > 0) {
+    // Update row yang sudah ada (replace in-place)
+    rekapSheet.getRange(existingRowIdx, 1, 1, newRow.length).setValues([newRow]);
+  } else {
+    // Append baru
+    rekapSheet.appendRow(newRow);
+  }
 
   return {
     success: true,
-    message: 'Tugas berhasil dikumpulkan!',
+    message: "Tugas berhasil dikumpulkan!",
     data: {
       fileName: finalFileName,
       fileUrl: fileUrl,
@@ -443,19 +468,11 @@ function ensureRekapSheet(ss) {
   var sheet = ss.getSheetByName(CONFIG.SHEET_REKAP);
   if (!sheet) {
     sheet = ss.insertSheet(CONFIG.SHEET_REKAP);
-    sheet.appendRow([
-      'timestamp',
-      'nama',
-      'kelas',
-      'mapel',
-      'judul_tugas',
-      'nama_file',
-      'link_file',
-    ]);
+    sheet.appendRow(["timestamp", "nama", "kelas", "mapel", "judul_tugas", "nama_file", "link_file"]);
     // Format header
     var headerRange = sheet.getRange(1, 1, 1, 7);
-    headerRange.setFontWeight('bold');
-    headerRange.setBackground('#FACC15');
+    headerRange.setFontWeight("bold");
+    headerRange.setBackground("#FACC15");
     sheet.setFrozenRows(1);
   }
   return sheet;
