@@ -278,6 +278,8 @@ a:hover {
   margin-top: var(--header-height);
   min-height: calc(100vh - var(--header-height));
   position: relative;
+  padding-left: var(--sidebar-left-width);
+  padding-right: var(--sidebar-right-width);
 }
 
 /* ========================================
@@ -458,8 +460,6 @@ a:hover {
    ======================================== */
 .main {
   flex: 1;
-  margin-left: var(--sidebar-left-width);
-  margin-right: var(--sidebar-right-width);
   padding: var(--space-2xl) var(--space-xl);
   max-width: 900px;
   margin-inline: auto;
@@ -887,7 +887,7 @@ a:hover {
 }
 [data-theme="dark"] .cell-highlight {
   background-color: #854D0E;
-  color: #FEF08A;
+  color: #FEFCE8;
 }
 
 .cell-new {
@@ -1024,8 +1024,8 @@ a:hover {
   .sidebar-right {
     display: none;
   }
-  .main {
-    margin-right: 0;
+  .layout {
+    padding-right: 0;
   }
   .footer {
     margin-right: 0;
@@ -1036,8 +1036,10 @@ a:hover {
 }
 
 @media (max-width: 1024px) {
+  .layout {
+    padding-left: 0;
+  }
   .main {
-    margin-left: 0;
     padding: var(--space-xl) var(--space-lg);
   }
   .footer {

@@ -1,494 +1,154 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Panduan & Tutorial Pemula - Aplikasi Hitung Nilai Siswa</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet" />
-
-    <!-- Bootstrap 5 CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Bootstrap Icons CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
-
-    <!-- Prism.js CSS (Theme: Tomorrow Night) for Syntax Highlighting -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-
-    <style>
-      :root {
-        --primary: #4f46e5;
-        --primary-hover: #4338ca;
-        --secondary: #0ea5e9;
-        --dark: #0f172a;
-        --light-bg: #f8fafc;
-        --card-bg: #ffffff;
-        --text-main: #334155;
-        --text-muted: #64748b;
-        --bs-body-font-family: "Plus Jakarta Sans", sans-serif;
-        --code-font: "JetBrains Mono", monospace;
-      }
-
-      body {
-        background-color: var(--light-bg);
-        color: var(--text-main);
-        font-family: var(--bs-body-font-family);
-        line-height: 1.7;
-        position: relative; /* For scrollspy */
-      }
-
-      /* Hero Banner */
-      .hero-banner {
-        background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
-        color: #ffffff;
-        padding: 4rem 0;
-        position: relative;
-        overflow: hidden;
-        border-bottom: 5px solid var(--primary);
-      }
-
-      .hero-banner::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=")
-          repeat;
-        opacity: 0.5;
-      }
-
-      .hero-content {
-        position: relative;
-        z-index: 1;
-      }
-
-      /* Typography */
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-weight: 700;
-        color: var(--dark);
-        letter-spacing: -0.025em;
-      }
-
-      /* Code Blocks & Prism Adjustments */
-      .code-wrapper {
-        position: relative;
-        margin-bottom: 2rem;
-        border-radius: 12px;
-        box-shadow:
-          0 10px 15px -3px rgba(0, 0, 0, 0.1),
-          0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        background: #1d1f21; /* Prism Tomorrow bg */
-        overflow: hidden;
-      }
-
-      .code-header {
-        background-color: rgba(255, 255, 255, 0.05);
-        color: #a3a3a3;
-        padding: 10px 16px;
-        font-size: 0.85rem;
-        font-family: var(--bs-body-font-family);
-        font-weight: 600;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .code-header .file-name {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      pre[class*="language-"] {
-        margin: 0 !important;
-        padding: 1.25rem !important;
-        border-radius: 0 !important;
-        background: transparent !important;
-        font-family: var(--code-font) !important;
-        font-size: 0.9rem !important;
-        line-height: 1.6 !important;
-      }
-
-      code[class*="language-"] {
-        font-family: var(--code-font) !important;
-      }
-
-      /* Copy Button */
-      .copy-btn {
-        background: rgba(255, 255, 255, 0.1);
-        color: #e5e5e5;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 6px;
-        padding: 4px 12px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-      }
-
-      .copy-btn:hover {
-        background: var(--primary);
-        border-color: var(--primary);
-        color: white;
-      }
-
-      .copy-btn.copied {
-        background: #10b981;
-        border-color: #10b981;
-        color: white;
-      }
-
-      /* Step Cards */
-      .step-card {
-        border: none;
-        border-radius: 16px;
-        box-shadow:
-          0 4px 6px -1px rgba(0, 0, 0, 0.05),
-          0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
-        margin-bottom: 2.5rem;
-        background: var(--card-bg);
-        overflow: hidden;
-        scroll-margin-top: 100px; /* Offset for sticky header if any */
-      }
-
-      .step-card:hover {
-        transform: translateY(-2px);
-        box-shadow:
-          0 10px 15px -3px rgba(0, 0, 0, 0.1),
-          0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      }
-
-      .step-header {
-        padding: 1.5rem 2rem 1rem;
-        border-bottom: 1px solid #e2e8f0;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-      }
-
-      .step-body {
-        padding: 2rem;
-      }
-
-      .step-badge {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-        color: white;
-        border-radius: 12px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        font-size: 1.1rem;
-        box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
-        flex-shrink: 0;
-      }
-
-      /* Explanations */
-      .explanation-box {
-        background-color: #eff6ff;
-        border-left: 4px solid var(--primary);
-        padding: 1.25rem 1.5rem;
-        border-radius: 0 12px 12px 0;
-        margin-top: 1.5rem;
-        font-size: 0.95rem;
-      }
-
-      .explanation-box h6 {
-        color: var(--primary);
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-
-      /* TOC Sidebar */
-      .toc-card {
-        border-radius: 16px;
-        border: none;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        background: var(--card-bg);
-        position: sticky;
-        top: 2rem;
-      }
-
-      .toc-link {
-        text-decoration: none;
-        color: var(--text-muted);
-        padding: 8px 16px;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        font-weight: 500;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .toc-link:hover {
-        color: var(--primary);
-        background-color: #f1f5f9;
-      }
-
-      .toc-link.active {
-        color: var(--primary);
-        background-color: #eff6ff;
-        font-weight: 600;
-      }
-
-      .toc-link i {
-        font-size: 1.1rem;
-        opacity: 0.7;
-        transition: opacity 0.2s ease;
-      }
-
-      .toc-link.active i {
-        opacity: 1;
-        color: var(--primary);
-      }
-
-      /* Toast */
-      .toast-container {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        z-index: 1050;
-      }
-
-      .custom-toast {
-        background: #10b981;
-        color: white;
-        border-radius: 10px;
-        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
-        font-weight: 500;
-        border: none;
-      }
-
-      /* Utility */
-      html {
-        scroll-behavior: smooth;
-        scroll-padding-top: 2rem;
-      }
-
-      .feature-box {
-        padding: 1.5rem;
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        height: 100%;
-        transition:
-          transform 0.2s,
-          border-color 0.2s;
-      }
-      .feature-box:hover {
-        transform: translateY(-5px);
-        border-color: var(--secondary);
-      }
-      .feature-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-      }
-    </style>
+    <title>Panduan Tutorial — Aplikasi Hitung Nilai Siswa</title>
+    <meta
+      name="description"
+      content="Panduan lengkap step-by-step membuat aplikasi web penilaian siswa secara modular menggunakan PHP Native dan Bootstrap 5. Menghitung Nilai Akhir dan Status KKM." />
+    <link rel="stylesheet" href="../css/style.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
-  <!-- Use Scrollspy on body to update TOC automatically -->
-  <body data-bs-spy="scroll" data-bs-target="#toc-nav" data-bs-smooth-scroll="true" tabindex="0">
-    <!-- Hero Banner -->
-    <header class="hero-banner">
-      <div class="container hero-content">
-        <div class="row align-items-center">
-          <div class="col-lg-8">
-            <span
-              class="badge bg-primary px-3 py-2 mb-3 rounded-pill"
-              style="font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3)">
-              <i class="bi bi-rocket-takeoff me-2"></i>
-              Tutorial Pemula
-            </span>
-            <h1 class="display-5 fw-bold mb-3 text-white">
-              Panduan Membuat Aplikasi
-              <br />
-              Hitung Nilai Siswa
-            </h1>
-            <p class="lead mb-0 opacity-75 fw-medium" style="max-width: 600px; color: #e2e8f0">
-              Pelajari langkah demi langkah membuat aplikasi web penilaian siswa secara modular menggunakan PHP Native
-              dan Bootstrap 5.
-            </p>
-          </div>
-          <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
-            <a
-              href="index.php"
-              class="btn btn-light btn-lg px-4 py-3 fw-bold rounded-pill shadow-lg text-primary"
-              style="transition: transform 0.2s">
-              <i class="bi bi-play-fill me-1 fs-5 align-middle"></i>
-              Buka Aplikasi
-            </a>
-          </div>
-        </div>
+  <body>
+    <!-- ========== HEADER ========== -->
+    <header class="header" id="header">
+      <div class="header__brand">
+        <span class="header__brand-icon"><i data-lucide="graduation-cap"></i></span>
+        <span>Tutorial Hitung Nilai Siswa</span>
+      </div>
+      <div class="header__actions">
+        <span class="theme-toggle__label" id="theme-label">Light</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
 
-    <div class="container my-5">
-      <div class="row">
-        <!-- Sidebar Daftar Isi (TOC) -->
-        <div class="col-lg-3 mb-4 order-lg-2">
-          <div class="toc-card p-2">
-            <div class="card-header bg-transparent border-bottom-0 pt-3 pb-2 px-3">
-              <h6 class="fw-bold text-uppercase text-muted mb-0" style="letter-spacing: 1px; font-size: 0.8rem">
-                <i class="bi bi-list-nested me-2"></i>
-                Daftar Isi
-              </h6>
+    <!-- ========== OVERLAY (mobile) ========== -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ========== LAYOUT ========== -->
+    <div class="layout">
+      <!-- ========== LEFT SIDEBAR ========== -->
+      <aside class="sidebar-left" id="sidebar-left">
+        <p class="sidebar__title">Tahapan Tutorial</p>
+        <ul class="sidebar__nav" id="sidebar-nav">
+          <li><a class="sidebar__link" href="#step-0"><span class="sidebar__link-number" style="background-color: var(--color-secondary); color: var(--color-background)">0</span><span class="sidebar__link-text">Konsep Proyek</span></a></li>
+          <li><a class="sidebar__link" href="#step-1"><span class="sidebar__link-number">1</span><span class="sidebar__link-text">Struktur Folder</span></a></li>
+          <li><a class="sidebar__link" href="#step-2"><span class="sidebar__link-number">2</span><span class="sidebar__link-text">config/helper.php</span></a></li>
+          <li><a class="sidebar__link" href="#step-3"><span class="sidebar__link-number">3</span><span class="sidebar__link-text">header.php</span></a></li>
+          <li><a class="sidebar__link" href="#step-4"><span class="sidebar__link-number">4</span><span class="sidebar__link-text">slider.php</span></a></li>
+          <li><a class="sidebar__link" href="#step-5"><span class="sidebar__link-number">5</span><span class="sidebar__link-text">form_input.php</span></a></li>
+          <li><a class="sidebar__link" href="#step-6"><span class="sidebar__link-number">6</span><span class="sidebar__link-text">output_result.php</span></a></li>
+          <li><a class="sidebar__link" href="#step-7"><span class="sidebar__link-number">7</span><span class="sidebar__link-text">footer.php</span></a></li>
+          <li><a class="sidebar__link" href="#step-8"><span class="sidebar__link-number">8</span><span class="sidebar__link-text">index.php</span></a></li>
+          <li><a class="sidebar__link" href="#step-9"><span class="sidebar__link-number">9</span><span class="sidebar__link-text">Algoritma</span></a></li>
+        </ul>
+      </aside>
+
+      <!-- ========== MAIN CONTENT ========== -->
+      <main class="main" id="main-content">
+        <!-- HERO -->
+        <section class="hero">
+          <span class="hero__badge">
+            <i data-lucide="book-open" style="width: 14px; height: 14px; margin-right: 4px"></i>
+            Tutorial Pemula
+          </span>
+          <h1 class="hero__title">
+            Panduan Membuat Aplikasi <span class="highlight">Hitung Nilai Siswa</span>
+          </h1>
+          <p class="hero__desc">
+            Pelajari langkah demi langkah membuat aplikasi web penilaian siswa secara modular menggunakan PHP Native dan Bootstrap 5.
+          </p>
+          <div class="hero__stats">
+            <div class="hero__stat">
+              <div class="hero__stat-value">10</div>
+              <div class="hero__stat-label">Tahapan Utama</div>
             </div>
-            <div class="card-body p-2">
-              <nav id="toc-nav" class="nav flex-column gap-1">
-                <a class="toc-link" href="#konsep-proyek">
-                  <i class="bi bi-lightbulb"></i>
-                  1. Konsep Proyek
-                </a>
-                <a class="toc-link" href="#struktur-folder">
-                  <i class="bi bi-folder2-open"></i>
-                  2. Struktur Folder
-                </a>
-                <a class="toc-link" href="#langkah-1">
-                  <i class="bi bi-filetype-php"></i>
-                  3. config/helper.php
-                </a>
-                <a class="toc-link" href="#langkah-2">
-                  <i class="bi bi-layout-sidebar-inset-reverse"></i>
-                  4. header.php
-                </a>
-                <a class="toc-link" href="#langkah-3">
-                  <i class="bi bi-image"></i>
-                  5. slider.php
-                </a>
-                <a class="toc-link" href="#langkah-4">
-                  <i class="bi bi-input-cursor-text"></i>
-                  6. form_input.php
-                </a>
-                <a class="toc-link" href="#langkah-5">
-                  <i class="bi bi-table"></i>
-                  7. output_result.php
-                </a>
-                <a class="toc-link" href="#langkah-6">
-                  <i class="bi bi-layout-text-window-reverse"></i>
-                  8. footer.php
-                </a>
-                <a class="toc-link" href="#langkah-7">
-                  <i class="bi bi-house-door"></i>
-                  9. index.php
-                </a>
-                <a class="toc-link" href="#penjelasan-algoritma">
-                  <i class="bi bi-calculator"></i>
-                  10. Algoritma
-                </a>
-              </nav>
+            <div class="hero__stat">
+              <div class="hero__stat-value">7</div>
+              <div class="hero__stat-label">File PHP</div>
+            </div>
+            <div class="hero__stat">
+              <div class="hero__stat-value">100</div>
+              <div class="hero__stat-label">% Gratis</div>
             </div>
           </div>
+        </section>
+
+        <!-- PROGRESS BAR -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <p class="progress-text">Progres: <span id="progress-text">0 / 10</span> diselesaikan</p>
         </div>
 
-        <!-- Konten Tutorial Utama -->
-        <div class="col-lg-9 order-lg-1">
-          <!-- Section 1: Konsep Proyek -->
-          <section id="konsep-proyek" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">1</div>
-              <h3 class="mb-0 fs-4">Konsep & Persyaratan Proyek</h3>
-            </div>
-            <div class="step-body">
-              <p class="text-muted fs-6 mb-4">
-                Aplikasi ini dirancang untuk menghitung Nilai Akhir siswa SMK/SMA secara akurat berbasis
-                <strong>PHP Native</strong>
-                tanpa framework rumit. Proyek ini memisahkan tampilan menjadi beberapa komponen terpisah (modular) agar
-                mudah dikelola, dipahami, dan dipresentasikan.
-              </p>
-
-              <div class="row g-4">
-                <div class="col-md-4">
-                  <div class="feature-box">
-                    <div class="feature-icon bg-primary bg-opacity-10 text-primary">
-                      <i class="bi bi-percent"></i>
-                    </div>
-                    <h6 class="fw-bold text-dark">Bobot Nilai</h6>
-                    <p class="small text-muted mb-0">Perhitungan menggunakan bobot 30% Tugas, 30% UTS, dan 40% UAS.</p>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="feature-box">
-                    <div class="feature-icon bg-success bg-opacity-10 text-success">
-                      <i class="bi bi-award"></i>
-                    </div>
-                    <h6 class="fw-bold text-dark">Status KKM</h6>
-                    <p class="small text-muted mb-0">
-                      Siswa dinyatakan tuntas (KKM) jika nilai akhir mencapai 70 atau lebih.
-                    </p>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="feature-box">
-                    <div class="feature-icon bg-info bg-opacity-10 text-info">
-                      <i class="bi bi-puzzle"></i>
-                    </div>
-                    <h6 class="fw-bold text-dark">Modular Layout</h6>
-                    <p class="small text-muted mb-0">
-                      Struktur kode dipisah per bagian (header, form, footer) agar
-                      <i>clean</i>
-                      .
-                    </p>
-                  </div>
-                </div>
+        <!-- STEP 0: Konsep Proyek -->
+        <section class="step-section" id="step-0">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number" style="background-color: var(--color-secondary); color: var(--color-background)">00</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Konsep & Persyaratan Proyek</h2>
+                <p class="step-card__subtitle">Memahami konsep aplikasi, bobot nilai, status KKM, dan arsitektur modular.</p>
               </div>
             </div>
-          </section>
-
-          <!-- Section 2: Struktur Folder -->
-          <section id="struktur-folder" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">2</div>
-              <h3 class="mb-0 fs-4">Struktur Folder Proyek</h3>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Aplikasi ini dirancang untuk menghitung Nilai Akhir siswa SMK/SMA secara akurat berbasis <strong>PHP Native</strong> tanpa framework rumit. Proyek ini memisahkan tampilan menjadi beberapa komponen terpisah (modular) agar mudah dikelola, dipahami, dan dipresentasikan.
+                </p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="percent"></i>Bobot Nilai</h3>
+                <p class="step-card__desc">Perhitungan menggunakan bobot 30% Tugas, 30% UTS, dan 40% UAS.</p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="award"></i>Status KKM</h3>
+                <p class="step-card__desc">Siswa dinyatakan tuntas (KKM) jika nilai akhir mencapai 70 atau lebih.</p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="puzzle"></i>Modular Layout</h3>
+                <p class="step-card__desc">Struktur kode dipisah per bagian (header, form, footer) agar <em>clean</em>.</p>
+              </div>
             </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                Buat folder proyek di server lokal Anda (misal
-                <code>d:/App/laragon/www/ukk3</code>
-                atau
-                <code>C:/xampp/htdocs/ukk3</code>
-                ) dengan struktur file sebagai berikut:
-              </p>
+          </div>
+        </section>
 
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-folder-fill text-warning"></i>
-                    Struktur Direktori
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
-                </div>
-                <pre><code class="language-treeview">ukk3/
+        <!-- STEP 1: Struktur Folder -->
+        <section class="step-section" id="step-1">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">01</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Struktur Folder Proyek</h2>
+                <p class="step-card__subtitle">Menyiapkan folder kerja dan memahami susunan file proyek.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Buat folder proyek di server lokal Anda (misal <code>d:/App/laragon/www/ukk3</code> atau <code>C:/xampp/htdocs/ukk3</code>) dengan struktur file sebagai berikut:
+                </p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="folder-tree"></i>Struktur Direktori</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Struktur Folder</span>
+                    <button class="formula-block__copy" data-copy="ukk3/&#10;├── config/&#10;│   └── helper.php&#10;├── components/&#10;│   ├── header.php&#10;│   ├── slider.php&#10;│   ├── form_input.php&#10;│   ├── output_result.php&#10;│   └── footer.php&#10;├── index.php&#10;└── tutorial.html">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code">ukk3/
 ├── config/
 │   └── helper.php          (Fungsi Perhitungan & Sanitasi Data)
 ├── components/
@@ -498,665 +158,477 @@
 │   ├── output_result.php   (Tampilan Output Perhitungan & Status KKM)
 │   └── footer.php          (Footer & Skrip Bootstrap JS)
 ├── index.php               (Halaman Utama Penggabung Komponen)
-└── tutorial.html           (Panduan Tutorial ini)</code></pre>
+└── tutorial.html           (Panduan Tutorial ini)</pre>
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Section 3: Langkah 1 - Helper -->
-          <section id="langkah-1" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">3</div>
-              <h3 class="mb-0 fs-4">
-                Langkah 1: Membuat
-                <code>config/helper.php</code>
-              </h3>
+        <!-- STEP 2: config/helper.php -->
+        <section class="step-section" id="step-2">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">02</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Langkah 1: Membuat config/helper.php</h2>
+                <p class="step-card__subtitle">File "otak" aplikasi — berisi fungsi perhitungan dan logika KKM.</p>
+              </div>
             </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                File ini berfungsi menyimpan fungsi algoritma perhitungan matematika desimal dan logika KKM. Ini adalah
-                "otak" dari aplikasi kita.
-              </p>
-
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-filetype-php text-primary"></i>
-                    config/helper.php
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
-                </div>
-                <pre><code class="language-php">&lt;?php
-/**
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  File ini berfungsi menyimpan fungsi algoritma perhitungan matematika desimal dan logika KKM. Ini adalah "otak" dari aplikasi kita.
+                </p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>config/helper.php</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>config/helper.php</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;/**&#10; * File: config/helper.php&#10; * Deskripsi: Kumpulan fungsi helper untuk sanitasi data,&#10; *            perhitungan Nilai Akhir, dan penentuan Status KKM.&#10; */&#10;&#10;// Clean & Sanitasi Input Data dari Karakter Berbahaya (XSS)&#10;function cleanInput($data) {&#10;    if (is_null($data)) return '';&#10;    $data = trim($data);&#10;    $data = stripslashes($data);&#10;    $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');&#10;    return $data;&#10;}&#10;&#10;// Algoritma Hitung Nilai Akhir (30% Tugas + 30% UTS + 40% UAS)&#10;function hitungNilaiAkhir($tugas, $uts, $uas) {&#10;    $valTugas = (float)$tugas;&#10;    $valUTS   = (float)$uts;&#10;    $valUAS   = (float)$uas;&#10;&#10;    $nilaiAkhir = ($valTugas * 0.30) + ($valUTS * 0.30) + ($valUAS * 0.40);&#10;    return $nilaiAkhir;&#10;}&#10;&#10;// Algoritma Penentuan Status KKM (>= 70)&#10;function cekStatusKKM($nilaiAkhir) {&#10;    if ($nilaiAkhir >= 70) {&#10;        return [&#10;            'status' => 'KKM',&#10;            'keterangan' => 'Tuntas / Lulus KKM',&#10;            'badge' => 'bg-success'&#10;        ];&#10;    } else {&#10;        return [&#10;            'status' => 'Tidak KKM',&#10;            'keterangan' => 'Belum Tuntas / Tidak Lulus KKM',&#10;            'badge' => 'bg-danger'&#10;        ];&#10;    }&#10;}">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="comment">/**
  * File: config/helper.php
  * Deskripsi: Kumpulan fungsi helper untuk sanitasi data,
  *            perhitungan Nilai Akhir, dan penentuan Status KKM.
- */
+ */</span>
 
-// Clean & Sanitasi Input Data dari Karakter Berbahaya (XSS)
-function cleanInput($data) {
-    if (is_null($data)) return '';
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
-    return $data;
+<span class="comment">// Clean &amp; Sanitasi Input Data dari Karakter Berbahaya (XSS)</span>
+<span class="keyword">function</span> <span class="function">cleanInput</span>(<span class="keyword">$data</span>) {
+    <span class="keyword">if</span> (<span class="function">is_null</span>(<span class="keyword">$data</span>)) <span class="keyword">return</span> <span class="string">''</span>;
+    <span class="keyword">$data</span> = <span class="function">trim</span>(<span class="keyword">$data</span>);
+    <span class="keyword">$data</span> = <span class="function">stripslashes</span>(<span class="keyword">$data</span>);
+    <span class="keyword">$data</span> = <span class="function">htmlspecialchars</span>(<span class="keyword">$data</span>, ENT_QUOTES, <span class="string">'UTF-8'</span>);
+    <span class="keyword">return</span> <span class="keyword">$data</span>;
 }
 
-// Algoritma Hitung Nilai Akhir (30% Tugas + 30% UTS + 40% UAS)
-function hitungNilaiAkhir($tugas, $uts, $uas) {
-    $valTugas = (float)$tugas;
-    $valUTS   = (float)$uts;
-    $valUAS   = (float)$uas;
+<span class="comment">// Algoritma Hitung Nilai Akhir (30% Tugas + 30% UTS + 40% UAS)</span>
+<span class="keyword">function</span> <span class="function">hitungNilaiAkhir</span>(<span class="keyword">$tugas</span>, <span class="keyword">$uts</span>, <span class="keyword">$uas</span>) {
+    <span class="keyword">$valTugas</span> = (<span class="keyword">float</span>)<span class="keyword">$tugas</span>;
+    <span class="keyword">$valUTS</span>   = (<span class="keyword">float</span>)<span class="keyword">$uts</span>;
+    <span class="keyword">$valUAS</span>   = (<span class="keyword">float</span>)<span class="keyword">$uas</span>;
 
-    $nilaiAkhir = ($valTugas * 0.30) + ($valUTS * 0.30) + ($valUAS * 0.40);
-    return $nilaiAkhir;
+    <span class="keyword">$nilaiAkhir</span> = (<span class="keyword">$valTugas</span> * <span class="number">0.30</span>) + (<span class="keyword">$valUTS</span> * <span class="number">0.30</span>) + (<span class="keyword">$valUAS</span> * <span class="number">0.40</span>);
+    <span class="keyword">return</span> <span class="keyword">$nilaiAkhir</span>;
 }
 
-// Algoritma Penentuan Status KKM (>= 70)
-function cekStatusKKM($nilaiAkhir) {
-    if ($nilaiAkhir >= 70) {
-        return [
-            'status' => 'KKM',
-            'keterangan' => 'Tuntas / Lulus KKM',
-            'badge' => 'bg-success'
+<span class="comment">// Algoritma Penentuan Status KKM (&gt;= 70)</span>
+<span class="keyword">function</span> <span class="function">cekStatusKKM</span>(<span class="keyword">$nilaiAkhir</span>) {
+    <span class="keyword">if</span> (<span class="keyword">$nilaiAkhir</span> &gt;= <span class="number">70</span>) {
+        <span class="keyword">return</span> [
+            <span class="string">'status'</span> =&gt; <span class="string">'KKM'</span>,
+            <span class="string">'keterangan'</span> =&gt; <span class="string">'Tuntas / Lulus KKM'</span>,
+            <span class="string">'badge'</span> =&gt; <span class="string">'bg-success'</span>
         ];
-    } else {
-        return [
-            'status' => 'Tidak KKM',
-            'keterangan' => 'Belum Tuntas / Tidak Lulus KKM',
-            'badge' => 'bg-danger'
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> [
+            <span class="string">'status'</span> =&gt; <span class="string">'Tidak KKM'</span>,
+            <span class="string">'keterangan'</span> =&gt; <span class="string">'Belum Tuntas / Tidak Lulus KKM'</span>,
+            <span class="string">'badge'</span> =&gt; <span class="string">'bg-danger'</span>
         ];
     }
-}</code></pre>
-              </div>
-
-              <div class="explanation-box">
-                <h6>
-                  <i class="bi bi-lightbulb-fill"></i>
-                  Penjelasan Kode:
-                </h6>
-                <ul class="mb-0">
-                  <li>
-                    <code>cleanInput()</code>
-                    : Mencegah serangan XSS dengan mengubah karakter spesial HTML.
-                  </li>
-                  <li>
-                    <code>(float)</code>
-                    : Digunakan untuk memastikan input berupa angka desimal (pecahan).
-                  </li>
-                  <li>
-                    Fungsi
-                    <code>cekStatusKKM()</code>
-                    mereturn array yang berisi teks status dan class
-                    <i>badge</i>
-                    dari Bootstrap.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <!-- Section 4: Langkah 2 - Header -->
-          <section id="langkah-2" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">4</div>
-              <h3 class="mb-0 fs-4">
-                Langkah 2: Membuat
-                <code>components/header.php</code>
-              </h3>
-            </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                File ini memuat bagian paling atas HTML, stylesheet Bootstrap 5, serta Logo dan Nama Sekolah sesuai
-                desain.
-              </p>
-
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-filetype-php text-primary"></i>
-                    components/header.php
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
+}</pre>
                 </div>
-                <pre><code class="language-php">&lt;!DOCTYPE html&gt;
-&lt;html lang="id"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;Aplikasi Hitung Nilai Siswa - UKK 3&lt;/title&gt;
-    &lt;!-- Bootstrap 5 CSS CDN --&gt;
-    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
-    &lt;!-- Bootstrap Icons CDN --&gt;
-    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"&gt;
-    &lt;style&gt;
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .header-box {
-            background: #ffffff;
-            border-bottom: 2px solid #e9ecef;
-            padding: 15px 0;
-        }
-        .logo-placeholder {
-            width: 50px;
-            height: 50px;
-            background-color: #0d6efd;
-            color: #ffffff;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;header class="header-box mb-4 shadow-sm"&gt;
-    &lt;div class="container"&gt;
-        &lt;div class="row align-items-center"&gt;
-            &lt;div class="col-auto"&gt;
-                &lt;div class="logo-placeholder"&gt;
-                    &lt;i class="bi bi-mortarboard-fill"&gt;&lt;/i&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="col"&gt;
-                &lt;h4 class="mb-0 text-dark fw-bold"&gt;SMK NEGERI UTAMA&lt;/h4&gt;
-                &lt;small class="text-muted"&gt;Sistem Penilaian Akademik Siswa & Status KKM&lt;/small&gt;
-            &lt;/div&gt;
-            &lt;div class="col-auto"&gt;
-                &lt;a href="tutorial.html" class="btn btn-outline-primary btn-sm fw-semibold"&gt;
-                    &lt;i class="bi bi-book me-1"&gt;&lt;/i&gt; Tutorial Pemula
-                &lt;/a&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/header&gt;</code></pre>
+              </div>
+              <div class="step-card__section">
+                <div class="callout-block callout-block--info">
+                  <strong>Penjelasan Kode:</strong><br>
+                  • <code>cleanInput()</code> — Mencegah serangan XSS dengan mengubah karakter spesial HTML.<br>
+                  • <code>(float)</code> — Digunakan untuk memastikan input berupa angka desimal (pecahan).<br>
+                  • Fungsi <code>cekStatusKKM()</code> mereturn array yang berisi teks status dan class <em>badge</em> dari Bootstrap.
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Section 5: Langkah 3 - Slider -->
-          <section id="langkah-3" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">5</div>
-              <h3 class="mb-0 fs-4">
-                Langkah 3: Membuat
-                <code>components/slider.php</code>
-              </h3>
+        <!-- STEP 3: header.php -->
+        <section class="step-section" id="step-3">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">03</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Langkah 2: Membuat components/header.php</h2>
+                <p class="step-card__subtitle">Bagian atas HTML, stylesheet Bootstrap 5, Logo dan Nama Sekolah.</p>
+              </div>
             </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                Komponen ini menggunakan fitur
-                <i>Carousel</i>
-                dari Bootstrap untuk menampilkan banner informasi yang dapat bergeser.
-              </p>
-
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-filetype-php text-primary"></i>
-                    components/slider.php
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">File ini memuat bagian paling atas HTML, stylesheet Bootstrap 5, serta Logo dan Nama Sekolah sesuai desain.</p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>components/header.php</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>components/header.php</span>
+                    <button class="formula-block__copy" data-copy="<!DOCTYPE html>&#10;<html lang=&quot;id&quot;>&#10;<head>&#10;    <meta charset=&quot;UTF-8&quot;>&#10;    <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>&#10;    <title>Aplikasi Hitung Nilai Siswa - UKK 3</title>&#10;    <link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;>&#10;    <link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css&quot; rel=&quot;stylesheet&quot;>&#10;    <style>&#10;        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }&#10;        .header-box { background: #ffffff; border-bottom: 2px solid #e9ecef; padding: 15px 0; }&#10;        .logo-placeholder { width: 50px; height: 50px; background-color: #0d6efd; color: #ffffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }&#10;    </style>&#10;</head>&#10;<body>&#10;<header class=&quot;header-box mb-4 shadow-sm&quot;>&#10;    <div class=&quot;container&quot;>&#10;        <div class=&quot;row align-items-center&quot;>&#10;            <div class=&quot;col-auto&quot;>&#10;                <div class=&quot;logo-placeholder&quot;><i class=&quot;bi bi-mortarboard-fill&quot;></i></div>&#10;            </div>&#10;            <div class=&quot;col&quot;>&#10;                <h4 class=&quot;mb-0 text-dark fw-bold&quot;>SMK NEGERI UTAMA</h4>&#10;                <small class=&quot;text-muted&quot;>Sistem Penilaian Akademik Siswa & Status KKM</small>&#10;            </div>&#10;        </div>&#10;    </div>&#10;</header>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+<span class="keyword">&lt;html</span> <span class="string">lang</span>=<span class="string">"id"</span><span class="keyword">&gt;</span>
+<span class="keyword">&lt;head&gt;</span>
+    <span class="keyword">&lt;meta</span> <span class="string">charset</span>=<span class="string">"UTF-8"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;meta</span> <span class="string">name</span>=<span class="string">"viewport"</span> <span class="string">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;title&gt;</span>Aplikasi Hitung Nilai Siswa - UKK 3<span class="keyword">&lt;/title&gt;</span>
+    <span class="comment">&lt;!-- Bootstrap 5 CSS CDN --&gt;</span>
+    <span class="keyword">&lt;link</span> <span class="string">href</span>=<span class="string">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"</span> <span class="string">rel</span>=<span class="string">"stylesheet"</span><span class="keyword">&gt;</span>
+    <span class="comment">&lt;!-- Bootstrap Icons CDN --&gt;</span>
+    <span class="keyword">&lt;link</span> <span class="string">href</span>=<span class="string">"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"</span> <span class="string">rel</span>=<span class="string">"stylesheet"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;style&gt;</span>
+        body { ... }
+        .header-box { ... }
+        .logo-placeholder { ... }
+    <span class="keyword">&lt;/style&gt;</span>
+<span class="keyword">&lt;/head&gt;</span>
+<span class="keyword">&lt;body&gt;</span>
+<span class="keyword">&lt;header</span> <span class="string">class</span>=<span class="string">"header-box mb-4 shadow-sm"</span><span class="keyword">&gt;</span>
+    ...Logo &amp; Nama Sekolah...
+<span class="keyword">&lt;/header&gt;</span></pre>
                 </div>
-                <pre><code class="language-php">&lt;?php
-/**
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 4: slider.php -->
+        <section class="step-section" id="step-4">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">04</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Langkah 3: Membuat components/slider.php</h2>
+                <p class="step-card__subtitle">Komponen Carousel Bootstrap untuk menampilkan banner informasi.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">Komponen ini menggunakan fitur <em>Carousel</em> dari Bootstrap untuk menampilkan banner informasi yang dapat bergeser. Ada 3 slide: Sistem Perhitungan, Kriteria KKM, dan Dukungan Input Desimal.</p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>components/slider.php</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>components/slider.php</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;/**&#10; * File: components/slider.php&#10; * Deskripsi: Komponen Header Slider / Carousel Bootstrap 5&#10; */&#10;?>&#10;<div class=&quot;mb-4&quot;>&#10;    <div id=&quot;headerSlider&quot; class=&quot;carousel slide shadow-sm rounded overflow-hidden&quot; data-bs-ride=&quot;carousel&quot;>&#10;        <div class=&quot;carousel-indicators&quot;>&#10;            <button type=&quot;button&quot; data-bs-target=&quot;#headerSlider&quot; data-bs-slide-to=&quot;0&quot; class=&quot;active&quot;></button>&#10;            <button type=&quot;button&quot; data-bs-target=&quot;#headerSlider&quot; data-bs-slide-to=&quot;1&quot;></button>&#10;            <button type=&quot;button&quot; data-bs-target=&quot;#headerSlider&quot; data-bs-slide-to=&quot;2&quot;></button>&#10;        </div>&#10;        <div class=&quot;carousel-inner&quot;>&#10;            <div class=&quot;carousel-item active p-4 bg-primary text-white text-center&quot; style=&quot;min-height: 140px;&quot;>&#10;                <h5 class=&quot;fw-bold&quot;>Sistem Perhitungan Nilai Akhir</h5>&#10;                <p class=&quot;mb-0&quot;>Bobot: 30% Tugas + 30% UTS + 40% UAS</p>&#10;            </div>&#10;            <div class=&quot;carousel-item p-4 bg-success text-white text-center&quot; style=&quot;min-height: 140px;&quot;>&#10;                <h5 class=&quot;fw-bold&quot;>Kriteria Kelulusan (KKM)</h5>&#10;                <p class=&quot;mb-0&quot;>Nilai Akhir minimal 70.00</p>&#10;            </div>&#10;            <div class=&quot;carousel-item p-4 bg-dark text-white text-center&quot; style=&quot;min-height: 140px;&quot;>&#10;                <h5 class=&quot;fw-bold&quot;>Dukungan Input Desimal</h5>&#10;                <p class=&quot;mb-0&quot;>Mendukung pecahan desimal (contoh: 85.5)</p>&#10;            </div>&#10;        </div>&#10;        ...carousel controls...&#10;    </div>&#10;</div>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="comment">/**
  * File: components/slider.php
  * Deskripsi: Komponen Header Slider / Carousel Bootstrap 5
- */
-?&gt;
-&lt;div class="mb-4"&gt;
-    &lt;div id="headerSlider" class="carousel slide shadow-sm rounded overflow-hidden" data-bs-ride="carousel"&gt;
-        &lt;!-- Indikator Slide --&gt;
-        &lt;div class="carousel-indicators"&gt;
-            &lt;button type="button" data-bs-target="#headerSlider" data-bs-slide-to="0" class="active" aria-current="true"&gt;&lt;/button&gt;
-            &lt;button type="button" data-bs-target="#headerSlider" data-bs-slide-to="1"&gt;&lt;/button&gt;
-            &lt;button type="button" data-bs-target="#headerSlider" data-bs-slide-to="2"&gt;&lt;/button&gt;
-        &lt;/div&gt;
+ */</span>
+<span class="keyword">?&gt;</span>
+<span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"mb-4"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;div</span> <span class="string">id</span>=<span class="string">"headerSlider"</span> <span class="string">class</span>=<span class="string">"carousel slide ..."</span><span class="keyword">&gt;</span>
+        <span class="comment">&lt;!-- Indikator Slide --&gt;</span>
+        <span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"carousel-indicators"</span><span class="keyword">&gt;</span>...3 buttons...<span class="keyword">&lt;/div&gt;</span>
 
-        &lt;div class="carousel-inner"&gt;
-            &lt;div class="carousel-item active p-4 bg-primary text-white text-center" style="min-height: 140px;"&gt;
-                &lt;h5 class="fw-bold"&gt;&lt;i class="bi bi-calculator me-2"&gt;&lt;/i&gt;Sistem Perhitungan Nilai Akhir&lt;/h5&gt;
-                &lt;p class="mb-0"&gt;Perhitungan menggunakan bobot resmi: &lt;strong&gt;30% Nilai Tugas + 30% Nilai UTS + 40% Nilai UAS&lt;/strong&gt;.&lt;/p&gt;
-            &lt;/div&gt;
-            &lt;div class="carousel-item p-4 bg-success text-white text-center" style="min-height: 140px;"&gt;
-                &lt;h5 class="fw-bold"&gt;&lt;i class="bi bi-check-circle me-2"&gt;&lt;/i&gt;Kriteria Kelulusan (KKM)&lt;/h5&gt;
-                &lt;p class="mb-0"&gt;Siswa dinyatakan &lt;strong&gt;KKM (Tuntas)&lt;/strong&gt; apabila mencapai Nilai Akhir minimal &lt;strong&gt;70.00&lt;/strong&gt;.&lt;/p&gt;
-            &lt;/div&gt;
-            &lt;div class="carousel-item p-4 bg-dark text-white text-center" style="min-height: 140px;"&gt;
-                &lt;h5 class="fw-bold"&gt;&lt;i class="bi bi-info-circle me-2"&gt;&lt;/i&gt;Dukungan Input Desimal&lt;/h5&gt;
-                &lt;p class="mb-0"&gt;Formulir penilaian mendukung input pecahan desimal (contoh: 85.5) untuk presisi hasil nilai.&lt;/p&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-
-        &lt;button class="carousel-control-prev" type="button" data-bs-target="#headerSlider" data-bs-slide="prev"&gt;
-            &lt;span class="carousel-control-prev-icon" aria-hidden="true"&gt;&lt;/span&gt;
-        &lt;/button&gt;
-        &lt;button class="carousel-control-next" type="button" data-bs-target="#headerSlider" data-bs-slide="next"&gt;
-            &lt;span class="carousel-control-next-icon" aria-hidden="true"&gt;&lt;/span&gt;
-        &lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+        <span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"carousel-inner"</span><span class="keyword">&gt;</span>
+            <span class="comment">&lt;!-- Slide 1: Perhitungan --&gt;</span>
+            <span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"carousel-item active p-4 bg-primary text-white text-center"</span><span class="keyword">&gt;</span>
+                <span class="keyword">&lt;h5&gt;</span>Sistem Perhitungan Nilai Akhir<span class="keyword">&lt;/h5&gt;</span>
+                <span class="keyword">&lt;p&gt;</span>Bobot: <span class="keyword">&lt;strong&gt;</span>30% Tugas + 30% UTS + 40% UAS<span class="keyword">&lt;/strong&gt;</span><span class="keyword">&lt;/p&gt;</span>
+            <span class="keyword">&lt;/div&gt;</span>
+            <span class="comment">&lt;!-- Slide 2: KKM --&gt;</span>
+            <span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"carousel-item p-4 bg-success ..."</span><span class="keyword">&gt;</span>...<span class="keyword">&lt;/div&gt;</span>
+            <span class="comment">&lt;!-- Slide 3: Desimal --&gt;</span>
+            <span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"carousel-item p-4 bg-dark ..."</span><span class="keyword">&gt;</span>...<span class="keyword">&lt;/div&gt;</span>
+        <span class="keyword">&lt;/div&gt;</span>
+        <span class="comment">&lt;!-- Prev/Next buttons --&gt;</span>
+    <span class="keyword">&lt;/div&gt;</span>
+<span class="keyword">&lt;/div&gt;</span></pre>
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Section 6: Langkah 4 - Form Input -->
-          <section id="langkah-4" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">6</div>
-              <h3 class="mb-0 fs-4">
-                Langkah 4: Membuat
-                <code>components/form_input.php</code>
-              </h3>
+        <!-- STEP 5: form_input.php -->
+        <section class="step-section" id="step-5">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">05</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Langkah 4: Membuat components/form_input.php</h2>
+                <p class="step-card__subtitle">Formulir input data siswa dengan state preservation.</p>
+              </div>
             </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                Bagian ini menangani formulir input data. Kita menggunakan PHP untuk menyimpan nilai inputan sebelumnya
-                (
-                <i>state preservation</i>
-                ) sehingga data tidak hilang saat tombol submit ditekan.
-              </p>
-
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-filetype-php text-primary"></i>
-                    components/form_input.php
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
-                </div>
-                <!-- Snippet disederhanakan untuk contoh, asumsikan kode form_input.php sebenarnya ada di sini -->
-                <pre><code class="language-php">&lt;?php
-/**
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Bagian ini menangani formulir input data. Kita menggunakan PHP untuk menyimpan nilai inputan sebelumnya (<em>state preservation</em>) sehingga data tidak hilang saat tombol submit ditekan. Perhatikan atribut <code>step="0.01"</code> pada input nilai untuk mendukung desimal.
+                </p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>components/form_input.php</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>components/form_input.php</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;/**&#10; * File: components/form_input.php&#10; * Deskripsi: Komponen formulir input data siswa dan nilai akademik.&#10; */&#10;&#10;$namaInput   = isset($_POST['nama']) ? cleanInput($_POST['nama']) : '';&#10;$kelasInput  = isset($_POST['kelas']) ? cleanInput($_POST['kelas']) : '';&#10;$jurusanInput= isset($_POST['jurusan']) ? cleanInput($_POST['jurusan']) : '';&#10;$tugasInput  = isset($_POST['tugas']) ? cleanInput($_POST['tugas']) : '';&#10;$utsInput    = isset($_POST['uts']) ? cleanInput($_POST['uts']) : '';&#10;$uasInput    = isset($_POST['uas']) ? cleanInput($_POST['uas']) : '';&#10;&#10;$opsiKelas = ['X RPL 1', 'X RPL 2', 'XI RPL 1', 'XII RPL 1', 'X TKJ 1', 'XI TKJ 1'];&#10;$opsiJurusan = ['Rekayasa Perangkat Lunak', 'Teknik Komputer dan Jaringan', 'Desain Komunikasi Visual'];&#10;?>&#10;&#10;<div class=&quot;card shadow-sm mb-4&quot;>&#10;    <div class=&quot;card-header bg-white py-3&quot;>&#10;        <h5 class=&quot;card-title mb-0 fw-bold text-primary&quot;>Form Input Data & Nilai Siswa</h5>&#10;    </div>&#10;    <div class=&quot;card-body&quot;>&#10;        <form method=&quot;POST&quot; action=&quot;&quot;>&#10;            <div class=&quot;row mb-3 align-items-center&quot;>&#10;                <label class=&quot;col-sm-3 col-form-label fw-bold&quot;>Nama</label>&#10;                <div class=&quot;col-sm-9&quot;>&#10;                    <input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;nama&quot; value=&quot;<?= $namaInput; ?>&quot; required>&#10;                </div>&#10;            </div>&#10;            ...kelas, jurusan, tugas, uts, uas inputs...&#10;            <div class=&quot;row mt-4&quot;>&#10;                <div class=&quot;col-sm-9 offset-sm-3&quot;>&#10;                    <button type=&quot;submit&quot; name=&quot;hitung&quot; class=&quot;btn btn-primary px-4 fw-bold&quot;>Hitung Nilai</button>&#10;                </div>&#10;            </div>&#10;        </form>&#10;    </div>&#10;</div>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="comment">/**
  * File: components/form_input.php
  * Deskripsi: Komponen formulir input data siswa dan nilai akademik.
- */
+ */</span>
 
-// Menyiapkan nilai default/isihan sebelumnya dari POST
-$namaInput   = isset($_POST['nama']) ? cleanInput($_POST['nama']) : '';
-$kelasInput  = isset($_POST['kelas']) ? cleanInput($_POST['kelas']) : '';
-$jurusanInput= isset($_POST['jurusan']) ? cleanInput($_POST['jurusan']) : '';
-$tugasInput  = isset($_POST['tugas']) ? cleanInput($_POST['tugas']) : '';
-$utsInput    = isset($_POST['uts']) ? cleanInput($_POST['uts']) : '';
-$uasInput    = isset($_POST['uas']) ? cleanInput($_POST['uas']) : '';
+<span class="comment">// Menyiapkan nilai default/isihan sebelumnya dari POST</span>
+<span class="keyword">$namaInput</span>   = <span class="function">isset</span>(<span class="keyword">$_POST</span>[<span class="string">'nama'</span>]) ? <span class="function">cleanInput</span>(<span class="keyword">$_POST</span>[<span class="string">'nama'</span>]) : <span class="string">''</span>;
+<span class="keyword">$kelasInput</span>  = <span class="function">isset</span>(<span class="keyword">$_POST</span>[<span class="string">'kelas'</span>]) ? <span class="function">cleanInput</span>(<span class="keyword">$_POST</span>[<span class="string">'kelas'</span>]) : <span class="string">''</span>;
+...
 
-$opsiKelas = ['X RPL 1', 'X RPL 2', 'XI RPL 1', 'XII RPL 1', 'X TKJ 1', 'XI TKJ 1'];
-$opsiJurusan = ['Rekayasa Perangkat Lunak', 'Teknik Komputer dan Jaringan', 'Desain Komunikasi Visual'];
-?&gt;
+<span class="keyword">$opsiKelas</span> = [<span class="string">'X RPL 1'</span>, <span class="string">'X RPL 2'</span>, ...];
+<span class="keyword">$opsiJurusan</span> = [<span class="string">'Rekayasa Perangkat Lunak'</span>, ...];
+<span class="keyword">?&gt;</span>
 
-&lt;div class="card shadow-sm mb-4"&gt;
-    &lt;div class="card-header bg-white py-3"&gt;
-        &lt;h5 class="card-title mb-0 fw-bold text-primary"&gt;
-            &lt;i class="bi bi-pencil-square me-2"&gt;&lt;/i&gt;Form Input Data &amp; Nilai Siswa
-        &lt;/h5&gt;
-    &lt;/div&gt;
-    &lt;div class="card-body"&gt;
-        &lt;form method="POST" action=""&gt;
-            &lt;!-- Contoh Input Nama --&gt;
-            &lt;div class="row mb-3 align-items-center"&gt;
-                &lt;label class="col-sm-3 col-form-label fw-bold"&gt;Nama&lt;/label&gt;
-                &lt;div class="col-sm-9"&gt;
-                    &lt;input type="text" class="form-control" name="nama" value="&lt;?= $namaInput; ?&gt;" required&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
+<span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"card shadow-sm mb-4"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"card-body"</span><span class="keyword">&gt;</span>
+        <span class="keyword">&lt;form</span> <span class="string">method</span>=<span class="string">"POST"</span> <span class="string">action</span>=<span class="string">""</span><span class="keyword">&gt;</span>
+            <span class="comment">&lt;!-- Input Nama --&gt;</span>
+            <span class="keyword">&lt;input</span> <span class="string">type</span>=<span class="string">"text"</span> <span class="string">name</span>=<span class="string">"nama"</span>
+                   <span class="string">value</span>=<span class="string">"&lt;?= $namaInput; ?&gt;"</span> <span class="string">required</span><span class="keyword">&gt;</span>
 
-            &lt;!-- Contoh Input Nilai (Perhatikan atribut step="0.01" untuk desimal) --&gt;
-            &lt;div class="row mb-3 align-items-center"&gt;
-                &lt;label class="col-sm-3 col-form-label fw-bold"&gt;Nilai Tugas&lt;/label&gt;
-                &lt;div class="col-sm-9"&gt;
-                    &lt;input type="number" step="0.01" class="form-control" name="tugas" value="&lt;?= $tugasInput; ?&gt;" required&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
+            <span class="comment">&lt;!-- Input Nilai Tugas (perhatikan step="0.01") --&gt;</span>
+            <span class="keyword">&lt;input</span> <span class="string">type</span>=<span class="string">"number"</span> <span class="string">step</span>=<span class="string">"0.01"</span>
+                   <span class="string">name</span>=<span class="string">"tugas"</span> <span class="string">required</span><span class="keyword">&gt;</span>
 
-            &lt;!-- Tombol Submit --&gt;
-            &lt;div class="row mt-4"&gt;
-                &lt;div class="col-sm-9 offset-sm-3"&gt;
-                    &lt;button type="submit" name="hitung" class="btn btn-primary px-4 fw-bold"&gt;Hitung Nilai&lt;/button&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/form&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+            <span class="keyword">&lt;button</span> <span class="string">type</span>=<span class="string">"submit"</span> <span class="string">name</span>=<span class="string">"hitung"</span><span class="keyword">&gt;</span>
+                Hitung Nilai
+            <span class="keyword">&lt;/button&gt;</span>
+        <span class="keyword">&lt;/form&gt;</span>
+    <span class="keyword">&lt;/div&gt;</span>
+<span class="keyword">&lt;/div&gt;</span></pre>
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Section 7: Langkah 5 - Output Result -->
-          <section id="langkah-5" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">7</div>
-              <h3 class="mb-0 fs-4">
-                Langkah 5: Membuat
-                <code>components/output_result.php</code>
-              </h3>
-            </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                Bagian ini hanya akan muncul jika form telah disubmit (kondisi
-                <code>isset($_POST['hitung'])</code>
-                ). Di sini kita memanggil fungsi helper yang telah dibuat di awal.
-              </p>
-
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-filetype-php text-primary"></i>
-                    components/output_result.php
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
-                </div>
-                <pre><code class="language-php">&lt;?php
-/**
- * File: components/output_result.php
- * Deskripsi: Menampilkan tabel hasil output perhitungan & status KKM
- */
-
-// Hanya tampilkan jika form disubmit
-if (isset($_POST['hitung']) && !empty($_POST['nama'])):
-    $nama    = cleanInput($_POST['nama']);
-    $kelas   = cleanInput($_POST['kelas']);
-    $jurusan = cleanInput($_POST['jurusan']);
-    $tugas   = (float)$_POST['tugas'];
-    $uts     = (float)$_POST['uts'];
-    $uas     = (float)$_POST['uas'];
-
-    // Panggil fungsi helper
-    $nilaiAkhir = hitungNilaiAkhir($tugas, $uts, $uas);
-    $dataStatus = cekStatusKKM($nilaiAkhir);
-?&gt;
-
-&lt;hr class="my-5 border-2 border-dark opacity-50"&gt;
-
-&lt;div class="card shadow-sm mb-5" style="border-left: 5px solid #0d6efd;"&gt;
-    &lt;div class="card-header bg-white py-3"&gt;
-        &lt;h5 class="card-title mb-0 fw-bold text-dark"&gt;Output Hasil Perhitungan&lt;/h5&gt;
-    &lt;/div&gt;
-    &lt;div class="card-body"&gt;
-        &lt;table class="table table-bordered mb-0"&gt;
-            &lt;tr&gt;&lt;th class="bg-light w-25"&gt;Nama Siswa&lt;/th&gt;&lt;td&gt;&lt;?= $nama; ?&gt;&lt;/td&gt;&lt;/tr&gt;
-            &lt;tr&gt;&lt;th class="bg-light"&gt;Kelas&lt;/th&gt;&lt;td&gt;&lt;?= $kelas; ?&gt;&lt;/td&gt;&lt;/tr&gt;
-            &lt;tr&gt;&lt;th class="bg-light"&gt;Jurusan&lt;/th&gt;&lt;td&gt;&lt;?= $jurusan; ?&gt;&lt;/td&gt;&lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;th class="bg-light"&gt;Nilai Akhir&lt;/th&gt;
-                &lt;td&gt;&lt;span class="fs-5 fw-bold text-primary"&gt;&lt;?= number_format($nilaiAkhir, 2, ',', '.'); ?&gt;&lt;/span&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;th class="bg-light"&gt;Status&lt;/th&gt;
-                &lt;td&gt;&lt;span class="badge &lt;?= $dataStatus['badge']; ?&gt; px-3 py-2"&gt;&lt;?= $dataStatus['status']; ?&gt;&lt;/span&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/table&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-&lt;?php endif; ?&gt;</code></pre>
+        <!-- STEP 6: output_result.php -->
+        <section class="step-section" id="step-6">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">06</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Langkah 5: Membuat components/output_result.php</h2>
+                <p class="step-card__subtitle">Tampilan hasil perhitungan nilai akhir dan status KKM.</p>
               </div>
             </div>
-          </section>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Bagian ini hanya akan muncul jika form telah disubmit (kondisi <code>isset($_POST['hitung'])</code>). Di sini kita memanggil fungsi helper yang telah dibuat di awal.
+                </p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>components/output_result.php</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>components/output_result.php</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;/**&#10; * File: components/output_result.php&#10; * Deskripsi: Menampilkan tabel hasil output perhitungan & status KKM&#10; */&#10;&#10;if (isset($_POST['hitung']) && !empty($_POST['nama'])):&#10;    $nama    = cleanInput($_POST['nama']);&#10;    $kelas   = cleanInput($_POST['kelas']);&#10;    $jurusan = cleanInput($_POST['jurusan']);&#10;    $tugas   = (float)$_POST['tugas'];&#10;    $uts     = (float)$_POST['uts'];&#10;    $uas     = (float)$_POST['uas'];&#10;&#10;    $nilaiAkhir = hitungNilaiAkhir($tugas, $uts, $uas);&#10;    $dataStatus = cekStatusKKM($nilaiAkhir);&#10;?>&#10;<hr>&#10;<div class=&quot;card shadow-sm mb-5&quot;>&#10;    <div class=&quot;card-header bg-white py-3&quot;>&#10;        <h5>Output Hasil Perhitungan</h5>&#10;    </div>&#10;    <div class=&quot;card-body&quot;>&#10;        <table class=&quot;table table-bordered mb-0&quot;>&#10;            <tr><th>Nama Siswa</th><td><?= $nama; ?></td></tr>&#10;            <tr><th>Kelas</th><td><?= $kelas; ?></td></tr>&#10;            <tr><th>Jurusan</th><td><?= $jurusan; ?></td></tr>&#10;            <tr><th>Nilai Akhir</th><td><?= number_format($nilaiAkhir, 2, ',', '.'); ?></td></tr>&#10;            <tr><th>Status</th><td><span class=&quot;badge <?= $dataStatus['badge']; ?>&quot;><?= $dataStatus['status']; ?></span></td></tr>&#10;        </table>&#10;    </div>&#10;</div>&#10;<?php endif; ?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="comment">// Hanya tampilkan jika form disubmit</span>
+<span class="keyword">if</span> (<span class="function">isset</span>(<span class="keyword">$_POST</span>[<span class="string">'hitung'</span>]) &amp;&amp; !<span class="function">empty</span>(<span class="keyword">$_POST</span>[<span class="string">'nama'</span>])):
+    <span class="keyword">$nama</span>    = <span class="function">cleanInput</span>(<span class="keyword">$_POST</span>[<span class="string">'nama'</span>]);
+    <span class="keyword">$kelas</span>   = <span class="function">cleanInput</span>(<span class="keyword">$_POST</span>[<span class="string">'kelas'</span>]);
+    <span class="keyword">$jurusan</span> = <span class="function">cleanInput</span>(<span class="keyword">$_POST</span>[<span class="string">'jurusan'</span>]);
+    <span class="keyword">$tugas</span>   = (<span class="keyword">float</span>)<span class="keyword">$_POST</span>[<span class="string">'tugas'</span>];
+    <span class="keyword">$uts</span>     = (<span class="keyword">float</span>)<span class="keyword">$_POST</span>[<span class="string">'uts'</span>];
+    <span class="keyword">$uas</span>     = (<span class="keyword">float</span>)<span class="keyword">$_POST</span>[<span class="string">'uas'</span>];
 
-          <!-- Section 8: Langkah 6 - Footer -->
-          <section id="langkah-6" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">8</div>
-              <h3 class="mb-0 fs-4">
-                Langkah 6: Membuat
-                <code>components/footer.php</code>
-              </h3>
-            </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                Ini adalah bagian penutup halaman yang berisi tag penutup HTML dan
-                <i>script</i>
-                Javascript dari Bootstrap.
-              </p>
+    <span class="comment">// Panggil fungsi helper</span>
+    <span class="keyword">$nilaiAkhir</span> = <span class="function">hitungNilaiAkhir</span>(<span class="keyword">$tugas</span>, <span class="keyword">$uts</span>, <span class="keyword">$uas</span>);
+    <span class="keyword">$dataStatus</span> = <span class="function">cekStatusKKM</span>(<span class="keyword">$nilaiAkhir</span>);
+<span class="keyword">?&gt;</span>
 
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-filetype-php text-primary"></i>
-                    components/footer.php
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
+<span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"card shadow-sm mb-5"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;table</span> <span class="string">class</span>=<span class="string">"table table-bordered"</span><span class="keyword">&gt;</span>
+        <span class="keyword">&lt;tr&gt;&lt;th&gt;</span>Nama Siswa<span class="keyword">&lt;/th&gt;&lt;td&gt;</span><span class="keyword">&lt;?=</span> <span class="keyword">$nama</span>; <span class="keyword">?&gt;</span><span class="keyword">&lt;/td&gt;&lt;/tr&gt;</span>
+        <span class="keyword">&lt;tr&gt;&lt;th&gt;</span>Nilai Akhir<span class="keyword">&lt;/th&gt;&lt;td&gt;</span>
+            <span class="keyword">&lt;?=</span> <span class="function">number_format</span>(<span class="keyword">$nilaiAkhir</span>, <span class="number">2</span>, <span class="string">','</span>, <span class="string">'.'</span>); <span class="keyword">?&gt;</span>
+        <span class="keyword">&lt;/td&gt;&lt;/tr&gt;</span>
+        <span class="keyword">&lt;tr&gt;&lt;th&gt;</span>Status<span class="keyword">&lt;/th&gt;&lt;td&gt;</span>
+            <span class="keyword">&lt;span</span> <span class="string">class</span>=<span class="string">"badge &lt;?= $dataStatus['badge']; ?&gt;"</span><span class="keyword">&gt;</span>
+                <span class="keyword">&lt;?=</span> <span class="keyword">$dataStatus</span>[<span class="string">'status'</span>]; <span class="keyword">?&gt;</span>
+            <span class="keyword">&lt;/span&gt;</span>
+        <span class="keyword">&lt;/td&gt;&lt;/tr&gt;</span>
+    <span class="keyword">&lt;/table&gt;</span>
+<span class="keyword">&lt;/div&gt;</span>
+<span class="keyword">&lt;?php</span> <span class="keyword">endif</span>; <span class="keyword">?&gt;</span></pre>
                 </div>
-                <pre><code class="language-php">&lt;?php
-/**
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 7: footer.php -->
+        <section class="step-section" id="step-7">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">07</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Langkah 6: Membuat components/footer.php</h2>
+                <p class="step-card__subtitle">Penutup halaman: footer dan script Bootstrap JS.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>components/footer.php</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>components/footer.php</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;/**&#10; * File: components/footer.php&#10; */&#10;?>&#10;<footer class=&quot;bg-dark text-white text-center py-4 mt-auto&quot;>&#10;    <div class=&quot;container&quot;>&#10;        <p class=&quot;mb-1 fw-semibold&quot;>&copy; <?= date('Y'); ?> Aplikasi Hitung Nilai Siswa</p>&#10;        <small class=&quot;text-white-50&quot;>Dibuat menggunakan PHP Native &amp; Bootstrap 5</small>&#10;    </div>&#10;</footer>&#10;&#10;<!-- Bootstrap 5 JS Bundle -->&#10;<script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js&quot;></script>&#10;&lt;/body&gt;&#10;&lt;/html&gt;">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="comment">/**
  * File: components/footer.php
- */
-?&gt;
-&lt;footer class="bg-dark text-white text-center py-4 mt-auto"&gt;
-    &lt;div class="container"&gt;
-        &lt;p class="mb-1 fw-semibold"&gt;&amp;copy; &lt;?= date('Y'); ?&gt; Aplikasi Hitung Nilai Siswa&lt;/p&gt;
-        &lt;small class="text-white-50"&gt;Dibuat menggunakan PHP Native &amp;amp; Bootstrap 5&lt;/small&gt;
-    &lt;/div&gt;
-&lt;/footer&gt;
+ */</span>
+<span class="keyword">?&gt;</span>
+<span class="keyword">&lt;footer</span> <span class="string">class</span>=<span class="string">"bg-dark text-white text-center py-4 mt-auto"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;div</span> <span class="string">class</span>=<span class="string">"container"</span><span class="keyword">&gt;</span>
+        <span class="keyword">&lt;p&gt;</span>&amp;copy; <span class="keyword">&lt;?=</span> <span class="function">date</span>(<span class="string">'Y'</span>); <span class="keyword">?&gt;</span> Aplikasi Hitung Nilai Siswa<span class="keyword">&lt;/p&gt;</span>
+        <span class="keyword">&lt;small&gt;</span>Dibuat menggunakan PHP Native &amp; Bootstrap 5<span class="keyword">&lt;/small&gt;</span>
+    <span class="keyword">&lt;/div&gt;</span>
+<span class="keyword">&lt;/footer&gt;</span>
 
-&lt;!-- Bootstrap 5 JS Bundle --&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<span class="comment">&lt;!-- Bootstrap 5 JS Bundle --&gt;</span>
+<span class="keyword">&lt;script</span> <span class="string">src</span>=<span class="string">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"</span><span class="keyword">&gt;&lt;/script&gt;</span>
+<span class="keyword">&lt;/body&gt;</span>
+<span class="keyword">&lt;/html&gt;</span></pre>
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Section 9: Langkah 7 - Index -->
-          <section id="langkah-7" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">9</div>
-              <h3 class="mb-0 fs-4">
-                Langkah 7: Membuat
-                <code>index.php</code>
-              </h3>
+        <!-- STEP 8: index.php -->
+        <section class="step-section" id="step-8">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">08</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Langkah 7: Membuat index.php</h2>
+                <p class="step-card__subtitle">Entry point utama — merangkai semua komponen menjadi satu halaman.</p>
+              </div>
             </div>
-            <div class="step-body">
-              <p class="text-muted mb-4">
-                Inilah
-                <i>entry point</i>
-                utama. File ini bertugas untuk "merangkai" potongan-potongan komponen yang telah kita buat menjadi satu
-                halaman utuh menggunakan perintah
-                <code>require_once</code>
-                .
-              </p>
-
-              <div class="code-wrapper">
-                <div class="code-header">
-                  <span class="file-name">
-                    <i class="bi bi-filetype-php text-primary"></i>
-                    index.php
-                  </span>
-                  <button class="copy-btn" onclick="copyCode(this)">
-                    <i class="bi bi-clipboard"></i>
-                    Copy
-                  </button>
-                </div>
-                <pre><code class="language-php">&lt;?php
-/**
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="lightbulb"></i>Penjelasan</h3>
+                <p class="step-card__desc">
+                  Inilah <em>entry point</em> utama. File ini bertugas untuk "merangkai" potongan-potongan komponen yang telah kita buat menjadi satu halaman utuh menggunakan perintah <code>require_once</code>.
+                </p>
+              </div>
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="terminal"></i>index.php</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>index.php</span>
+                    <button class="formula-block__copy" data-copy="<?php&#10;/**&#10; * File: index.php&#10; * Halaman Utama Penggabung Komponen Modular&#10; */&#10;&#10;// 1. Muat Helper dan Header&#10;require_once __DIR__ . '/config/helper.php';&#10;require_once __DIR__ . '/components/header.php';&#10;?>&#10;&#10;<!-- Kontainer Utama -->&#10;<main class=&quot;container my-4&quot;>&#10;    <?php&#10;    // 2. Muat bagian konten&#10;    require_once __DIR__ . '/components/slider.php';&#10;    require_once __DIR__ . '/components/form_input.php';&#10;    require_once __DIR__ . '/components/output_result.php';&#10;    ?>&#10;</main>&#10;&#10;<?php&#10;// 3. Muat Footer&#10;require_once __DIR__ . '/components/footer.php';&#10;?>">
+                      <i data-lucide="copy"></i> Copy
+                    </button>
+                  </div>
+                  <pre class="formula-block__code"><span class="keyword">&lt;?php</span>
+<span class="comment">/**
  * File: index.php
  * Halaman Utama Penggabung Komponen Modular
- */
+ */</span>
 
-// 1. Muat Helper dan Header
-require_once __DIR__ . '/config/helper.php';
-require_once __DIR__ . '/components/header.php';
-?&gt;
+<span class="comment">// 1. Muat Helper dan Header</span>
+<span class="keyword">require_once</span> <span class="keyword">__DIR__</span> . <span class="string">'/config/helper.php'</span>;
+<span class="keyword">require_once</span> <span class="keyword">__DIR__</span> . <span class="string">'/components/header.php'</span>;
+<span class="keyword">?&gt;</span>
 
-&lt;!-- Kontainer Utama --&gt;
-&lt;main class="container my-4"&gt;
-    &lt;?php
-    // 2. Muat bagian konten
-    require_once __DIR__ . '/components/slider.php';
-    require_once __DIR__ . '/components/form_input.php';
-    require_once __DIR__ . '/components/output_result.php';
-    ?&gt;
-&lt;/main&gt;
+<span class="comment">&lt;!-- Kontainer Utama --&gt;</span>
+<span class="keyword">&lt;main</span> <span class="string">class</span>=<span class="string">"container my-4"</span><span class="keyword">&gt;</span>
+    <span class="keyword">&lt;?php</span>
+    <span class="comment">// 2. Muat bagian konten</span>
+    <span class="keyword">require_once</span> <span class="keyword">__DIR__</span> . <span class="string">'/components/slider.php'</span>;
+    <span class="keyword">require_once</span> <span class="keyword">__DIR__</span> . <span class="string">'/components/form_input.php'</span>;
+    <span class="keyword">require_once</span> <span class="keyword">__DIR__</span> . <span class="string">'/components/output_result.php'</span>;
+    <span class="keyword">?&gt;</span>
+<span class="keyword">&lt;/main&gt;</span>
 
-&lt;?php
-// 3. Muat Footer
-require_once __DIR__ . '/components/footer.php';
-?&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- Section 10: Algoritma -->
-          <section id="penjelasan-algoritma" class="step-card">
-            <div class="step-header">
-              <div class="step-badge">10</div>
-              <h3 class="mb-0 fs-4">Penjelasan Algoritma Perhitungan</h3>
-            </div>
-            <div class="step-body">
-              <div class="p-4 bg-light rounded-3 border border-info border-opacity-25 shadow-sm">
-                <h5 class="fw-bold text-dark mb-3">
-                  <i class="bi bi-calculator-fill text-info me-2"></i>
-                  Formula Perhitungan Matematika
-                </h5>
-
-                <div class="p-3 mb-4 rounded" style="background-color: #f1f5f9">
-                  <p class="mb-0 fs-5 text-center font-monospace fw-semibold text-dark">
-                    Nilai Akhir = (30% × Tugas) + (30% × UTS) + (40% × UAS)
-                  </p>
-                </div>
-
-                <h6 class="fw-bold mt-4">Contoh Simulasi:</h6>
-                <div class="table-responsive mt-3">
-                  <table class="table table-sm table-bordered">
-                    <thead class="table-light">
-                      <tr>
-                        <th>Komponen</th>
-                        <th>Nilai Input</th>
-                        <th>Bobot</th>
-                        <th>Hasil Kali</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Tugas</td>
-                        <td>80.50</td>
-                        <td>30% (0.3)</td>
-                        <td>24.15</td>
-                      </tr>
-                      <tr>
-                        <td>UTS</td>
-                        <td>75.00</td>
-                        <td>30% (0.3)</td>
-                        <td>22.50</td>
-                      </tr>
-                      <tr>
-                        <td>UAS</td>
-                        <td>60.00</td>
-                        <td>40% (0.4)</td>
-                        <td>24.00</td>
-                      </tr>
-                      <tr class="table-info fw-bold">
-                        <td colspan="3" class="text-end">Total Nilai Akhir:</td>
-                        <td>70.65</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div class="mt-4 p-3 bg-white rounded border">
-                  <h6 class="fw-bold text-success mb-2">
-                    <i class="bi bi-check-circle-fill me-2"></i>
-                    Kesimpulan Status
-                  </h6>
-                  <p class="mb-0">
-                    Karena
-                    <strong>70.65</strong>
-                    &ge; 70.00, maka siswa tersebut mendapatkan status
-                    <strong>KKM (Tuntas / Lulus KKM)</strong>
-                    .
-                  </p>
+<span class="keyword">&lt;?php</span>
+<span class="comment">// 3. Muat Footer</span>
+<span class="keyword">require_once</span> <span class="keyword">__DIR__</span> . <span class="string">'/components/footer.php'</span>;
+<span class="keyword">?&gt;</span></pre>
                 </div>
               </div>
             </div>
-          </section>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer for tutorial -->
-    <footer class="bg-white py-4 mt-5 border-top text-center text-muted">
-      <div class="container">
-        <p class="mb-0">Semoga panduan ini membantu Anda dalam ujian dan pembuatan proyek PHP Native.</p>
-      </div>
-    </footer>
-
-    <!-- Toast Notifikasi Copy Kode -->
-    <div class="toast-container">
-      <div
-        id="copyToast"
-        class="toast custom-toast border-0"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        data-bs-delay="2000">
-        <div class="d-flex">
-          <div class="toast-body">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            Kode berhasil disalin ke clipboard!
           </div>
-        </div>
-      </div>
+        </section>
+
+        <!-- STEP 9: Algoritma -->
+        <section class="step-section" id="step-9">
+          <div class="step-card">
+            <div class="step-card__header">
+              <div class="step-card__number">09</div>
+              <div class="step-card__title-group">
+                <h2 class="step-card__title">Penjelasan Algoritma Perhitungan</h2>
+                <p class="step-card__subtitle">Formula matematika dan simulasi perhitungan nilai akhir.</p>
+              </div>
+            </div>
+            <div class="step-card__body">
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="calculator"></i>Formula Perhitungan</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Formula Nilai Akhir</span>
+                  </div>
+                  <pre class="formula-block__code">Nilai Akhir = (30% × Tugas) + (30% × UTS) + (40% × UAS)</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <h3 class="step-card__section-title"><i data-lucide="table"></i>Contoh Simulasi</h3>
+                <div class="formula-block">
+                  <div class="formula-block__header">
+                    <span>Tabel Simulasi</span>
+                  </div>
+                  <pre class="formula-block__code">Komponen  │ Nilai Input │ Bobot      │ Hasil Kali
+──────────┼─────────────┼────────────┼───────────
+Tugas     │ 80.50       │ 30% (0.3)  │ 24.15
+UTS       │ 75.00       │ 30% (0.3)  │ 22.50
+UAS       │ 60.00       │ 40% (0.4)  │ 24.00
+──────────┼─────────────┼────────────┼───────────
+                    Total Nilai Akhir: 70.65</pre>
+                </div>
+              </div>
+
+              <div class="step-card__section">
+                <div class="callout-block callout-block--info">
+                  <strong>Kesimpulan Status:</strong><br>
+                  Karena <strong>70.65</strong> ≥ 70.00, maka siswa tersebut mendapatkan status <strong>KKM (Tuntas / Lulus KKM)</strong>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top"><i data-lucide="arrow-up"></i></button>
 
-    <!-- Prism.js for Syntax Highlighting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-
-    <!-- Custom Script for Copy Button -->
-    <script>
-      function copyCode(btn) {
-        // Find the adjacent pre > code element
-        const codeElement = btn.parentElement.nextElementSibling.querySelector("code");
-        const codeText = codeElement.textContent;
-
-        navigator.clipboard
-          .writeText(codeText)
-          .then(() => {
-            // Show toast
-            const toastEl = document.getElementById("copyToast");
-            const toast = new bootstrap.Toast(toastEl);
-            toast.show();
-
-            // Update button visual state
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-check2"></i> Copied';
-            btn.classList.add("copied");
-
-            setTimeout(() => {
-              btn.innerHTML = originalHTML;
-              btn.classList.remove("copied");
-            }, 2000);
-          })
-          .catch((err) => {
-            console.error("Failed to copy: ", err);
-            alert("Gagal menyalin kode.");
-          });
-      }
-    </script>
+    <script src="../js/script.js"></script>
   </body>
 </html>
