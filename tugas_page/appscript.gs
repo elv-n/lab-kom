@@ -253,10 +253,30 @@ function getRekap(mapel, tugas, kelas) {
 
   const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
 
-  // Ambil daftar siswa di kelas
-  const siswaResult = getSiswaByKelas(kelas);
-  if (!siswaResult.success) return siswaResult;
-  const allSiswa = siswaResult.data;
+  // Ambil daftar siswa di kelas (inline, reuse ss)
+  const siswaSheet = ss.getSheetByName(CONFIG.SHEET_SISWA);
+  if (!siswaSheet) {
+    return { success: false, error: 'Sheet "' + CONFIG.SHEET_SISWA + '" tidak ditemukan' };
+  }
+
+  const siswaData = siswaSheet.getDataRange().getValues();
+  const siswaHeaders = siswaData[0].map(function (h) { return h.toString().toLowerCase().trim(); });
+  const namaIdx = siswaHeaders.indexOf('nama');
+  const kelasIdx = siswaHeaders.indexOf('kelas');
+
+  if (namaIdx === -1 || kelasIdx === -1) {
+    return { success: false, error: 'Header "nama" atau "kelas" tidak ditemukan di sheet data_siswa' };
+  }
+
+  var allSiswa = [];
+  for (var i = 1; i < siswaData.length; i++) {
+    var rowKelas = siswaData[i][kelasIdx].toString().trim();
+    var rowNama = siswaData[i][namaIdx].toString().trim();
+    if (rowKelas === kelas && rowNama) {
+      allSiswa.push(rowNama);
+    }
+  }
+  allSiswa.sort();
 
   // Ambil data rekap
   const rekapSheet = ss.getSheetByName(CONFIG.SHEET_REKAP);
