@@ -1246,18 +1246,35 @@
       // INIT — Load initial data
       // =============================================
       async function init() {
+        const CACHE_KEY = "ourlabs_mapelTugas";
+        const CACHE_TTL = 10 * 60 * 1000; // 10 menit
+
+        // 1) Coba load dari cache dulu (instant, tanpa nunggu server)
         try {
-          // Load mapel + tugas + kelas (semua dalam 1 request)
+          const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
+          if (cached && cached.data && (Date.now() - cached.ts) < CACHE_TTL) {
+            mapelTugasData = cached.data;
+            populateSelect(selectMapel, Object.keys(mapelTugasData), "— Pilih Mapel —");
+            populateSelect(rekapMapel, Object.keys(mapelTugasData), "— Pilih —");
+          }
+        } catch (_) {}
+
+        // 2) Fetch fresh data dari server (update cache + dropdown jika berubah)
+        try {
           const mapelRes = await apiFetch("getMapelTugas");
           if (mapelRes.success) {
             mapelTugasData = mapelRes.data;
             populateSelect(selectMapel, Object.keys(mapelTugasData), "— Pilih Mapel —");
             populateSelect(rekapMapel, Object.keys(mapelTugasData), "— Pilih —");
-          } else {
+            // Simpan ke cache
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ data: mapelRes.data, ts: Date.now() }));
+          } else if (!Object.keys(mapelTugasData).length) {
             showToast(mapelRes.error || "Gagal memuat data mapel", "error");
           }
         } catch (err) {
-          showToast("Gagal terhubung ke server: " + err.message, "error");
+          if (!Object.keys(mapelTugasData).length) {
+            showToast("Gagal terhubung ke server: " + err.message, "error");
+          }
         }
       }
 
@@ -1613,70 +1630,6 @@
         $("rekap-content").style.display = "block";
       }
 
-      function formatTimestampID(ts) {
-        if (!ts) return "—";
-        const bulanID = [
-          "Januari",
-          "Februari",
-          "Maret",
-          "April",
-          "Mei",
-          "Juni",
-          "Juli",
-          "Agustus",
-          "September",
-          "Oktober",
-          "November",
-          "Desember",
-        ];
-
-        // Kalau string sudah mengandung nama bulan Indonesia, langsung return
-        if (typeof ts === "string" && bulanID.some((b) => ts.includes(b))) return ts;
-
-        let d;
-        let parseOk = false;
-
-        if (typeof ts === "string") {
-          // Format utama (baru): "yyyy-MM-dd HH:mm:ss" — tidak ambigu
-          const isoMatch = ts.match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})$/);
-          if (isoMatch) {
-            const [, yyyy, mm, dd, hh, mi, ss] = isoMatch;
-            d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd), parseInt(hh), parseInt(mi), parseInt(ss));
-            parseOk = true;
-          } else {
-            // Format lama: "dd/MM/yyyy HH:mm:ss"
-            const oldMatch = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/);
-            if (oldMatch) {
-              const [, dd, mm, yyyy, hh, mi, ss] = oldMatch;
-              d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd), parseInt(hh), parseInt(mi), parseInt(ss));
-              parseOk = true;
-            } else {
-              // Format tanpa waktu: "dd/MM/yyyy"
-              const dateOnly = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-              if (dateOnly) {
-                const [, dd, mm, yyyy] = dateOnly;
-                d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
-                parseOk = true;
-              }
-            }
-          }
-        }
-
-        // Fallback: coba parse langsung (ISO string, dll)
-        if (!parseOk) {
-          d = new Date(ts);
-        }
-
-        if (isNaN(d.getTime())) return ts;
-
-        const jam =
-          String(d.getHours()).padStart(2, "0") +
-          ":" +
-          String(d.getMinutes()).padStart(2, "0") +
-          ":" +
-          String(d.getSeconds()).padStart(2, "0");
-        return d.getDate() + " " + bulanID[d.getMonth()] + " " + d.getFullYear() + ", " + jam + " WIB";
-      }
 
       // =============================================
       // TABS
