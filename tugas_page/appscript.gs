@@ -306,20 +306,38 @@ function getRekap(mapel, tugas, kelas) {
           row[kIdx].toString().trim() === kelas
         ) {
           var nama = row[nIdx].toString().trim();
-          // Konversi timestamp: jika Sheets auto-convert ke Date object, format ulang ke string
+          // Konversi timestamp ke Date untuk perbandingan akurat
           var rawTs = row[tIdx];
+          var tsDate;
           var tsStr;
           if (rawTs instanceof Date && !isNaN(rawTs.getTime())) {
+            tsDate = rawTs;
             tsStr = Utilities.formatDate(rawTs, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm:ss");
+          } else if (rawTs) {
+            // Parse dari string format "dd/MM/yyyy HH:mm:ss"
+            tsStr = rawTs.toString();
+            var parts = tsStr.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})/);
+            if (parts) {
+              tsDate = new Date(parseInt(parts[3]), parseInt(parts[2]) - 1, parseInt(parts[1]),
+                parseInt(parts[4]), parseInt(parts[5]), parseInt(parts[6]));
+            } else {
+              tsDate = new Date(0); // fallback: treat as oldest
+            }
           } else {
-            tsStr = rawTs ? rawTs.toString() : "";
+            tsStr = "";
+            tsDate = new Date(0);
           }
-          // Simpan yang terbaru (index lebih besar = lebih baru)
-          rekapMap[nama] = {
-            timestamp: tsStr,
-            nama_file: row[fIdx].toString(),
-            link_file: row[lIdx].toString(),
-          };
+
+          // Simpan hanya yang timestamp-nya benar-benar paling baru
+          var existing = rekapMap[nama];
+          if (!existing || tsDate.getTime() > existing._tsDate.getTime()) {
+            rekapMap[nama] = {
+              timestamp: tsStr,
+              nama_file: row[fIdx].toString(),
+              link_file: row[lIdx].toString(),
+              _tsDate: tsDate,
+            };
+          }
         }
       }
     }
@@ -391,11 +409,15 @@ function uploadTugas(data) {
   var baseName = data.fileName.replace("." + ext, "");
   var finalFileName = safeNama + "_" + baseName + "." + ext;
 
-  // Cek apakah sudah ada file lama dari siswa ini, hapus jika ada
-  var existingFiles = kelasFolder.getFilesByName(finalFileName);
-  while (existingFiles.hasNext()) {
-    var old = existingFiles.next();
-    old.setTrashed(true);
+  // Hapus SEMUA file lama dari siswa ini di folder kelas (prefix match)
+  // Ini menangani kasus siswa upload ulang dengan nama file berbeda
+  var prefix = safeNama + "_";
+  var allFiles = kelasFolder.getFiles();
+  while (allFiles.hasNext()) {
+    var f = allFiles.next();
+    if (f.getName().indexOf(prefix) === 0) {
+      f.setTrashed(true);
+    }
   }
 
   // Upload file
@@ -412,7 +434,7 @@ function uploadTugas(data) {
 
   var newRow = [timestamp, data.nama, data.kelas, data.mapel, data.judul_tugas, finalFileName, fileUrl];
 
-  // Cari row lama dengan nama + kelas + mapel + judul_tugas yang sama
+  // Cari SEMUA row dengan nama + kelas + mapel + judul_tugas yang sama
   var rekapData = rekapSheet.getDataRange().getValues();
   var headers = rekapData[0].map(function (h) {
     return h.toString().toLowerCase().trim();
@@ -421,7 +443,7 @@ function uploadTugas(data) {
   var kIdx = headers.indexOf("kelas");
   var mIdx = headers.indexOf("mapel");
   var jIdx = headers.indexOf("judul_tugas");
-  var existingRowIdx = -1;
+  var matchingRows = []; // semua index row yang match (1-indexed)
 
   for (var i = 1; i < rekapData.length; i++) {
     if (
@@ -430,23 +452,31 @@ function uploadTugas(data) {
       rekapData[i][mIdx].toString().trim() === data.mapel &&
       rekapData[i][jIdx].toString().trim() === data.judul_tugas
     ) {
-      existingRowIdx = i + 1; // Sheet rows are 1-indexed
-      // Jangan break — lanjut scan agar yang ter-update adalah row TERAKHIR (terbaru)
+      matchingRows.push(i + 1); // Sheet rows are 1-indexed
     }
   }
 
-  if (existingRowIdx > 0) {
-    // Update row yang sudah ada (replace in-place)
-    var range = rekapSheet.getRange(existingRowIdx, 1, 1, newRow.length);
-    // Force kolom timestamp sebagai plain text agar tidak auto-convert ke Date object
-    rekapSheet.getRange(existingRowIdx, 1).setNumberFormat("@");
+  if (matchingRows.length > 0) {
+    // Hapus row duplikat (sisakan hanya yang pertama untuk di-update)
+    // Hapus dari bawah ke atas agar index tidak bergeser
+    if (matchingRows.length > 1) {
+      for (var d = matchingRows.length - 1; d >= 1; d--) {
+        rekapSheet.deleteRow(matchingRows[d]);
+      }
+    }
+    // Update row pertama (satu-satunya yang tersisa)
+    var targetRow = matchingRows[0];
+    // Set format "@" (plain text) pada kolom timestamp SEBELUM menulis data
+    rekapSheet.getRange(targetRow, 1).setNumberFormat("@");
+    var range = rekapSheet.getRange(targetRow, 1, 1, newRow.length);
     range.setValues([newRow]);
   } else {
-    // Append baru
-    rekapSheet.appendRow(newRow);
-    // Force kolom timestamp di row baru sebagai plain text
-    var lastRow = rekapSheet.getLastRow();
+    // Append baru: gunakan setValues agar format bisa di-set sebelum data ditulis
+    var lastRow = rekapSheet.getLastRow() + 1;
+    // Set format "@" (plain text) pada kolom timestamp SEBELUM menulis data
     rekapSheet.getRange(lastRow, 1).setNumberFormat("@");
+    var range = rekapSheet.getRange(lastRow, 1, 1, newRow.length);
+    range.setValues([newRow]);
   }
 
   return {
