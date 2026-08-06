@@ -1,64 +1,58 @@
 ---
-name: Brutal Honey
+name: NVIDIA
 colors:
-  primary: "#FACC15"
-  secondary: "#111827"
-  success: "#22C55E"
-  warning: "#F59E0B"
-  danger: "#EF4444"
-  info: "#3B82F6"
-  background: "#FEFCE8"
-  surface: "#FFFFFF"
-  foreground: "#1A1A1A"
-  border: "#1A1A1A"
-  overlay: "rgba(0, 0, 0, 0.5)"
+  primary: "#76b900"
+  secondary: "#a7a7a7"
+  success: "#3f8500"
+  warning: "#ef9100"
+  danger: "#e52020"
+  info: "#0046a4"
+  background: "#ffffff"
+  surface: "#ffffff"
+  foreground: "#000000"
+  border: "#e5e5e5"
 colors-dark:
-  primary: "#FACC15"
-  secondary: "#111827"
-  success: "#22C55E"
-  warning: "#F59E0B"
-  danger: "#EF4444"
-  info: "#3B82F6"
-  background: "#1A1A1A"
-  surface: "#262626"
-  foreground: "#FEFCE8"
-  border: "#FEFCE8"
+  primary: "#76b900"
+  secondary: "#a7a7a7"
+  success: "#3f8500"
+  warning: "#ef9100"
+  danger: "#e52020"
+  info: "#0046a4"
+  background: "#0a0a0a"
+  surface: "#111111"
+  foreground: "#e5e5e5"
+  border: "#333333"
 typography:
   display:
-    fontFamily: "DM Sans, sans-serif"
-    fontSize: 48px
-    fontWeight: 800
-    lineHeight: 1.1
-  h1:
-    fontFamily: "DM Sans, sans-serif"
+    fontFamily: "NVIDIA-EMEA, Arial, Helvetica, sans-serif"
     fontSize: 36px
     fontWeight: 700
-    lineHeight: 1.2
-  h2:
-    fontFamily: "DM Sans, sans-serif"
+    lineHeight: 1.25
+  h1:
+    fontFamily: "NVIDIA-EMEA, Arial, Helvetica, sans-serif"
     fontSize: 24px
     fontWeight: 700
     lineHeight: 1.25
-  h3:
-    fontFamily: "DM Sans, sans-serif"
+  h2:
+    fontFamily: "NVIDIA-EMEA, Arial, Helvetica, sans-serif"
     fontSize: 20px
-    fontWeight: 600
-    lineHeight: 1.3
+    fontWeight: 700
+    lineHeight: 1.25
   body-md:
-    fontFamily: "DM Sans, sans-serif"
+    fontFamily: "NVIDIA-EMEA, Arial, Helvetica, sans-serif"
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.5
   body-sm:
-    fontFamily: "DM Sans, sans-serif"
+    fontFamily: "NVIDIA-EMEA, Arial, Helvetica, sans-serif"
     fontSize: 14px
-    fontWeight: 500
-    lineHeight: 1.4
+    fontWeight: 600
+    lineHeight: 1.5
   body-xs:
-    fontFamily: "DM Sans, sans-serif"
+    fontFamily: "NVIDIA-EMEA, Arial, Helvetica, sans-serif"
     fontSize: 12px
-    fontWeight: 500
-    lineHeight: 1.33
+    fontWeight: 400
+    lineHeight: 1.25
 spacing:
   xs: 0.25rem
   sm: 0.5rem
@@ -66,185 +60,126 @@ spacing:
   lg: 1.5rem
   xl: 2rem
 rounded:
-  sm: 0.125rem
-  md: 0.5rem
-  lg: 0.75rem
-  xl: 1rem
+  sm: 1px
+  md: 2px
+  lg: 4px
+  xl: 8px
   full: 9999px
 ---
 
 ## Overview
 
-Brutal Honey channels the raw energy of neo-brutalism into an AI API platform identity — golden yellow (#FACC15) that demands attention against bold black borders and chunky offset shadows. Every element screams confidence and developer-cred. This is design that says: "I don't need to be subtle."
+NVIDIA's design system is a high-contrast, technology-forward experience that communicates raw computational power through design restraint. The philosophy is rooted in hardware engineering aesthetics — every element feels machined rather than painted, specified rather than styled. "The green is a signal, not a surface" — this single principle governs the entire system.
 
 ## Colors
 
-The palette is anchored by #FACC15 as the primary accent, with #FACC15 in dark mode.
-
 ### Foundation
 
-Brutal Honey's color story is built on **golden yellow power** (#FACC15) — a warm, high-energy accent that cuts through the stark neo-brutalist aesthetic. Against the yellow, everything else is either pure white or confident black.
+NVIDIA's color architecture is built on **binary contrast**: True Black (#000000), Pure White (#ffffff), and NVIDIA Green (#76b900) as the singular signal. This stark contrast creates the engineered feel of a PCB board or hardware specification sheet.
 
-### The Neo-Brutalist Palette
+### The NVIDIA Green Accent Principle
 
-**Primary — Honey Gold (#FACC15)**: The signature accent — used for CTAs, highlights, and anywhere you want the eye to go. This isn't a subtle brand element; it's a statement.
-
-**Secondary — Pure Black (#111827)**: The structural backbone. Borders, text, shadows — black creates the bold, unapologetic framework that makes the yellow pop.
+**Green is a signal, not a surface.** #76b900 appears exclusively as borders, underlines, link indicators, and focus states. Never as background fills or large decorative areas.
 
 ### Surface Hierarchy
 
-| Level | Light Mode | Dark Mode | Use |
-|-------|-----------|-----------|-----|
-| Canvas | #FEFCE8 | #1A1A1A | Warm cream background |
-| Surface | #FFFFFF | #262626 | Cards, elevated elements |
-| Muted | #FEF9C3 | #262626 | Subtle backgrounds |
-| Interactive | #FACC15 | #FACC15 | Primary CTAs, highlights |
+| Level | Light | Dark | Use |
+|-------|-------|------|-----|
+| Background | #ffffff | #0a0a0a | Page base |
+| Surface | #ffffff | #111111 | Card fills |
+| Foreground | #000000 | #e5e5e5 | Primary text |
+| Border | #e5e5e5 | #333333 | Dividers |
+| Primary | #76b900 | #76b900 | Signal — unchanged |
+| Secondary | #a7a7a7 | #a7a7a7 | Gray |
+| Success | #3f8500 | #3f8500 | Darker green |
+| Warning | #ef9100 | #ef9100 | Amber |
+| Danger | #e52020 | #e52020 | Red |
+| Info | #0046a4 | #0046a4 | Blue |
 
-### Dark Mode: "Electric Brutalism"
+### Dark Mode
 
-Dark mode transforms Brutal Honey into an electric nighttime experience — near-black backgrounds let the honey gold glow with increased intensity. The bold borders remain, creating structure in the darkness.
-
-**Core Principles:**
-
-1. **Yellow Intensifies**: The golden accent remains #FACC15 for maximum visibility against dark backgrounds
-2. **Borders Remain Bold**: The 2-4px black borders persist in dark mode — structure never disappears
-3. **Warm Canvas**: The dark canvas isn't pure black — #1A1A1A has subtle warmth
-
-**Dark Mode Token Mapping:**
-
-| Light Mode | Dark Mode | Rationale |
-|------------|-----------|-----------|
-| #FACC15 (Primary) | #FACC15 | Yellow stays iconic |
-| #FEFCE8 (Canvas) | #1A1A1A | Near-black with warmth |
-| #111827 (Secondary) | #111827 | Black structure persists |
-| #FFFFFF (Surface) | #262626 | Cards adapt to dark context |
-
-### Semantic Colors
-
-| Token | Light | Dark |
-|-------|-------|------|
-| Background | #FEFCE8 | #1A1A1A |
-| Surface | #FFFFFF | #262626 |
-| Foreground | #1A1A1A | #FEFCE8 |
-| Border | #1A1A1A | #FEFCE8 |
-| Primary | #FACC15 | #FACC15 |
-| Secondary | #111827 | #111827 |
-| Success | #22C55E | #22C55E |
-| Warning | #F59E0B | #F59E0B |
-| Danger | #EF4444 | #EF4444 |
-| Info | #3B82F6 | #3B82F6 |
-
-### The Neo-Brutalist Border Rule
-
-Brutal Honey uses **bold black borders** (2-4px) as primary definition — not soft shadows. The border IS the elevation. Elements are defined by their thick outlines, not by floating above their surroundings.
+Dark mode is not an alternate theme — it is the primary expression. Black foundation (#0a0a0a) is where the brand lives most naturally. NVIDIA Green remains constant across modes.
 
 ## Typography
 
-### Font Stack
-
-**DM Sans** — Clean, geometric sans-serif for maximum clarity. No fancy fonts — the typography is about weight and size, not style.
+**NVIDIA-EMEA** — Custom font family creating an industrial typographic voice. European, pragmatic, engineering-focused.
 
 ### Type Scale
 
-| Role | Size | Weight | Line Height | Character |
-|------|------|--------|-------------|-----------|
-| Display | 48px | 800 | 1.1 | Bold impact headlines |
-| H1 | 36px | 700 | 1.2 | Section headers |
-| H2 | 24px | 700 | 1.25 | Card titles |
-| H3 | 20px | 600 | 1.3 | Subsections |
-| Body | 16px | 400 | 1.5 | Content |
-| Small | 14px | 500 | 1.4 | Labels, metadata |
-| Micro | 12px | 500 | 1.33 | Badges, tags |
+| Role | Size | Weight | Line Height |
+|------|------|--------|-------------|
+| Display Hero | 36px | 700 | 1.25 |
+| Section | 24px | 700 | 1.25 |
+| Card Title | 20px | 700 | 1.25 |
+| Body | 16px | 400 | 1.5 |
+| Caption | 14px | 600 | 1.5 |
+| Micro | 12px | 400 | 1.25 |
 
-### The Bold Weight Rule
-
-Brutal Honey embraces heavy weights (600-800) for headings. The neo-brutalist aesthetic demands chunky, confident type. Light weights feel too delicate for this identity.
+Bold is the default voice — weight 700 for headings, buttons, links. Weight 400 reserved for body text.
 
 ## Layout & Spacing
-
-The spacing system follows a 4px grid scale based on 0.25rem increments:
 
 | Token | Value | Usage |
 |-------|-------|-------|
 | xs | 0.25rem | Micro spacing |
-| sm | 0.5rem | Tight element spacing |
-| md | 1rem | Standard padding |
-| lg | 1.5rem | Section gaps |
+| sm | 0.5rem | Compact padding |
+| md | 1rem | Standard gaps |
+| lg | 1.5rem | Section spacing |
 | xl | 2rem | Large margins |
 
 ## Elevation & Depth
 
-### The Offset Shadow System
+Minimal and utilitarian. The primary depth signal is not shadow but color contrast: black backgrounds next to white sections create hardware-like visual layering.
 
-Brutal Honey's signature elevation is the **offset shadow** — no soft diffused shadows here. Elements cast hard, blocky shadows that offset 2-10px in both X and Y directions.
-
-| Level | Offset Shadow | Border | Use |
-|-------|---------------|--------|-----|
-| Level 0 | none | None | Flat elements |
-| Level 1 | 2px 2px 0px 0px rgba(0,0,0,1) | 2px solid #000 | Buttons, cards |
-| Level 2 | 4px 4px 0px 0px rgba(0,0,0,1) | 2px solid #000 | Elevated cards |
-| Level 3 | 6px 6px 0px 0px rgba(0,0,0,1) | 3px solid #000 | Important elements |
-| Level 4 | 8px 8px 0px 0px rgba(0,0,0,1) | 3px solid #000 | Modals |
-| Level 5 | 10px 10px 0px 0px rgba(0,0,0,1) | 4px solid #000 | Maximum emphasis |
+| Level | Shadow | Use |
+|-------|--------|-----|
+| Level 0 | none | Page backgrounds |
+| Level 1 | 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06) | Cards |
+| Level 2 | 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06) | Dropdowns |
+| Level 3 | 0 10px 25px rgba(0,0,0,0.15), 0 6px 10px rgba(0,0,0,0.1) | Modals |
+| Card | rgba(0,0,0,0.3) 0px 0px 5px | Standard card shadow |
 
 ## Shapes
 
-The shape language embraces sharp corners with 0.125rem as the base radius, reflecting the neo-brutalist aesthetic:
-
 | Token | Value | Usage |
 |-------|-------|-------|
-| sm | 0.125rem | Minimal rounding |
-| md | 0.5rem | Buttons, inputs |
-| lg | 0.75rem | Cards |
-| xl | 1rem | Modals |
-| full | 9999px | Pills, badges |
+| sm | 1px | Micro elements |
+| md | 2px | Buttons, cards, inputs — primary radius |
+| lg | 4px | Modals |
+| xl | 8px | Larger containers |
+| full | 9999px | Switches |
 
-Neo-brutalism embraces sharp corners. Brutal Honey uses border-radius: 0 or very minimal radius (2px max). Sharp edges are part of the raw, confident identity.
+Sharp 1-2px radius is the signature — never rounded or pill-shaped for buttons.
 
 ## Components
 
-### Buttons & Interaction
+### Buttons
 
-**Primary CTA**: Honey Gold (#FACC15) background, black text, bold 3px black border, offset shadow (4px 4px). On hover: shadow increases to 6px 6px. On press: shadow reduces to 2px 2px, border inverts.
+**Primary (Green Border):** Transparent background, 2px solid #76b900 border, 2px radius, black text. Hover fills with teal (#1eaedb).
+**Secondary:** 1px solid #76b900 border.
 
-**Secondary**: White background, bold 2px black border, offset shadow. Black text. The structured alternative to primary.
+### Cards
 
-**Ghost Buttons**: Transparent background, bold 2px black border. No fill — the border does the work.
+2px radius, #ffffff (light) / #1a1a1a (dark) background, card shadow.
 
-### Cards & Containers
+### Inputs
 
-**Neo-Brutalist Cards**: White surface, 3px black border, 4px offset shadow. No border-radius. The chunky, confident container.
-
-**Hover State**: Shadow increases to 6px 6px, border remains. The card "lifts" into the shadow.
-
-### Inputs & Selection
-
-**Text Inputs**: White background, 2px black border, no radius. Focus state: yellow border (#FACC15) in addition to black border. Placeholder in muted gray.
-
-**Select Dropdowns**: Consistent with input styling. Dropdown panel uses offset shadow, not floating glass.
-
-### Feedback Components
-
-**Alerts**: Bold left border (4px) in semantic color, white background, black border on other sides. No soft shadows — borders define the shape.
-
-**Badges**: Solid color fill, black border, no radius. The chunky label.
+2px radius, 1px solid #5e5e5e border. Focus: 2px solid #000000.
 
 ## Do's and Don'ts
 
 ### Do
 
-- **Use offset shadows for elevation** — the 4px 4px shadow IS the Brutal Honey signature
-- **Apply bold borders (2-4px)** — borders define elements, not soft shadows
-- **Use heavy font weights (600-800)** — neo-brutalism demands chunky type
-- **Keep corners sharp** — border-radius: 0 or 2px maximum
-- **Let yellow demand attention** — it's the singular accent, used for primary CTAs
-- **Use black borders everywhere** — the structural backbone of the system
+- Use NVIDIA Green (#76b900) exclusively as a SIGNAL color — borders, underlines, outlines
+- Keep the foundation black-and-white with green pinpricks of accent
+- Use sharp 1-2px border radius across all components
+- Apply tight 1.25 line-height to headings for dense, authoritative text
+- Use 2px solid #76b900 as the primary button border pattern
 
 ### Don't
 
-- **Don't use soft shadows** — Brutal Honey uses ONLY offset shadows (no diffused blur)
-- **Don't use thin borders** — 1px borders feel wrong. 2-4px only
-- **Don't use light font weights** — 400 feels too delicate. Use 600-800
-- **Don't add border-radius** — sharp corners are part of the identity
-- **Don't use multiple accent colors** — yellow is the singular accent
-- **Don't make inputs feel floating** — they should feel embedded, bordered, solid
+- Don't use the green as a fill on large surfaces or backgrounds
+- Don't introduce mid-tone backgrounds — contrast is binary by design
+- Don't use rounded or pill-shaped buttons
+- Don't use generous line-height on display headers
+- Don't use filled green buttons as the primary pattern
