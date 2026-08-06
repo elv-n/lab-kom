@@ -343,7 +343,7 @@ function getRekap(mapel, tugas, kelas) {
     }
   }
 
-  // Gabungkan: semua siswa + status pengumpulan
+  // Gabungkan: semua siswa + status pengumpulan (exclude internal _tsDate)
   var result = [];
   for (var j = 0; j < allSiswa.length; j++) {
     var nama = allSiswa[j];

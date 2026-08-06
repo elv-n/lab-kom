@@ -1189,7 +1189,7 @@
       // KONFIGURASI — GANTI URL SCRIPT KAMU
       // =============================================
       const SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbwKdYk3MW3IltVsMfpStXZ-LbFeIks4oMLpzGWk_wSFei6vGthg6SIpXkfMMo2_SrQy/exec";
+        "https://script.google.com/macros/s/AKfycbwSCNl1t0oCW1T97f9uNdGhKuA7vaKRUxBretHk0crOJSMAe6kOzVejJBPkwFeY8DD-5g/exec";
 
       // =============================================
       // STATE
@@ -1633,33 +1633,40 @@
         // Kalau string sudah mengandung nama bulan Indonesia, langsung return
         if (typeof ts === "string" && bulanID.some((b) => ts.includes(b))) return ts;
 
-        // Parse dari berbagai format (Date object, dd/MM/yyyy, ISO string, dll)
         let d;
-        if (typeof ts === "string" && ts.includes("/") && !ts.includes("T")) {
-          // Asumsi format dd/MM/yyyy HH:mm:ss (disimpan sebagai teks di Google Sheet)
-          const [datePart, timePart] = ts.split(" ");
-          const [dd, mm, yyyy] = datePart.split("/");
-          d = new Date(yyyy, mm - 1, dd);
-          if (timePart) {
-            const [hh, mi] = timePart.split(":");
-            d.setHours(hh, mi);
+        let parseOk = false;
+
+        if (typeof ts === "string") {
+          // Format utama dari server: "dd/MM/yyyy HH:mm:ss"
+          const match = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/);
+          if (match) {
+            const [, dd, mm, yyyy, hh, mi, ss] = match;
+            d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd), parseInt(hh), parseInt(mi), parseInt(ss));
+            parseOk = true;
+          } else {
+            // Format tanpa waktu: "dd/MM/yyyy"
+            const matchDate = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+            if (matchDate) {
+              const [, dd, mm, yyyy] = matchDate;
+              d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
+              parseOk = true;
+            }
           }
-        } else {
+        }
+
+        // Fallback: coba parse langsung (ISO string, Date object dari JSON, dll)
+        if (!parseOk) {
           d = new Date(ts);
-          // BUGFIX: Google Sheets locale menukar Tanggal dan Bulan kalau d <= 12
-          // "03/08/2026" (3 Agustus) dianggap "March 8" oleh Sheets.
-          // Kalau masuk ke blok ini sebagai ISO string, berarti Sheets menganggapnya Date.
-          if (typeof ts === "string" && ts.includes("T")) {
-            const actualDay = d.getMonth() + 1; // Bulan di Date object adalah hari aslinya
-            const actualMonth = d.getDate() - 1; // Hari di Date object adalah bulan aslinya
-            d.setMonth(actualMonth);
-            d.setDate(actualDay);
-          }
         }
 
         if (isNaN(d.getTime())) return ts;
 
-        const jam = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+        const jam =
+          String(d.getHours()).padStart(2, "0") +
+          ":" +
+          String(d.getMinutes()).padStart(2, "0") +
+          ":" +
+          String(d.getSeconds()).padStart(2, "0");
         return d.getDate() + " " + bulanID[d.getMonth()] + " " + d.getFullYear() + ", " + jam + " WIB";
       }
 
