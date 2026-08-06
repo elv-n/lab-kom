@@ -306,9 +306,17 @@ function getRekap(mapel, tugas, kelas) {
           row[kIdx].toString().trim() === kelas
         ) {
           var nama = row[nIdx].toString().trim();
+          // Konversi timestamp: jika Sheets auto-convert ke Date object, format ulang ke string
+          var rawTs = row[tIdx];
+          var tsStr;
+          if (rawTs instanceof Date && !isNaN(rawTs.getTime())) {
+            tsStr = Utilities.formatDate(rawTs, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm:ss");
+          } else {
+            tsStr = rawTs ? rawTs.toString() : "";
+          }
           // Simpan yang terbaru (index lebih besar = lebih baru)
           rekapMap[nama] = {
-            timestamp: row[tIdx],
+            timestamp: tsStr,
             nama_file: row[fIdx].toString(),
             link_file: row[lIdx].toString(),
           };
@@ -423,16 +431,22 @@ function uploadTugas(data) {
       rekapData[i][jIdx].toString().trim() === data.judul_tugas
     ) {
       existingRowIdx = i + 1; // Sheet rows are 1-indexed
-      break;
+      // Jangan break — lanjut scan agar yang ter-update adalah row TERAKHIR (terbaru)
     }
   }
 
   if (existingRowIdx > 0) {
     // Update row yang sudah ada (replace in-place)
-    rekapSheet.getRange(existingRowIdx, 1, 1, newRow.length).setValues([newRow]);
+    var range = rekapSheet.getRange(existingRowIdx, 1, 1, newRow.length);
+    // Force kolom timestamp sebagai plain text agar tidak auto-convert ke Date object
+    rekapSheet.getRange(existingRowIdx, 1).setNumberFormat("@");
+    range.setValues([newRow]);
   } else {
     // Append baru
     rekapSheet.appendRow(newRow);
+    // Force kolom timestamp di row baru sebagai plain text
+    var lastRow = rekapSheet.getLastRow();
+    rekapSheet.getRange(lastRow, 1).setNumberFormat("@");
   }
 
   return {
