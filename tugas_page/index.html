@@ -1143,6 +1143,7 @@
                       <th>No</th>
                       <th>Nama Siswa</th>
                       <th>Status</th>
+                      <th>Waktu</th>
                       <th>File</th>
                     </tr>
                   </thead>
@@ -1586,6 +1587,9 @@
                   ? '<span class="badge badge--success">✓ Sudah</span>'
                   : '<span class="badge badge--danger">✗ Belum</span>'
               }
+            </td>
+            <td style="font-size:13px; color:var(--mute); font-family:var(--font-mono)">
+              ${item.timestamp || '—'}
             </td>
             <td>
               ${
