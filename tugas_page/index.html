@@ -1143,7 +1143,6 @@
                       <th>No</th>
                       <th>Nama Siswa</th>
                       <th>Status</th>
-                      <th>Waktu</th>
                       <th>File</th>
                     </tr>
                   </thead>
@@ -1588,9 +1587,6 @@
                   : '<span class="badge badge--danger">✗ Belum</span>'
               }
             </td>
-            <td style="font-size:13px; color:var(--mute); font-family:var(--font-mono)">
-              ${formatTimestampID(item.timestamp)}
-            </td>
             <td>
               ${
                 item.link_file
@@ -1637,24 +1633,32 @@
         let parseOk = false;
 
         if (typeof ts === "string") {
-          // Format utama dari server: "dd/MM/yyyy HH:mm:ss"
-          const match = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/);
-          if (match) {
-            const [, dd, mm, yyyy, hh, mi, ss] = match;
+          // Format utama (baru): "yyyy-MM-dd HH:mm:ss" — tidak ambigu
+          const isoMatch = ts.match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})$/);
+          if (isoMatch) {
+            const [, yyyy, mm, dd, hh, mi, ss] = isoMatch;
             d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd), parseInt(hh), parseInt(mi), parseInt(ss));
             parseOk = true;
           } else {
-            // Format tanpa waktu: "dd/MM/yyyy"
-            const matchDate = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-            if (matchDate) {
-              const [, dd, mm, yyyy] = matchDate;
-              d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
+            // Format lama: "dd/MM/yyyy HH:mm:ss"
+            const oldMatch = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})$/);
+            if (oldMatch) {
+              const [, dd, mm, yyyy, hh, mi, ss] = oldMatch;
+              d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd), parseInt(hh), parseInt(mi), parseInt(ss));
               parseOk = true;
+            } else {
+              // Format tanpa waktu: "dd/MM/yyyy"
+              const dateOnly = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+              if (dateOnly) {
+                const [, dd, mm, yyyy] = dateOnly;
+                d = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
+                parseOk = true;
+              }
             }
           }
         }
 
-        // Fallback: coba parse langsung (ISO string, Date object dari JSON, dll)
+        // Fallback: coba parse langsung (ISO string, dll)
         if (!parseOk) {
           d = new Date(ts);
         }
