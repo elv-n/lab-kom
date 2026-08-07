@@ -841,6 +841,13 @@
         border: 1px solid var(--divider);
       }
 
+      .rekap-toolbar__auto-label {
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--stone);
+        font-family: var(--font-mono);
+      }
+
       .rekap-toolbar__left {
         display: flex;
         align-items: center;
@@ -1245,6 +1252,7 @@
                 <div class="rekap-toolbar__left">
                   <span class="rekap-toolbar__dot" id="rekap-dot"></span>
                   <span class="rekap-toolbar__status" id="rekap-last-updated">Baru dimuat</span>
+                  <span class="rekap-toolbar__auto-label">· auto 30s</span>
                 </div>
                 <button class="btn-refresh" id="btn-refresh" title="Refresh data rekap">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1629,7 +1637,7 @@
           const result = await apiPost(payload);
 
           if (result.success) {
-            showToast(result.message || "Tugas berhasil dikumpulkan! ✅", "success");
+            showToast(result.message || "Tugas berhasil dikumpulkan", "success");
             // Reset form
             selectMapel.value = "";
             selectMapel.dispatchEvent(new Event("change"));
@@ -1667,6 +1675,8 @@
       let previousRekapData = null; // Store previous data for change detection
       let lastRefreshTime = null;
       let isRefreshing = false;
+      let autoRefreshInterval = null;
+      const AUTO_REFRESH_MS = 30 * 1000; // 30 detik
 
       const btnRefresh = $("btn-refresh");
 
@@ -1747,7 +1757,7 @@
             // Show notifications for new submissions
             if (newSubmissions.length > 0) {
               newSubmissions.forEach((nama) => {
-                showToast(`${nama} baru saja mengumpulkan tugas! 🎉`, "success");
+                showToast(`${nama} baru saja mengumpulkan tugas`, "success");
               });
             } else if (isRefresh) {
               showToast("Data sudah yang terbaru", "info");
@@ -1795,6 +1805,7 @@
         $("rekap-loading").style.display = "none";
         $("rekap-empty").style.display = "block";
         previousRekapData = null;
+        stopAutoRefresh();
       }
 
       /**
@@ -1866,6 +1877,9 @@
         $("rekap-loading").style.display = "none";
         $("rekap-empty").style.display = "none";
         $("rekap-content").style.display = "block";
+
+        // Start auto-refresh if not already running
+        startAutoRefresh();
       }
 
       /**
@@ -1918,6 +1932,27 @@
       // Update the "last refreshed" text every 10 seconds
       setInterval(updateLastRefreshedText, 10000);
 
+      // =============================================
+      // AUTO-REFRESH
+      // =============================================
+      function startAutoRefresh() {
+        stopAutoRefresh();
+        autoRefreshInterval = setInterval(() => {
+          // Only auto-refresh if rekap tab is active and filters are filled
+          const rekapTabActive = $("tab-rekap").classList.contains("active");
+          if (rekapTabActive && rekapMapel.value && rekapTugas.value && rekapKelas.value) {
+            loadRekap(true);
+          }
+        }, AUTO_REFRESH_MS);
+      }
+
+      function stopAutoRefresh() {
+        if (autoRefreshInterval) {
+          clearInterval(autoRefreshInterval);
+          autoRefreshInterval = null;
+        }
+      }
+
 
       // =============================================
       // TABS
@@ -1933,6 +1968,13 @@
           // Update tab content
           document.querySelectorAll(".tab-content").forEach((c) => c.classList.remove("active"));
           $("tab-" + tab).classList.add("active");
+
+          // Manage auto-refresh based on active tab
+          if (tab === "rekap" && previousRekapData) {
+            startAutoRefresh();
+          } else {
+            stopAutoRefresh();
+          }
         });
       });
 
