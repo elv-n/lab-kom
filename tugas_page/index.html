@@ -828,6 +828,123 @@
         }
       }
 
+      /* ---- REFRESH TOOLBAR ---- */
+      .rekap-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding: 10px 16px;
+        background: var(--bg-bone);
+        border-radius: 6px;
+        border: 1px solid var(--divider);
+      }
+
+      .rekap-toolbar__left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .rekap-toolbar__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+        flex-shrink: 0;
+        animation: pulse-dot 2s ease-in-out infinite;
+      }
+
+      .rekap-toolbar__dot--stale {
+        background: var(--warning);
+        animation: none;
+      }
+
+      .rekap-toolbar__status {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--mute);
+        font-family: var(--font-mono);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .btn-refresh {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        font-family: var(--font);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink);
+        background: var(--surface-card);
+        border: 1px solid var(--divider);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all var(--transition);
+        white-space: nowrap;
+        flex-shrink: 0;
+        height: 32px;
+      }
+
+      .btn-refresh:hover:not(:disabled) {
+        background: var(--bg-bone);
+        border-color: var(--mute);
+      }
+
+      .btn-refresh:active:not(:disabled) {
+        transform: scale(0.97);
+      }
+
+      .btn-refresh:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-refresh svg {
+        width: 14px;
+        height: 14px;
+        transition: transform 0.3s ease;
+      }
+
+      .btn-refresh.refreshing svg {
+        animation: spin 0.8s linear infinite;
+      }
+
+      /* ---- ROW HIGHLIGHT (new submission detected) ---- */
+      @keyframes row-highlight {
+        0% {
+          background: hsla(152, 56%, 38%, 0.15);
+        }
+        100% {
+          background: transparent;
+        }
+      }
+
+      .rekap-table tbody tr.row-new {
+        animation: row-highlight 2.5s ease-out forwards;
+      }
+
+      /* Status change pulse */
+      @keyframes stat-bump {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+        100% { transform: scale(1); }
+      }
+
+      .rekap-stat__value.bumped {
+        animation: stat-bump 0.4s ease-out;
+      }
+
+      @keyframes pulse-dot {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+
       /* ---- RESPONSIVE ---- */
       @media (max-width: 640px) {
         .main {
@@ -853,6 +970,21 @@
 
         .tabs {
           overflow-x: auto;
+        }
+
+        .rekap-toolbar {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 8px;
+        }
+
+        .rekap-toolbar__left {
+          justify-content: center;
+        }
+
+        .btn-refresh {
+          width: 100%;
+          justify-content: center;
         }
 
         .page-hero h1 {
@@ -1108,6 +1240,22 @@
 
             <!-- Rekap content (hidden until filters selected) -->
             <div id="rekap-content" style="display: none">
+              <!-- Refresh Toolbar -->
+              <div class="rekap-toolbar" id="rekap-toolbar">
+                <div class="rekap-toolbar__left">
+                  <span class="rekap-toolbar__dot" id="rekap-dot"></span>
+                  <span class="rekap-toolbar__status" id="rekap-last-updated">Baru dimuat</span>
+                </div>
+                <button class="btn-refresh" id="btn-refresh" title="Refresh data rekap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 4 23 10 17 10"/>
+                    <polyline points="1 20 1 14 7 14"/>
+                    <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                  </svg>
+                  Refresh
+                </button>
+              </div>
+
               <!-- Stats -->
               <div class="rekap-stats">
                 <div class="rekap-stat">
@@ -1514,12 +1662,19 @@
       }
 
       // =============================================
-      // REKAP TAB — CASCADING SELECT
+      // REKAP TAB — CASCADING SELECT + REAL-TIME
       // =============================================
+      let previousRekapData = null; // Store previous data for change detection
+      let lastRefreshTime = null;
+      let isRefreshing = false;
+
+      const btnRefresh = $("btn-refresh");
+
       rekapMapel.addEventListener("change", function () {
         const mapel = this.value;
         resetSelect(rekapTugas, "— Pilih —");
         resetSelect(rekapKelas, "— Pilih —");
+        previousRekapData = null;
         hideRekap();
 
         if (mapel && mapelTugasData[mapel]) {
@@ -1531,6 +1686,7 @@
         const mapel = rekapMapel.value;
         const tugas = this.value;
         resetSelect(rekapKelas, "— Pilih —");
+        previousRekapData = null;
         hideRekap();
 
         if (mapel && tugas && mapelTugasData[mapel] && mapelTugasData[mapel][tugas]) {
@@ -1539,50 +1695,122 @@
       });
 
       rekapKelas.addEventListener("change", async function () {
+        previousRekapData = null;
+        await loadRekap();
+      });
+
+      // Refresh button click
+      btnRefresh.addEventListener("click", async function () {
+        await loadRekap(true); // isRefresh = true
+      });
+
+      /**
+       * Load / refresh rekap data
+       * @param {boolean} isRefresh - If true, compare with previous data for change detection
+       */
+      async function loadRekap(isRefresh = false) {
         const mapel = rekapMapel.value;
         const tugas = rekapTugas.value;
-        const kelas = this.value;
+        const kelas = rekapKelas.value;
 
         if (!mapel || !tugas || !kelas) {
           hideRekap();
           return;
         }
 
-        // Show loading
-        $("rekap-empty").style.display = "none";
-        $("rekap-content").style.display = "none";
-        $("rekap-loading").style.display = "block";
+        if (isRefreshing) return;
+        isRefreshing = true;
+
+        if (isRefresh) {
+          // Refresh mode: show spinning icon, keep content visible
+          btnRefresh.classList.add("refreshing");
+          btnRefresh.disabled = true;
+        } else {
+          // Initial load: show skeleton loading
+          $("rekap-empty").style.display = "none";
+          $("rekap-content").style.display = "none";
+          $("rekap-loading").style.display = "block";
+        }
 
         try {
           const res = await apiFetch("getRekap", { mapel, tugas, kelas });
 
           if (res.success) {
-            renderRekap(res.data);
+            // Detect changes if refreshing
+            let newSubmissions = [];
+            if (isRefresh && previousRekapData) {
+              newSubmissions = detectChanges(previousRekapData, res.data);
+            }
+
+            renderRekap(res.data, newSubmissions);
+
+            // Show notifications for new submissions
+            if (newSubmissions.length > 0) {
+              newSubmissions.forEach((nama) => {
+                showToast(`${nama} baru saja mengumpulkan tugas! 🎉`, "success");
+              });
+            } else if (isRefresh) {
+              showToast("Data sudah yang terbaru", "info");
+            }
+
+            // Store for next comparison
+            previousRekapData = res.data;
           } else {
             showToast(res.error || "Gagal memuat rekap", "error");
-            hideRekap();
+            if (!isRefresh) hideRekap();
           }
         } catch (err) {
           showToast("Gagal memuat rekap: " + err.message, "error");
-          hideRekap();
+          if (!isRefresh) hideRekap();
+        } finally {
+          isRefreshing = false;
+          btnRefresh.classList.remove("refreshing");
+          btnRefresh.disabled = false;
         }
-      });
+      }
+
+      /**
+       * Detect which students newly submitted between previous and current data
+       * @returns {string[]} List of student names who newly submitted
+       */
+      function detectChanges(prevData, newData) {
+        const prevMap = {};
+        prevData.rekap.forEach((item) => {
+          prevMap[item.nama] = item.sudah;
+        });
+
+        const newSubmissions = [];
+        newData.rekap.forEach((item) => {
+          // Student was previously "belum" but now "sudah"
+          if (item.sudah && prevMap[item.nama] === false) {
+            newSubmissions.push(item.nama);
+          }
+        });
+
+        return newSubmissions;
+      }
 
       function hideRekap() {
         $("rekap-content").style.display = "none";
         $("rekap-loading").style.display = "none";
         $("rekap-empty").style.display = "block";
+        previousRekapData = null;
       }
 
-      function renderRekap(data) {
+      /**
+       * Render rekap data with optional highlighting for new submissions
+       * @param {object} data - The rekap data from API
+       * @param {string[]} newSubmissions - Names of students who newly submitted (to highlight)
+       */
+      function renderRekap(data, newSubmissions = []) {
         const { rekap, total_siswa, total_sudah } = data;
         const totalBelum = total_siswa - total_sudah;
         const persen = total_siswa > 0 ? Math.round((total_sudah / total_siswa) * 100) : 0;
 
-        // Stats
-        $("stat-sudah").textContent = total_sudah;
-        $("stat-belum").textContent = totalBelum;
-        $("stat-total").textContent = total_siswa;
+        // Stats (with bump animation if values changed)
+        animateStat("stat-sudah", total_sudah);
+        animateStat("stat-belum", totalBelum);
+        animateStat("stat-total", total_siswa);
 
         // Progress
         $("progress-fill").style.width = persen + "%";
@@ -1595,6 +1823,12 @@
 
         rekap.forEach((item, idx) => {
           const tr = document.createElement("tr");
+
+          // Highlight row if this student just submitted
+          if (newSubmissions.includes(item.nama)) {
+            tr.classList.add("row-new");
+          }
+
           tr.innerHTML = `
             <td style="font-weight:500; text-align:center">${idx + 1}</td>
             <td style="font-weight:500">${escapeHtml(item.nama)}</td>
@@ -1624,11 +1858,65 @@
           tbody.appendChild(tr);
         });
 
+        // Update last refreshed timestamp
+        lastRefreshTime = new Date();
+        updateLastRefreshedText();
+
         // Show content
         $("rekap-loading").style.display = "none";
         $("rekap-empty").style.display = "none";
         $("rekap-content").style.display = "block";
       }
+
+      /**
+       * Animate stat value with a bump effect if the value changed
+       */
+      function animateStat(elementId, newValue) {
+        const el = $(elementId);
+        const oldValue = el.textContent;
+        el.textContent = newValue;
+
+        if (oldValue !== String(newValue)) {
+          el.classList.remove("bumped");
+          // Force reflow to restart animation
+          void el.offsetWidth;
+          el.classList.add("bumped");
+          el.addEventListener("animationend", () => el.classList.remove("bumped"), { once: true });
+        }
+      }
+
+      /**
+       * Update the "last refreshed" text in the toolbar
+       */
+      function updateLastRefreshedText() {
+        if (!lastRefreshTime) return;
+        const el = $("rekap-last-updated");
+        const dot = $("rekap-dot");
+
+        const now = new Date();
+        const diffMs = now - lastRefreshTime;
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+
+        if (diffSec < 10) {
+          el.textContent = "Baru saja diperbarui";
+          dot.classList.remove("rekap-toolbar__dot--stale");
+        } else if (diffSec < 60) {
+          el.textContent = `${diffSec} detik yang lalu`;
+          dot.classList.remove("rekap-toolbar__dot--stale");
+        } else if (diffMin < 60) {
+          el.textContent = `${diffMin} menit yang lalu`;
+          dot.classList.add("rekap-toolbar__dot--stale");
+        } else {
+          const h = lastRefreshTime.getHours().toString().padStart(2, "0");
+          const m = lastRefreshTime.getMinutes().toString().padStart(2, "0");
+          el.textContent = `Terakhir ${h}:${m}`;
+          dot.classList.add("rekap-toolbar__dot--stale");
+        }
+      }
+
+      // Update the "last refreshed" text every 10 seconds
+      setInterval(updateLastRefreshedText, 10000);
 
 
       // =============================================
