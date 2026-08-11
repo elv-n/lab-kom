@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial - Perhitungan Nilai Siswa (PHP)</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f9;
+            color: #333;
+            line-height: 1.7;
+            padding: 30px 15px;
+        }
+        .tutorial {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid #e0e0e0;
+        }
+        h1 {
+            font-size: 26px;
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+        h1 + p { color: #666; margin-bottom: 30px; }
+        h2 {
+            font-size: 20px;
+            color: #333;
+            margin: 35px 0 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #4f46e5;
+        }
+        h3 {
+            font-size: 16px;
+            margin: 20px 0 8px;
+            color: #4f46e5;
+        }
+        p { margin-bottom: 12px; }
+        ul, ol { margin: 10px 0 15px 25px; }
+        li { margin-bottom: 6px; }
+        .info-box {
+            background-color: #eef2ff;
+            border-left: 4px solid #4f46e5;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 14px;
+        }
+        .file-label {
+            display: inline-block;
+            background: #4f46e5;
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 5px 5px 0 0;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .code-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        pre {
+            background-color: #fafafa;
+            color: #333333;
+            padding: 20px;
+            border-radius: 0 6px 6px 6px;
+            overflow-x: auto;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre;
+            border: 1px solid #e0e0e0;
+            border-top: none;
+        }
+        /* Syntax Colors (VS Code Light Theme) */
+        .cm  { color: #008000; }  /* comment */
+        .kw  { color: #0000ff; }  /* keyword */
+        .vr  { color: #9b2393; }  /* variable */
+        .st  { color: #a31515; }  /* string */
+        .fn  { color: #795e26; }  /* function */
+        .nm  { color: #098658; }  /* number */
+        .tg  { color: #800000; }  /* html tag */
+        .at  { color: #ff0000; }  /* html attribute */
+        .av  { color: #0000ff; }  /* attribute value */
+        .pt  { color: #ff0000; font-weight: bold; } /* php tag */
+        .cp  { color: #9b2393; }  /* css property */
+        .cv  { color: #0451a5; }  /* css value */
+        .cs  { color: #800000; font-weight: bold; } /* css selector */
+        .btn-copy {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #e0e0e0;
+            color: #333;
+            border: 1px solid #cccccc;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-copy:hover { background-color: #d0d0d0; }
+        .btn-copy.copied { background-color: #d1fae5; color: #10b981; border-color: #10b981; }
+        .struktur {
+            background: #f8fafc;
+            border: 1px solid #e0e0e0;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            margin: 10px 0 20px;
+        }
+        .step-number {
+            display: inline-block;
+            background: #4f46e5;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 20px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th { background-color: #4f46e5; color: #fff; }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+            color: #4f46e5;
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tutorial">
+
+    <h1>Tutorial: Perhitungan Nilai Siswa</h1>
+    <p>Belajar membuat aplikasi web sederhana menggunakan <strong>PHP</strong>, <strong>HTML</strong>, dan <strong>CSS</strong>.</p>
+
+
+    <h2>1. Pendahuluan</h2>
+    <p>Pada tutorial ini, kita akan membuat aplikasi <strong>Perhitungan Nilai Siswa</strong> yang dapat:</p>
+    <ul>
+        <li>Menerima input data siswa (Nama, Kelas, Jurusan)</li>
+        <li>Menerima input nilai (Tugas, UTS, UAS)</li>
+        <li>Menghitung <strong>Nilai Akhir</strong> dengan rumus: <code>Tugas 30% + UTS 35% + UAS 35%</code></li>
+        <li>Menampilkan status <strong>LULUS</strong> atau <strong>TIDAK LULUS</strong> (batas nilai 75)</li>
+    </ul>
+
+    <div class="info-box">
+        <strong>Yang dibutuhkan:</strong> Laragon (atau XAMPP), browser, dan text editor (Notepad / VS Code).
+    </div>
+
+
+    <h2>2. Struktur Folder</h2>
+    <p>Buat folder bernama <code>xxx</code> di dalam folder <code>www</code> (Laragon) atau <code>htdocs</code> (XAMPP), lalu buat file-file berikut:</p>
+
+    <div class="struktur">
+        xxx/<br>
+        &nbsp;&nbsp;&nbsp;proses.php &nbsp;&nbsp;&nbsp;<em>-- logika PHP (perhitungan)</em><br>
+        &nbsp;&nbsp;&nbsp;index.php &nbsp;&nbsp;&nbsp;&nbsp;<em>-- tampilan HTML</em><br>
+        &nbsp;&nbsp;&nbsp;style.css &nbsp;&nbsp;&nbsp;&nbsp;<em>-- styling CSS</em><br>
+        &nbsp;&nbsp;&nbsp;logo.png &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>-- gambar logo</em>
+    </div>
+
+
+    <h2>3. Langkah-langkah</h2>
+
+    <!-- ======================== -->
+    <!-- LANGKAH 1: proses.php    -->
+    <!-- ======================== -->
+    <h3><span class="step-number">1</span> Buat file <code>proses.php</code></h3>
+    <p>File ini berisi <strong>logika PHP</strong> untuk mengambil data dari form dan menghitung nilai akhir.</p>
+
+    <span class="file-label">proses.php</span>
+    <div class="code-wrapper">
+        <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+<pre id="code-proses"><span class="pt">&lt;?php</span>
+<span class="cm">// ========================================</span>
+<span class="cm">// PHP: Mengolah data dari form (POST)</span>
+<span class="cm">// ========================================</span>
+
+<span class="cm">// Variabel awal (kosong)</span>
+<span class="vr">$nama</span>         = <span class="st">''</span>;
+<span class="vr">$kelas</span>        = <span class="st">''</span>;
+<span class="vr">$jurusan</span>      = <span class="st">''</span>;
+<span class="vr">$tugas</span>        = <span class="st">''</span>;
+<span class="vr">$uts</span>          = <span class="st">''</span>;
+<span class="vr">$uas</span>          = <span class="st">''</span>;
+<span class="vr">$nilai_akhir</span>  = <span class="st">''</span>;
+<span class="vr">$status</span>       = <span class="st">''</span>;
+<span class="vr">$status_class</span> = <span class="st">''</span>;
+
+<span class="cm">// Cek apakah tombol Hitung ditekan</span>
+<span class="kw">if</span> (<span class="fn">isset</span>(<span class="vr">$_POST</span>[<span class="st">'hitung'</span>])) {
+    <span class="cm">// Ambil data dari form</span>
+    <span class="vr">$nama</span>    = <span class="fn">htmlspecialchars</span>(<span class="vr">$_POST</span>[<span class="st">'nama'</span>]);
+    <span class="vr">$kelas</span>   = <span class="fn">htmlspecialchars</span>(<span class="vr">$_POST</span>[<span class="st">'kelas'</span>]);
+    <span class="vr">$jurusan</span> = <span class="fn">htmlspecialchars</span>(<span class="vr">$_POST</span>[<span class="st">'jurusan'</span>]);
+    <span class="vr">$tugas</span>   = <span class="fn">floatval</span>(<span class="vr">$_POST</span>[<span class="st">'tugas'</span>]);
+    <span class="vr">$uts</span>     = <span class="fn">floatval</span>(<span class="vr">$_POST</span>[<span class="st">'uts'</span>]);
+    <span class="vr">$uas</span>     = <span class="fn">floatval</span>(<span class="vr">$_POST</span>[<span class="st">'uas'</span>]);
+
+    <span class="cm">// Hitung Nilai Akhir: Tugas 30%, UTS 35%, UAS 35%</span>
+    <span class="vr">$nilai_akhir</span> = (<span class="vr">$tugas</span> * <span class="nm">0.3</span>) + (<span class="vr">$uts</span> * <span class="nm">0.35</span>) + (<span class="vr">$uas</span> * <span class="nm">0.35</span>);
+    <span class="vr">$nilai_akhir</span> = <span class="fn">number_format</span>(<span class="vr">$nilai_akhir</span>, <span class="nm">2</span>);
+
+    <span class="cm">// Tentukan status lulus atau tidak</span>
+    <span class="kw">if</span> (<span class="vr">$nilai_akhir</span> &gt;= <span class="nm">75</span>) {
+        <span class="vr">$status</span>       = <span class="st">'LULUS'</span>;
+        <span class="vr">$status_class</span> = <span class="st">'status-lulus'</span>;
+    } <span class="kw">else</span> {
+        <span class="vr">$status</span>       = <span class="st">'TIDAK LULUS'</span>;
+        <span class="vr">$status_class</span> = <span class="st">'status-gagal'</span>;
+    }
+}
+<span class="pt">?&gt;</span></pre>
+    </div>
+
+    <p><strong>Penjelasan kode:</strong></p>
+    <table>
+        <tr><th>Kode</th><th>Fungsi</th></tr>
+        <tr><td><code>$_POST['nama']</code></td><td>Mengambil data yang dikirim dari form (method POST)</td></tr>
+        <tr><td><code>isset($_POST['hitung'])</code></td><td>Mengecek apakah tombol "Hitung" sudah ditekan</td></tr>
+        <tr><td><code>htmlspecialchars()</code></td><td>Mengamankan input agar tidak ada kode berbahaya</td></tr>
+        <tr><td><code>floatval()</code></td><td>Mengubah input teks menjadi angka desimal</td></tr>
+        <tr><td><code>number_format($score, 2)</code></td><td>Memformat angka menjadi 2 angka di belakang koma</td></tr>
+    </table>
+
+
+    <!-- ======================== -->
+    <!-- LANGKAH 2: index.php     -->
+    <!-- ======================== -->
+    <h3><span class="step-number">2</span> Buat file <code>index.php</code></h3>
+    <p>File ini berisi <strong>tampilan HTML</strong>. Di baris pertama, kita memanggil <code>proses.php</code> menggunakan <code>include</code>.</p>
+
+    <span class="file-label">index.php</span>
+    <div class="code-wrapper">
+        <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+<pre id="code-index"><span class="pt">&lt;?php</span> <span class="kw">include</span> <span class="st">'proses.php'</span>; <span class="pt">?&gt;</span>
+<span class="tg">&lt;!DOCTYPE</span> <span class="at">html</span><span class="tg">&gt;</span>
+<span class="tg">&lt;html</span> <span class="at">lang</span>=<span class="av">"id"</span><span class="tg">&gt;</span>
+<span class="tg">&lt;head&gt;</span>
+    <span class="tg">&lt;meta</span> <span class="at">charset</span>=<span class="av">"UTF-8"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;meta</span> <span class="at">name</span>=<span class="av">"viewport"</span> <span class="at">content</span>=<span class="av">"width=device-width, initial-scale=1.0"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;title&gt;</span>Perhitungan Nilai Siswa<span class="tg">&lt;/title&gt;</span>
+    <span class="tg">&lt;link</span> <span class="at">rel</span>=<span class="av">"stylesheet"</span> <span class="at">href</span>=<span class="av">"style.css"</span><span class="tg">&gt;</span>
+<span class="tg">&lt;/head&gt;</span>
+<span class="tg">&lt;body&gt;</span>
+
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"container"</span><span class="tg">&gt;</span>
+
+        <span class="cm">&lt;!-- HEADER --&gt;</span>
+        <span class="tg">&lt;header&gt;</span>
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"logo"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;img</span> <span class="at">src</span>=<span class="av">"logo.png"</span> <span class="at">alt</span>=<span class="av">"Logo"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"nama-perusahaan"</span><span class="tg">&gt;</span>
+                Nama Perusahaan
+            <span class="tg">&lt;/div&gt;</span>
+        <span class="tg">&lt;/header&gt;</span>
+
+
+        <span class="cm">&lt;!-- BANNER --&gt;</span>
+        <span class="tg">&lt;section</span> <span class="at">class</span>=<span class="av">"banner"</span><span class="tg">&gt;</span>
+            Header dengan Slide bar
+        <span class="tg">&lt;/section&gt;</span>
+
+
+        <span class="cm">&lt;!-- FORM INPUT (method POST) --&gt;</span>
+        <span class="tg">&lt;section</span> <span class="at">class</span>=<span class="av">"form-section"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;form</span> <span class="at">method</span>=<span class="av">"POST"</span> <span class="at">action</span>=<span class="av">""</span><span class="tg">&gt;</span>
+
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"form-row"</span><span class="tg">&gt;</span>
+                    <span class="tg">&lt;label&gt;</span>Nama<span class="tg">&lt;/label&gt;</span>
+                    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"text"</span> <span class="at">name</span>=<span class="av">"nama"</span> <span class="at">placeholder</span>=<span class="av">"Masukkan nama"</span> <span class="at">value</span>=<span class="av">"<span class="pt">&lt;?=</span> <span class="vr">$nama</span> <span class="pt">?&gt;</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"form-row"</span><span class="tg">&gt;</span>
+                    <span class="tg">&lt;label&gt;</span>Kelas<span class="tg">&lt;/label&gt;</span>
+                    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"text"</span> <span class="at">name</span>=<span class="av">"kelas"</span> <span class="at">placeholder</span>=<span class="av">"Contoh: XII IPA 1"</span> <span class="at">value</span>=<span class="av">"<span class="pt">&lt;?=</span> <span class="vr">$kelas</span> <span class="pt">?&gt;</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"form-row"</span><span class="tg">&gt;</span>
+                    <span class="tg">&lt;label&gt;</span>Jurusan<span class="tg">&lt;/label&gt;</span>
+                    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"text"</span> <span class="at">name</span>=<span class="av">"jurusan"</span> <span class="at">placeholder</span>=<span class="av">"Contoh: IPA"</span> <span class="at">value</span>=<span class="av">"<span class="pt">&lt;?=</span> <span class="vr">$jurusan</span> <span class="pt">?&gt;</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"form-row"</span><span class="tg">&gt;</span>
+                    <span class="tg">&lt;label&gt;</span>Nilai Tugas<span class="tg">&lt;/label&gt;</span>
+                    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"number"</span> <span class="at">name</span>=<span class="av">"tugas"</span> <span class="at">min</span>=<span class="av">"0"</span> <span class="at">max</span>=<span class="av">"100"</span> <span class="at">placeholder</span>=<span class="av">"0 - 100"</span> <span class="at">value</span>=<span class="av">"<span class="pt">&lt;?=</span> <span class="vr">$tugas</span> <span class="pt">?&gt;</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"form-row"</span><span class="tg">&gt;</span>
+                    <span class="tg">&lt;label&gt;</span>Nilai UTS<span class="tg">&lt;/label&gt;</span>
+                    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"number"</span> <span class="at">name</span>=<span class="av">"uts"</span> <span class="at">min</span>=<span class="av">"0"</span> <span class="at">max</span>=<span class="av">"100"</span> <span class="at">placeholder</span>=<span class="av">"0 - 100"</span> <span class="at">value</span>=<span class="av">"<span class="pt">&lt;?=</span> <span class="vr">$uts</span> <span class="pt">?&gt;</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"form-row"</span><span class="tg">&gt;</span>
+                    <span class="tg">&lt;label&gt;</span>Nilai UAS<span class="tg">&lt;/label&gt;</span>
+                    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"number"</span> <span class="at">name</span>=<span class="av">"uas"</span> <span class="at">min</span>=<span class="av">"0"</span> <span class="at">max</span>=<span class="av">"100"</span> <span class="at">placeholder</span>=<span class="av">"0 - 100"</span> <span class="at">value</span>=<span class="av">"<span class="pt">&lt;?=</span> <span class="vr">$uas</span> <span class="pt">?&gt;</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"form-actions"</span><span class="tg">&gt;</span>
+                    <span class="tg">&lt;button</span> <span class="at">type</span>=<span class="av">"submit"</span> <span class="at">name</span>=<span class="av">"hitung"</span> <span class="at">class</span>=<span class="av">"btn btn-primary"</span><span class="tg">&gt;</span>Hitung Nilai<span class="tg">&lt;/button&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;/form&gt;</span>
+        <span class="tg">&lt;/section&gt;</span>
+
+
+        <span class="cm">&lt;!-- GARIS PEMISAH --&gt;</span>
+        <span class="tg">&lt;hr&gt;</span>
+
+
+        <span class="cm">&lt;!-- OUTPUT --&gt;</span>
+        <span class="tg">&lt;section</span> <span class="at">class</span>=<span class="av">"output-section"</span><span class="tg">&gt;</span>
+
+            <span class="tg">&lt;h3&gt;</span>Output<span class="tg">&lt;/h3&gt;</span>
+
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-row"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;label&gt;</span>Nama<span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-box"</span><span class="tg">&gt;</span><span class="pt">&lt;?=</span> <span class="vr">$nama</span> <span class="pt">?&gt;</span><span class="tg">&lt;/div&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-row"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;label&gt;</span>Kelas<span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-box"</span><span class="tg">&gt;</span><span class="pt">&lt;?=</span> <span class="vr">$kelas</span> <span class="pt">?&gt;</span><span class="tg">&lt;/div&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-row"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;label&gt;</span>Jurusan<span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-box"</span><span class="tg">&gt;</span><span class="pt">&lt;?=</span> <span class="vr">$jurusan</span> <span class="pt">?&gt;</span><span class="tg">&lt;/div&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-row"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;label&gt;</span>Nilai Akhir<span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-box"</span><span class="tg">&gt;</span><span class="pt">&lt;?=</span> <span class="vr">$nilai_akhir</span> <span class="pt">?&gt;</span><span class="tg">&lt;/div&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-row"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;label&gt;</span>Status<span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"output-box"</span><span class="tg">&gt;</span>
+                    <span class="pt">&lt;?php</span> <span class="kw">if</span> (<span class="fn">isset</span>(<span class="vr">$_POST</span>[<span class="st">'hitung'</span>])): <span class="pt">?&gt;</span>
+                        <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"<span class="pt">&lt;?=</span> <span class="vr">$status_class</span> <span class="pt">?&gt;</span>"</span><span class="tg">&gt;</span><span class="pt">&lt;?=</span> <span class="vr">$status</span> <span class="pt">?&gt;</span><span class="tg">&lt;/span&gt;</span>
+                    <span class="pt">&lt;?php</span> <span class="kw">endif</span>; <span class="pt">?&gt;</span>
+                <span class="tg">&lt;/div&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+        <span class="tg">&lt;/section&gt;</span>
+
+
+        <span class="cm">&lt;!-- FOOTER --&gt;</span>
+        <span class="tg">&lt;footer&gt;</span>
+            Footer
+        <span class="tg">&lt;/footer&gt;</span>
+
+    <span class="tg">&lt;/div&gt;</span>
+
+<span class="tg">&lt;/body&gt;</span>
+<span class="tg">&lt;/html&gt;</span></pre>
+    </div>
+
+    <p><strong>Penjelasan kode:</strong></p>
+    <table>
+        <tr><th>Kode</th><th>Fungsi</th></tr>
+        <tr><td><code>include 'proses.php'</code></td><td>Memanggil file proses.php agar variabel bisa dipakai di sini</td></tr>
+        <tr><td><code>&lt;form method="POST"&gt;</code></td><td>Form mengirim data menggunakan metode POST</td></tr>
+        <tr><td><code>name="hitung"</code></td><td>Nama tombol, digunakan oleh isset() di PHP</td></tr>
+        <tr><td><code>&lt;?= $nama ?&gt;</code></td><td>Menampilkan isi variabel PHP di dalam HTML</td></tr>
+        <tr><td><code>value="&lt;?= $nama ?&gt;"</code></td><td>Mengisi kembali input setelah form dikirim</td></tr>
+    </table>
+
+
+    <!-- ======================== -->
+    <!-- LANGKAH 3: style.css     -->
+    <!-- ======================== -->
+    <h3><span class="step-number">3</span> Buat file <code>style.css</code></h3>
+    <p>File ini berisi <strong>styling CSS</strong> untuk mempercantik tampilan halaman.</p>
+
+    <span class="file-label">style.css</span>
+    <div class="code-wrapper">
+        <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+<pre id="code-css"><span class="cm">/* ============================= */</span>
+<span class="cm">/* STYLE CSS - Perhitungan Nilai */</span>
+<span class="cm">/* ============================= */</span>
+
+<span class="cm">/* Reset dasar: semua elemen pakai border-box */</span>
+<span class="cs">*</span> {
+    <span class="cp">box-sizing</span>: <span class="cv">border-box</span>;
+    <span class="cp">margin</span>: <span class="nm">0</span>;
+    <span class="cp">padding</span>: <span class="nm">0</span>;
+}
+
+<span class="cm">/* BODY: pengaturan halaman utama */</span>
+<span class="cs">body</span> {
+    <span class="cp">font-family</span>: <span class="cv">Arial, sans-serif</span>;
+    <span class="cp">background-color</span>: <span class="cv">#f1f5f9</span>;
+    <span class="cp">color</span>: <span class="cv">#333333</span>;
+    <span class="cp">padding</span>: <span class="nm">30px</span> <span class="nm">15px</span>;
+}
+
+<span class="cm">/* CONTAINER: kotak utama pembungkus semua isi */</span>
+<span class="cs">.container</span> {
+    <span class="cp">width</span>: <span class="nm">700px</span>;
+    <span class="cp">margin</span>: <span class="nm">0</span> <span class="cv">auto</span>;
+    <span class="cp">background-color</span>: <span class="cv">#ffffff</span>;
+    <span class="cp">border</span>: <span class="nm">1px</span> <span class="cv">solid</span> <span class="cv">#e0e0e0</span>;
+    <span class="cp">border-radius</span>: <span class="nm">12px</span>;
+    <span class="cp">padding</span>: <span class="nm">30px</span>;
+}
+
+<span class="cm">/* HEADER */</span>
+<span class="cs">header</span> {
+    <span class="cp">display</span>: <span class="cv">flex</span>;
+    <span class="cp">align-items</span>: <span class="cv">center</span>;
+    <span class="cp">margin-bottom</span>: <span class="nm">20px</span>;
+    <span class="cp">padding-bottom</span>: <span class="nm">15px</span>;
+    <span class="cp">border-bottom</span>: <span class="nm">1px</span> <span class="cv">solid</span> <span class="cv">#e0e0e0</span>;
+}
+
+<span class="cm">/* Logo: gambar di kiri */</span>
+<span class="cs">.logo img</span> {
+    <span class="cp">height</span>: <span class="nm">50px</span>;
+}
+
+<span class="cm">/* Nama Perusahaan: teks di kanan */</span>
+<span class="cs">.nama-perusahaan</span> {
+    <span class="cp">flex</span>: <span class="nm">1</span>;
+    <span class="cp">text-align</span>: <span class="cv">right</span>;
+    <span class="cp">font-size</span>: <span class="nm">18px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+    <span class="cp">color</span>: <span class="cv">#333333</span>;
+}
+
+<span class="cm">/* BANNER */</span>
+<span class="cs">.banner</span> {
+    <span class="cp">width</span>: <span class="nm">100%</span>;
+    <span class="cp">height</span>: <span class="nm">130px</span>;
+    <span class="cp">margin-bottom</span>: <span class="nm">25px</span>;
+    <span class="cp">border-radius</span>: <span class="nm">8px</span>;
+    <span class="cp">background-color</span>: <span class="cv">#4f46e5</span>;
+    <span class="cp">color</span>: <span class="cv">#ffffff</span>;
+    <span class="cp">display</span>: <span class="cv">flex</span>;
+    <span class="cp">align-items</span>: <span class="cv">center</span>;
+    <span class="cp">justify-content</span>: <span class="cv">center</span>;
+    <span class="cp">font-size</span>: <span class="nm">16px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+    <span class="cp">text-align</span>: <span class="cv">center</span>;
+}
+
+<span class="cm">/* FORM INPUT */</span>
+<span class="cs">.form-section</span> {
+    <span class="cp">width</span>: <span class="nm">100%</span>;
+    <span class="cp">margin-bottom</span>: <span class="nm">25px</span>;
+}
+
+<span class="cm">/* Setiap baris form: label + input sejajar */</span>
+<span class="cs">.form-row</span> {
+    <span class="cp">display</span>: <span class="cv">flex</span>;
+    <span class="cp">align-items</span>: <span class="cv">center</span>;
+    <span class="cp">margin-bottom</span>: <span class="nm">10px</span>;
+}
+
+<span class="cm">/* Label form: lebar tetap 140px */</span>
+<span class="cs">.form-row label</span> {
+    <span class="cp">width</span>: <span class="nm">140px</span>;
+    <span class="cp">font-size</span>: <span class="nm">14px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+}
+
+<span class="cm">/* Input form: mengisi sisa lebar */</span>
+<span class="cs">.form-row input</span> {
+    <span class="cp">flex</span>: <span class="nm">1</span>;
+    <span class="cp">height</span>: <span class="nm">38px</span>;
+    <span class="cp">padding</span>: <span class="nm">0</span> <span class="nm">10px</span>;
+    <span class="cp">font-size</span>: <span class="nm">14px</span>;
+    <span class="cp">border</span>: <span class="nm">1px</span> <span class="cv">solid</span> <span class="cv">#cccccc</span>;
+    <span class="cp">border-radius</span>: <span class="nm">5px</span>;
+}
+
+<span class="cm">/* Efek saat input diklik (focus) */</span>
+<span class="cs">.form-row input:focus</span> {
+    <span class="cp">outline</span>: <span class="cv">none</span>;
+    <span class="cp">border-color</span>: <span class="cv">#4f46e5</span>;
+}
+
+<span class="cm">/* Tombol aksi */</span>
+<span class="cs">.form-actions</span> {
+    <span class="cp">display</span>: <span class="cv">flex</span>;
+    <span class="cp">gap</span>: <span class="nm">10px</span>;
+    <span class="cp">margin-top</span>: <span class="nm">15px</span>;
+    <span class="cp">justify-content</span>: <span class="cv">flex-end</span>;
+}
+
+<span class="cm">/* Style dasar tombol */</span>
+<span class="cs">.btn</span> {
+    <span class="cp">height</span>: <span class="nm">38px</span>;
+    <span class="cp">padding</span>: <span class="nm">0</span> <span class="nm">18px</span>;
+    <span class="cp">border-radius</span>: <span class="nm">5px</span>;
+    <span class="cp">font-size</span>: <span class="nm">14px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+    <span class="cp">cursor</span>: <span class="cv">pointer</span>;
+    <span class="cp">border</span>: <span class="cv">none</span>;
+}
+
+<span class="cm">/* Tombol utama: warna ungu */</span>
+<span class="cs">.btn-primary</span> {
+    <span class="cp">background-color</span>: <span class="cv">#4f46e5</span>;
+    <span class="cp">color</span>: <span class="cv">#ffffff</span>;
+}
+
+<span class="cm">/* GARIS PEMISAH (HR) */</span>
+<span class="cs">hr</span> {
+    <span class="cp">width</span>: <span class="nm">100%</span>;
+    <span class="cp">border</span>: <span class="cv">none</span>;
+    <span class="cp">border-top</span>: <span class="nm">1px</span> <span class="cv">solid</span> <span class="cv">#e0e0e0</span>;
+    <span class="cp">margin</span>: <span class="nm">20px</span> <span class="nm">0</span>;
+}
+
+<span class="cm">/* OUTPUT */</span>
+<span class="cs">.output-section</span> {
+    <span class="cp">width</span>: <span class="nm">100%</span>;
+    <span class="cp">margin-bottom</span>: <span class="nm">25px</span>;
+}
+
+<span class="cm">/* Judul Output */</span>
+<span class="cs">.output-section h3</span> {
+    <span class="cp">font-size</span>: <span class="nm">15px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+    <span class="cp">margin-bottom</span>: <span class="nm">10px</span>;
+}
+
+<span class="cm">/* Setiap baris output: label + kotak sejajar */</span>
+<span class="cs">.output-row</span> {
+    <span class="cp">display</span>: <span class="cv">flex</span>;
+    <span class="cp">align-items</span>: <span class="cv">center</span>;
+    <span class="cp">margin-bottom</span>: <span class="nm">10px</span>;
+}
+
+<span class="cm">/* Label output: lebar tetap 140px */</span>
+<span class="cs">.output-row label</span> {
+    <span class="cp">width</span>: <span class="nm">140px</span>;
+    <span class="cp">font-size</span>: <span class="nm">14px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+}
+
+<span class="cm">/* Kotak output: menampilkan hasil */</span>
+<span class="cs">.output-box</span> {
+    <span class="cp">flex</span>: <span class="nm">1</span>;
+    <span class="cp">height</span>: <span class="nm">38px</span>;
+    <span class="cp">padding</span>: <span class="nm">0</span> <span class="nm">10px</span>;
+    <span class="cp">font-size</span>: <span class="nm">14px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+    <span class="cp">background-color</span>: <span class="cv">#f8f9fa</span>;
+    <span class="cp">border</span>: <span class="nm">1px</span> <span class="cv">solid</span> <span class="cv">#cccccc</span>;
+    <span class="cp">border-radius</span>: <span class="nm">5px</span>;
+    <span class="cp">display</span>: <span class="cv">flex</span>;
+    <span class="cp">align-items</span>: <span class="cv">center</span>;
+}
+
+<span class="cm">/* Badge status LULUS: warna hijau */</span>
+<span class="cs">.status-lulus</span> {
+    <span class="cp">background-color</span>: <span class="cv">#d1fae5</span>;
+    <span class="cp">color</span>: <span class="cv">#10b981</span>;
+    <span class="cp">padding</span>: <span class="nm">3px</span> <span class="nm">10px</span>;
+    <span class="cp">border-radius</span>: <span class="nm">12px</span>;
+    <span class="cp">font-size</span>: <span class="nm">13px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+}
+
+<span class="cm">/* Badge status TIDAK LULUS: warna merah */</span>
+<span class="cs">.status-gagal</span> {
+    <span class="cp">background-color</span>: <span class="cv">#fee2e2</span>;
+    <span class="cp">color</span>: <span class="cv">#ef4444</span>;
+    <span class="cp">padding</span>: <span class="nm">3px</span> <span class="nm">10px</span>;
+    <span class="cp">border-radius</span>: <span class="nm">12px</span>;
+    <span class="cp">font-size</span>: <span class="nm">13px</span>;
+    <span class="cp">font-weight</span>: <span class="cv">bold</span>;
+}
+
+<span class="cm">/* FOOTER */</span>
+<span class="cs">footer</span> {
+    <span class="cp">width</span>: <span class="nm">100%</span>;
+    <span class="cp">height</span>: <span class="nm">40px</span>;
+    <span class="cp">border</span>: <span class="nm">1px</span> <span class="cv">solid</span> <span class="cv">#e0e0e0</span>;
+    <span class="cp">border-radius</span>: <span class="nm">5px</span>;
+    <span class="cp">background-color</span>: <span class="cv">#f8f9fa</span>;
+    <span class="cp">display</span>: <span class="cv">flex</span>;
+    <span class="cp">align-items</span>: <span class="cv">center</span>;
+    <span class="cp">justify-content</span>: <span class="cv">center</span>;
+    <span class="cp">font-size</span>: <span class="nm">13px</span>;
+    <span class="cp">color</span>: <span class="cv">#888888</span>;
+}</pre>
+    </div>
+
+    <p><strong>Penjelasan CSS penting:</strong></p>
+    <table>
+        <tr><th>Property</th><th>Fungsi</th></tr>
+        <tr><td><code>box-sizing: border-box</code></td><td>Padding & border dihitung di dalam lebar elemen</td></tr>
+        <tr><td><code>display: flex</code></td><td>Menyusun elemen secara sejajar (horizontal)</td></tr>
+        <tr><td><code>align-items: center</code></td><td>Meratakan elemen secara vertikal di tengah</td></tr>
+        <tr><td><code>flex: 1</code></td><td>Elemen mengisi sisa lebar yang tersedia</td></tr>
+        <tr><td><code>margin: 0 auto</code></td><td>Menempatkan elemen di tengah halaman</td></tr>
+        <tr><td><code>border-radius</code></td><td>Membuat sudut elemen menjadi melengkung</td></tr>
+    </table>
+
+
+    <h2>4. Cara Menjalankan</h2>
+    <ol>
+        <li>Pastikan <strong>Laragon</strong> sudah dijalankan (Start All)</li>
+        <li>Simpan semua file di folder <code>C:\laragon\www\xxx\</code></li>
+        <li>Buka browser, ketik: <code>http://localhost/xxx/</code></li>
+        <li>Isi form, lalu klik tombol <strong>"Hitung Nilai"</strong></li>
+        <li>Lihat hasilnya di bagian <strong>Output</strong></li>
+    </ol>
+
+    <div class="info-box">
+        <strong>Tips:</strong> Jika menggunakan XAMPP, simpan folder <code>xxx</code> di dalam <code>C:\xampp\htdocs\</code>.
+    </div>
+
+
+    <h2>5. Alur Program</h2>
+    <p>Berikut adalah alur kerja aplikasi dari awal sampai akhir:</p>
+    <ol>
+        <li>User membuka <code>http://localhost/xxx/</code></li>
+        <li>Browser menampilkan <code>index.php</code> (yang otomatis memanggil <code>proses.php</code>)</li>
+        <li>User mengisi form lalu klik tombol <strong>Hitung Nilai</strong></li>
+        <li>Data dikirim ke server menggunakan <strong>method POST</strong></li>
+        <li><code>proses.php</code> menerima data via <code>$_POST</code>, lalu menghitung Nilai Akhir</li>
+        <li>Hasil ditampilkan di bagian Output (Nama, Kelas, Jurusan, Nilai Akhir, Status)</li>
+    </ol>
+
+
+    <h2>6. Rumus Perhitungan</h2>
+    <table>
+        <tr><th>Komponen</th><th>Bobot</th><th>Contoh Nilai</th><th>Hasil</th></tr>
+        <tr><td>Nilai Tugas</td><td>30%</td><td>85</td><td>85 &times; 0.3 = 25.50</td></tr>
+        <tr><td>Nilai UTS</td><td>35%</td><td>80</td><td>80 &times; 0.35 = 28.00</td></tr>
+        <tr><td>Nilai UAS</td><td>35%</td><td>90</td><td>90 &times; 0.35 = 31.50</td></tr>
+        <tr><td colspan="3"><strong>Nilai Akhir</strong></td><td><strong>85.00</strong></td></tr>
+        <tr><td colspan="3"><strong>Status</strong> (Nilai Akhir &ge; 75)</td><td><strong style="color: #10b981;">LULUS</strong></td></tr>
+    </table>
+
+
+    <hr style="margin: 35px 0; border-top: 2px solid #e0e0e0;">
+    <p style="text-align: center; color: #888; font-size: 13px;">
+        Tutorial Perhitungan Nilai Siswa &mdash; PHP Dasar<br>
+        Dibuat untuk pembelajaran di kelas.
+    </p>
+
+</div>
+
+<script>
+function copyCode(button) {
+    var pre = button.parentElement.querySelector('pre');
+    // Get text only (strip HTML span tags) for clean copy
+    var temp = document.createElement('div');
+    temp.innerHTML = pre.innerHTML;
+    var text = temp.textContent || temp.innerText;
+
+    navigator.clipboard.writeText(text).then(function() {
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        setTimeout(function() {
+            button.textContent = 'Copy';
+            button.classList.remove('copied');
+        }, 2000);
+    });
+}
+</script>
+
+</body>
+</html>
