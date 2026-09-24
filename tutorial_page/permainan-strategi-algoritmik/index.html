@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panduan Permainan Strategi Algoritmik (7 Kelompok)</title>
+  <meta name="description" content="Panduan belajar strategi algoritma yang seru dan mudah dipahami untuk siswa SMA melalui simulasi permainan fisik: Brute Force, Greedy, Divide and Conquer, Decrease and Conquer, Dynamic Programming, Backtracking, dan Branch and Bound.">
+  <style>
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f1f5f9;
+      --border-color: #cbd5e1;
+      --border-subtle: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --text-soft: #64748b;
+      --primary: #1e3a8a;
+      --primary-hover: #172554;
+      --primary-bg: #eff6ff;
+      --accent: #0284c7;
+      --accent-soft: #e0f2fe;
+      --tag-bg: #e2e8f0;
+      --tag-text: #1e293b;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #090d16;
+      --bg-surface: #111827;
+      --bg-surface-elevated: #1f2937;
+      --border-color: #374151;
+      --border-subtle: #1f2937;
+      --text-main: #f9fafb;
+      --text-muted: #cbd5e1;
+      --text-soft: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #7dd3fc;
+      --primary-bg: #0c4a6e33;
+      --accent: #38bdf8;
+      --accent-soft: #082f49;
+      --tag-bg: #1f2937;
+      --tag-text: #e2e8f0;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-stack);
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 4rem;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* Top Utility Header */
+    .top-bar {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .top-bar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      gap: 1rem;
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      text-decoration: none;
+      min-height: 40px;
+    }
+
+    .btn:hover {
+      background: var(--bg-surface-elevated);
+      border-color: var(--text-soft);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    [data-theme="dark"] .btn-primary {
+      color: #090d16;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    /* Hero Header */
+    .hero-section {
+      padding: 2.5rem 0 1.75rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .badge-category {
+      display: inline-block;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-desc {
+      font-size: 1.0625rem;
+      color: var(--text-muted);
+      max-width: 860px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      border-bottom: 2px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: -2px;
+    }
+
+    /* Tab Content Areas */
+    .tab-pane {
+      display: none;
+      padding-top: 2rem;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Group Cards */
+    .groups-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+    }
+
+    .group-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .group-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+
+    .group-header {
+      padding: 1.25rem 1.5rem;
+      background: var(--bg-surface-elevated);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .group-number {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .group-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 0.25rem;
+    }
+
+    .group-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pill-tag {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 0.25rem 0.625rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .group-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .section-block {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+    }
+
+    .section-title {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+      margin-bottom: 0.45rem;
+    }
+
+    .section-content {
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    /* Theory Card Styles */
+    .theory-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.15rem;
+      font-size: 0.925rem;
+      color: var(--text-main);
+      margin-top: 0.35rem;
+    }
+
+    .theory-card p {
+      margin-bottom: 0.55rem;
+    }
+
+    .theory-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .analogy-highlight {
+      background: var(--primary-bg);
+      border-left: 3px solid var(--primary);
+      padding: 0.625rem 0.875rem;
+      border-radius: 4px;
+      margin: 0.625rem 0;
+      font-size: 0.9rem;
+    }
+
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .theory-stat {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.625rem 0.875rem;
+      font-size: 0.85rem;
+    }
+
+    .theory-stat-label {
+      font-weight: 700;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      font-size: 0.725rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+
+    .theory-stat-val {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Point-based lists */
+    .point-list {
+      list-style-type: disc;
+      margin-left: 1.25rem;
+      margin-top: 0.35rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .point-list li {
+      margin-bottom: 0.45rem;
+      color: var(--text-main);
+    }
+
+    /* Sequential Steps List */
+    .step-list {
+      list-style: none;
+      counter-reset: step-counter;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .step-item {
+      counter-increment: step-counter;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.875rem 1rem;
+      position: relative;
+    }
+
+    .step-header {
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+    }
+
+    [data-theme="dark"] .step-badge {
+      color: #090d16;
+    }
+
+    .step-desc {
+      font-size: 0.925rem;
+      color: var(--text-muted);
+    }
+
+    .step-desc ul {
+      margin-left: 1.25rem;
+      margin-top: 0.35rem;
+    }
+
+    /* Algorithm Theory Box */
+    .theory-box {
+      background: var(--primary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1.25rem;
+    }
+
+    .theory-heading {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .theory-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Interactive Demonstration Widget */
+    .demo-widget {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin-top: 0.25rem;
+    }
+
+    .demo-title {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+    }
+
+    .demo-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .demo-input {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      min-width: 140px;
+    }
+
+    .demo-output {
+      margin-top: 0.875rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    /* Table Styles */
+    .table-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: var(--bg-surface-elevated);
+      padding: 0.875rem 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+    }
+
+    /* Print Styles */
+    @media print {
+      .top-bar, .nav-tabs, .btn, .demo-widget, .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding-bottom: 0;
+      }
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+      .tab-pane {
+        display: block !important;
+      }
+      .group-card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        margin-bottom: 1.5rem;
+      }
+      .group-header {
+        background: #f0f0f0 !important;
+      }
+      .step-item {
+        border: 1px solid #ccc !important;
+        background: #fafafa !important;
+      }
+      .theory-box {
+        background: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 1.5rem;
+      }
+      .group-header {
+        flex-direction: column;
+      }
+      .top-bar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .top-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Utility Bar -->
+  <header class="top-bar">
+    <div class="container">
+      <div class="top-bar-inner">
+        <div class="brand-title">
+          <span>Modul Praktik Strategi Algoritmik</span>
+        </div>
+        <div class="top-actions">
+          <button type="button" class="btn" id="themeToggleBtn" aria-label="Ganti Tema Tampilan">
+            <span id="themeLabel">Mode Gelap</span>
+          </button>
+          <button type="button" class="btn btn-primary" onclick="window.print()" aria-label="Cetak atau Simpan PDF">
+            Cetak / Ekspor PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero / Introduction -->
+    <section class="hero-section">
+      <span class="badge-category">Aktivitas Seru & Pemahaman Logika Algoritma</span>
+      <h1 class="hero-title">Panduan Permainan 7 Strategi Algoritmik</h1>
+      <p class="hero-desc">
+        Belajar strategi algoritma lewat simulasi permainan langsung tanpa komputer. Panduan ini dirancang santai, jelas, dan menggunakan contoh sehari-hari agar logika di balik 7 cara berpikir komputer mudah dipahami oleh siapa saja.
+      </p>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" role="tablist" aria-label="Pilihan Halaman">
+        <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="pane-7groups" id="tab-7groups" onclick="switchTab('pane-7groups')">
+          Panduan Lengkap 7 Kelompok
+        </button>
+        <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="pane-matrix" id="tab-matrix" onclick="switchTab('pane-matrix')">
+          Tabel Ringkasan 7 Strategi
+        </button>
+      </nav>
+    </section>
+
+    <!-- TAB 1: 7 GROUPS SPECIFICATION -->
+    <section id="pane-7groups" class="tab-pane active" role="tabpanel" aria-labelledby="tab-7groups">
+      <div class="groups-list">
+
+        <!-- KELOMPOK 1: BRUTE FORCE -->
+        <article class="group-card" id="kelompok-1">
+          <header class="group-header">
+            <div>
+              <span class="group-number">Kelompok 01</span>
+              <h2 class="group-title">Brute Force: Tebak Sandi Koper Rahasia</h2>
+            </div>
+            <div class="group-meta">
+              <span class="pill-tag">Waktu: 15-20 Menit</span>
+              <span class="pill-tag">Pemain: 2 Orang / Tim</span>
+              <span class="pill-tag">Prinsip: Coba Semua Kemungkinan</span>
+            </div>
+          </header>
+          <div class="group-body">
+            <!-- LANDASAN TEORI RAMAH SISWA -->
+            <div class="section-block">
+              <h3 class="section-title">Konsep Dasar Algoritma</h3>
+              <div class="theory-card">
+                <p>
+                  <strong>Apa itu Brute Force?</strong> Brute Force adalah cara berpikir paling polos dan lurus. Komputer tidak memakai trik cerdas apa pun, melainkan <strong>mencoba semua kemungkinan satu per satu</strong> secara berurutan sampai menemukan jawaban yang benar.
+                </p>
+                <div class="analogy-highlight">
+                  <strong>Analogi Sehari-hari:</strong> Bayangkan kamu lupa 3 digit angka gembok kopermu. Karena tidak tahu kombinasinya, kamu terpaksa memutar roda angka mulai dari 0-0-0, lalu 0-0-1, 0-0-2, terus sampai bunyi "klik" dan koper terbuka.
+                </div>
+                <div class="theory-grid">
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Keunggulan</div>
+                    <div class="theory-stat-val">Pasti ketemu jawabannya jika memang ada</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Kelemahan</div>
+                    <div class="theory-stat-val">Sangat lambat jika pilihannya banyak</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Contoh di Dunia Nyata</div>
+                    <div class="theory-stat-val">Metode peretas mencoba kata sandi pendek secara membabi-buta</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KONSEP & TUJUAN AKTIVITAS -->
+            <div class="section-block">
+              <h3 class="section-title">Tujuan Permainan</h3>
+              <p class="section-content">
+                Merasakan bagaimana capeknya komputer jika harus menebak sesuatu tanpa petunjuk, serta melihat langsung mengapa password yang panjang sangat sulit dibobol dengan cara coba-coba.
+              </p>
+            </div>
+
+            <!-- ALAT DAN BAHAN -->
+            <div class="section-block">
+              <h3 class="section-title">Alat dan Bahan</h3>
+              <ul class="point-list">
+                <li>3 lembar kertas lipat kecil atau 3 cangkir untuk menyembunyikan angka sandi.</li>
+                <li>1 lembar kertas coret-coretan untuk mencatat riwayat tebakan yang sudah dicoba.</li>
+                <li>1 buah pulpen atau pensil.</li>
+              </ul>
+            </div>
+
+            <!-- PERAN PEMAIN -->
+            <div class="section-block">
+              <h3 class="section-title">Peran Pemain</h3>
+              <ul class="point-list">
+                <li><strong>Pemain A (Pembuat Sandi):</strong> Memilih dan menyimpan 3 angka rahasia.</li>
+                <li><strong>Pemain B (Mesin Penebak):</strong> Menebak angka satu per satu secara urut dari paling kecil sampai paling besar tanpa melompati angka.</li>
+              </ul>
+            </div>
+
+            <!-- LANGKAH-LANGKAH PERMAINAN -->
+            <div class="section-block">
+              <h3 class="section-title">Langkah-Langkah Permainan</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 1</span>
+                    <span>Tulis Sandi Rahasia</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain A menuliskan 3 digit angka rahasia di secarik kertas tersembunyi. Untuk latihan di kelas, gunakan angka dari 1 sampai 4 saja (misal: <strong>2 - 4 - 1</strong>). Kertas dilipat rapat agar Pemain B tidak bisa mengintip.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 2</span>
+                    <span>Mulai dari Angka Paling Kecil</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain B harus mulai menebak dari kombinasi paling awal: <strong>1 - 1 - 1</strong>.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 3</span>
+                    <span>Respon yang Boleh Diberikan</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain A hanya boleh menjawab dengan 2 kalimat:
+                    <ul>
+                      <li>Jawab <strong>"Salah"</strong> jika tebakannya meleset. Pemain A dilarang membocorkan posisi angka mana yang benar!</li>
+                      <li>Jawab <strong>"Benar Semua"</strong> jika ketiga angka pas persis di posisinya.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 4</span>
+                    <span>Lanjutkan Tebakan secara Runtut</span>
+                  </div>
+                  <div class="step-desc">
+                    Tiap kali dibilang "Salah", Pemain B mencatat tebakannya di kertas dan menaikkan angka paling belakang secara berurutan:
+                    1-1-1, lalu 1-1-2, 1-1-3, 1-1-4. Jika angka belakang sudah mentok di 4, naikkan angka tengah: 1-2-1, 1-2-2, 1-2-3, 1-2-4, lalu 1-3-1, dan seterusnya.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 5</span>
+                    <span>Hitung Jumlah Percobaan</span>
+                  </div>
+                  <div class="step-desc">
+                    Permainan selesai begitu Pemain A berteriak "Benar Semua!". Hitung berapa baris tebakan yang kamu tulis di kertas sampai sandi akhirnya berhasil terbuka.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANALISIS TEORETIS -->
+            <div class="theory-box">
+              <div class="theory-heading">Pelajaran Penting: Mengapa Password Harus Panjang?</div>
+              <p class="theory-text">
+                Dengan 4 pilihan angka untuk 3 digit, tebakan terburuk kita adalah 4 x 4 x 4 = 64 kali mencoba. Masih terasa ringan bagi manusia. Tapi bagaimana kalau digitnya ada 8 karakter berupa huruf besar, huruf kecil, dan angka (total 62 karakter)? Jumlah kemungkinannya menjadi 62 pangkat 8 = 218 triliun percobaan! Komputer super canggih pun butuh ribuan tahun untuk mencoba semuanya satu per satu. Itulah alasan kita wajib membuat kata sandi yang panjang.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- KELOMPOK 2: GREEDY -->
+        <article class="group-card" id="kelompok-2">
+          <header class="group-header">
+            <div>
+              <span class="group-number">Kelompok 02</span>
+              <h2 class="group-title">Greedy: Kasir Cerdas & Jebakan Uang Kembalian</h2>
+            </div>
+            <div class="group-meta">
+              <span class="pill-tag">Waktu: 20 Menit</span>
+              <span class="pill-tag">Pemain: 2 Orang</span>
+              <span class="pill-tag">Prinsip: Ambil yang Terbesar Saat Ini</span>
+            </div>
+          </header>
+          <div class="group-body">
+            <!-- LANDASAN TEORI RAMAH SISWA -->
+            <div class="section-block">
+              <h3 class="section-title">Konsep Dasar Algoritma</h3>
+              <div class="theory-card">
+                <p>
+                  <strong>Apa itu Greedy?</strong> Kata <em>Greedy</em> artinya serakah atau rakus. Dalam algoritma, prinsip ini berarti: pada setiap langkah, <strong>selalu ambil pilihan yang kelihatan paling menguntungkan saat itu juga</strong> tanpa berpikir panjang tentang dampak di masa depan.
+                </p>
+                <div class="analogy-highlight">
+                  <strong>Analogi Sehari-hari:</strong> Bayangkan kasir toko yang mau memberi uang kembalian. Agar kembalian cepat habis dan koin tidak menumpuk di dompet pembeli, kasir akan selalu mengambil uang pecahan paling besar terlebih dahulu yang masih cukup.
+                </div>
+                <div class="theory-grid">
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Keunggulan</div>
+                    <div class="theory-stat-val">Sangat cepat mengambil keputusan tanpa mikir rumit</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Kelemahan</div>
+                    <div class="theory-stat-val">Bisa terjebak dan gagal memberi hasil terbaik jika situasinya tidak pas</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Contoh di Dunia Nyata</div>
+                    <div class="theory-stat-val">Aplikasi navigasi peta mencari jalur jalan raya utama terdekat</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KONSEP & TUJUAN AKTIVITAS -->
+            <div class="section-block">
+              <h3 class="section-title">Tujuan Permainan</h3>
+              <p class="section-content">
+                Membuktikan kapan cara pikir serakah (Greedy) berhasil memberikan solusi terbaik, dan kapan cara pikir ini justru 'buntung' dan kalah oleh cara yang lebih cermat.
+              </p>
+            </div>
+
+            <!-- ALAT DAN BAHAN -->
+            <div class="section-block">
+              <h3 class="section-title">Alat dan Bahan</h3>
+              <ul class="point-list">
+                <li>Potongan kertas uang mainan standar: pecahan Rp 1.000, Rp 500, Rp 200, dan Rp 100.</li>
+                <li>Potongan kertas uang jebakan khusus: pecahan Rp 400 dan Rp 300.</li>
+                <li>1 lembar kertas catatan kasir untuk menghitung sisa kembalian.</li>
+              </ul>
+            </div>
+
+            <!-- PERAN PEMAIN -->
+            <div class="section-block">
+              <h3 class="section-title">Peran Pemain</h3>
+              <ul class="point-list">
+                <li><strong>Pemain A (Pembeli):</strong> Memberikan tantangan berapa uang kembalian yang harus dikembalikan.</li>
+                <li><strong>Pemain B (Kasir Greedy):</strong> Mengambil koin kembalian secepat mungkin dengan prinsip koin terbesar yang muat.</li>
+              </ul>
+            </div>
+
+            <!-- LANGKAH-LANGKAH PERMAINAN -->
+            <div class="section-block">
+              <h3 class="section-title">Langkah-Langkah Permainan</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Babak 1</span>
+                    <span>Ketika Cara Greedy Berhasil Sempurna</span>
+                  </div>
+                  <div class="step-desc">
+                    <ul>
+                      <li>Pemain A menantang: "Kembalian belanja saya adalah <strong>Rp 2.400</strong>!".</li>
+                      <li>Kasir menerapkan cara Greedy: Selalu ambil pecahan paling besar yang muat.</li>
+                      <li>Langkah Kasir: Ambil Rp 1.000 (sisa Rp 1.400) -> Ambil Rp 1.000 lagi (sisa Rp 400) -> Pecahan Rp 500 kebesaran, maka ambil Rp 200 (sisa Rp 200) -> Ambil Rp 200 lagi (sisa Rp 0, lunas).</li>
+                      <li>Hasil: Total cuma butuh <strong>4 koin</strong>. Cara ini cepat dan hasilnya memang paling sedikit koinnya (optimal).</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Babak 2</span>
+                    <span>Ketika Kasir Greedy Kena Jebakan</span>
+                  </div>
+                  <div class="step-desc">
+                    <ul>
+                      <li>Sekarang ganti dompet kasir dengan koin aneh: hanya ada <strong>Rp 400, Rp 300, dan Rp 100</strong>.</li>
+                      <li>Pemain A meminta kembalian sebesar <strong>Rp 600</strong>.</li>
+                      <li>Kasir yang serakah berpikir: "Pasti ambil yang paling gede dulu dong, yaitu Rp 400!". Sisa kembalian menjadi Rp 200.</li>
+                      <li>Pecahan Rp 300 kebesaran untuk sisa Rp 200. Maka kasir terpaksa mengambil koin Rp 100 (sisa Rp 100), lalu koin Rp 100 lagi (sisa Rp 0).</li>
+                      <li>Hasil Kasir Greedy: Kasir mengeluarkan <strong>3 koin</strong> (Rp 400 + Rp 100 + Rp 100).</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Babak 3</span>
+                    <span>Membongkar Cara yang Lebih Cerdas</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain A tersenyum dan menunjukkan cara lain: "Kenapa tidak kasih <strong>Rp 300 + Rp 300</strong> saja? Itu kan cuma butuh <strong>2 koin</strong>!". Kasir terkejut karena pilihan yang awalnya kelihatan paling untung (mengambil Rp 400) malah berujung boros koin.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mini Interactive Widget for Greedy -->
+            <div class="demo-widget">
+              <div class="demo-title">Simulasi Langsung: Uji Kasus Kembalian Koin [400, 300, 100]</div>
+              <div class="demo-controls">
+                <label for="coinTargetInput" style="font-size:0.875rem; font-weight:600;">Nominal Kembalian (Rp):</label>
+                <input type="number" id="coinTargetInput" class="demo-input" value="600" step="100" min="100" max="2000">
+                <button type="button" class="btn btn-primary" onclick="runGreedySim()">Bandingkan Greedy vs Solusi Cerdas</button>
+              </div>
+              <div id="coinSimOutput" class="demo-output">Klik tombol di atas untuk melihat perbandingan koin greedy [400, 300, 100].</div>
+            </div>
+
+            <!-- ANALISIS TEORETIS -->
+            <div class="theory-box">
+              <div class="theory-heading">Pelajaran Penting: Kapan Greedy Boleh Dipakai?</div>
+              <p class="theory-text">
+                Uang rupiah asli yang kita gunakan sehari-hari (100.000, 50.000, 20.000, dst) sengaja dirancang oleh Bank Indonesia dengan perbandingan angka yang pas agar kasir di toko bisa selalu menggunakan cara Greedy tanpa pernah salah. Tapi dalam masalah lain seperti rute perjalanan atau pembagian waktu belajar, cara serakah yang cuma melihat keuntungan sesaat sering kali membuat kita rugi di akhir.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- KELOMPOK 3: DIVIDE AND CONQUER -->
+        <article class="group-card" id="kelompok-3">
+          <header class="group-header">
+            <div>
+              <span class="group-number">Kelompok 03</span>
+              <h2 class="group-title">Divide and Conquer: Balap Menara Gelas (Merge Sort)</h2>
+            </div>
+            <div class="group-meta">
+              <span class="pill-tag">Waktu: 20 Menit</span>
+              <span class="pill-tag">Pemain: Balapan 2 Tim</span>
+              <span class="pill-tag">Prinsip: Bagi Dua, Urutkan, Gabung</span>
+            </div>
+          </header>
+          <div class="group-body">
+            <!-- LANDASAN TEORI RAMAH SISWA -->
+            <div class="section-block">
+              <h3 class="section-title">Konsep Dasar Algoritma</h3>
+              <div class="theory-card">
+                <p>
+                  <strong>Apa itu Divide and Conquer?</strong> Artinya "Bagi dan Taklukkan". Kalau kamu punya tugas yang terlalu besar dan bikin pusing, jangan coba diselesaikan sekaligus. <strong>Bagi masalah itu menjadi potongan-potongan kecil</strong>, bereskan potongan kecil itu satu per satu, lalu gabungkan kembali hasilnya dengan rapi.
+                </p>
+                <div class="analogy-highlight">
+                  <strong>Analogi Sehari-hari:</strong> Kalau kamu diminta mengurutkan 8 kartu remi yang acak-acakan, mengurutkannya sekaligus terasa rumit. Lebih gampang kalau kamu bagi dua tumpukan jadi 4 dan 4, lalu bagi lagi jadi 2 dan 2. Mengurutkan 2 kartu itu sekejap mata! Setelah kelompok-kelompok kecil itu terurut, kamu tinggal menggabungkannya kembali.
+                </div>
+                <div class="theory-grid">
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Keunggulan</div>
+                    <div class="theory-stat-val">Sangat cepat dan rapi untuk mengurutkan jutaan data</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Tiga Langkah Inti</div>
+                    <div class="theory-stat-val">Bagi (Divide) -> Bereskan (Conquer) -> Gabung (Combine)</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Contoh di Dunia Nyata</div>
+                    <div class="theory-stat-val">Fitur urutkan harga termurah di Tokopedia atau Shopee</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KONSEP & TUJUAN AKTIVITAS -->
+            <div class="section-block">
+              <h3 class="section-title">Tujuan Permainan</h3>
+              <p class="section-content">
+                Melihat langsung trik menyatukan dua kelompok data yang sudah terurut. Kita akan membuktikan bahwa menyatukan dua tumpukan yang sudah rapi jauh lebih cepat daripada mengurutkan tumpukan berantakan dari awal.
+              </p>
+            </div>
+
+            <!-- ALAT DAN BAHAN -->
+            <div class="section-block">
+              <h3 class="section-title">Alat dan Bahan</h3>
+              <ul class="point-list">
+                <li>8 buah gelas plastik atau cangkir kertas untuk setiap tim yang bertanding.</li>
+                <li>1 buah spidol untuk menuliskan angka acak di badan gelas: [23, 7, 89, 12, 45, 2, 56, 19].</li>
+                <li>Stopwatch di handphone untuk lomba cepat antar tim.</li>
+                <li>Meja yang cukup luas untuk membagi dan menyusun gelas.</li>
+              </ul>
+            </div>
+
+            <!-- LANGKAH-LANGKAH PERMAINAN -->
+            <div class="section-block">
+              <h3 class="section-title">Langkah-Langkah Permainan</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 1</span>
+                    <span>Persiapan Barisan Gelas</span>
+                  </div>
+                  <div class="step-desc">
+                    Setiap tim meletakkan 8 gelas dengan nomor acak di meja secara berjejer. Siapkan stopwatch untuk mulai balapan.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 2</span>
+                    <span>Fase Bagi (Divide)</span>
+                  </div>
+                  <div class="step-desc">
+                    Jangan langsung urutkan gelas! Ikuti aturan pemisahan:
+                    <ul>
+                      <li>Belah barisan 8 gelas menjadi 2 kelompok sama banyak (masing-masing 4 gelas).</li>
+                      <li>Belah lagi masing-masing 4 gelas menjadi 2 gelas.</li>
+                      <li>Belah lagi sampai setiap gelas berdiri sendirian (ada 8 kelompok, masing-masing berisi 1 gelas). Gelas yang sendirian otomatis sudah dianggap "terurut" karena tidak ada pembandingnya.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 3</span>
+                    <span>Fase Gabung Kecil (Ukuran 1 Menjadi 2 Gelas)</span>
+                  </div>
+                  <div class="step-desc">
+                    Gabungkan dua gelas yang bersebelahan jadi pasangan terurut dari kecil ke besar:
+                    Misalnya gelas bernomor [23] dan [7]. Karena 7 lebih kecil, taruh gelas 7 di depan gelas 23 menjadi barisan [7, 23]. Lakukan hal yang sama untuk pasangan lain hingga ada 4 barisan mini berisi 2 gelas terurut.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 4</span>
+                    <span>Trik Menggabungkan Barisan (Hanya Lirik Gelas Paling Depan)</span>
+                  </div>
+                  <div class="step-desc">
+                    Sekarang gabungkan kelompok [7, 23] dengan kelompok [12, 89]:
+                    <ul>
+                      <li>Kamu <strong>tidak perlu memeriksa semua angka</strong>. Cukup bandingkan gelas paling kiri dari kedua kelompok: angka 7 vs 12. Karena 7 lebih kecil, ambil 7 taruh paling depan.</li>
+                      <li>Sekarang gelas terdepan yang tersisa adalah 23 vs 12. Karena 12 lebih kecil, ambil 12.</li>
+                      <li>Bandingkan sisa terdepan: 23 vs 89, ambil 23. Terakhir ambil 89.</li>
+                      <li>Hasilnya adalah barisan 4 gelas yang langsung rapi terurut: [7, 12, 23, 89]! Lakukan hal yang sama pada 4 gelas di sebelahnya.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 5</span>
+                    <span>Gabung Terakhir Menjadi 8 Gelas Utuh</span>
+                  </div>
+                  <div class="step-desc">
+                    Gabungkan kedua barisan berisi 4 gelas tadi dengan trik yang sama: hanya bandingkan gelas paling depan dari kedua tumpukan. Begitu 8 gelas berbaris rapi dari angka terkecil (2) sampai terbesar (89), matikan stopwatch. Tim yang paling cepat dan benar urutannya adalah pemenangnya.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANALISIS TEORETIS -->
+            <div class="theory-box">
+              <div class="theory-heading">Pelajaran Penting: Mengapa Cara Ini Sangat Cepat?</div>
+              <p class="theory-text">
+                Kalau kita mengurutkan dengan cara biasa (mencari angka terkecil satu per satu di antara 8 gelas), kita harus bolak-balik melihat angka sampai 64 kali. Pada metode Merge Sort ini, karena kita selalu membandingkan dua tumpukan yang sudah rapi, kita cuma melirik gelas paling depan saja. Komputer memakai metode ini untuk mengurutkan jutaan data pengguna Instagram atau jutaan video YouTube dalam hitungan detik.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- KELOMPOK 4: DECREASE AND CONQUER -->
+        <article class="group-card" id="kelompok-4">
+          <header class="group-header">
+            <div>
+              <span class="group-number">Kelompok 04</span>
+              <h2 class="group-title">Decrease and Conquer: Tebak Angka Pikiran (Binary Search)</h2>
+            </div>
+            <div class="group-meta">
+              <span class="pill-tag">Waktu: 15 Menit</span>
+              <span class="pill-tag">Pemain: 2 Orang</span>
+              <span class="pill-tag">Prinsip: Buang Separuh di Setiap Tebakan</span>
+            </div>
+          </header>
+          <div class="group-body">
+            <!-- LANDASAN TEORI RAMAH SISWA -->
+            <div class="section-block">
+              <h3 class="section-title">Konsep Dasar Algoritma</h3>
+              <div class="theory-card">
+                <p>
+                  <strong>Apa itu Decrease and Conquer?</strong> Artinya "Kurangi dan Bereskan". Setiap kali melangkah, algoritma ini <strong>langsung membuang separuh masalah yang mustahil</strong> dan hanya melanjutkan ke satu belahan yang tersisa.
+                </p>
+                <div class="analogy-highlight">
+                  <strong>Analogi Sehari-hari:</strong> Bayangkan kamu mencari arti kata "Kelinci" di dalam kamus tebal. Kamu tidak akan membuka kamus dari halaman 1, 2, 3 secara urut. Kamu pasti langsung membuka tepat di tengah-tengah kamus. Kalau halaman tengah itu huruf "M", kamu tahu bahwa "Kelinci" pasti ada di bagian depan. Maka seketika itu juga, separuh isi kamus dari huruf M sampai Z langsung kamu abaikan!
+                </div>
+                <div class="theory-grid">
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Beda dengan Divide & Conquer</div>
+                    <div class="theory-stat-val">Divide memproses kedua belah sisi lalu digabung; Decrease hanya memproses satu sisi dan membuang sisanya</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Efisiensi</div>
+                    <div class="theory-stat-val">Angka 1 sampai 100 dijamin bisa ditebak maksimal 7 kali!</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Contoh di Dunia Nyata</div>
+                    <div class="theory-stat-val">Fitur pencarian nama kontak di smartphone saat kamu mengetik huruf</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KONSEP & TUJUAN AKTIVITAS -->
+            <div class="section-block">
+              <h3 class="section-title">Tujuan Permainan</h3>
+              <p class="section-content">
+                Membuktikan keajaiban pencarian biner (Binary Search). Siswa akan bertindak seperti mesin komputer yang bisa menebak angka apa pun di dalam hati teman hanya dalam maksimal 7 tebakan.
+              </p>
+            </div>
+
+            <!-- ALAT DAN BAHAN -->
+            <div class="section-block">
+              <h3 class="section-title">Alat dan Bahan</h3>
+              <ul class="point-list">
+                <li>1 lembar kertas catatan dengan kolom: Putaran, Batas Bawah, Batas Atas, dan Tebakan Tengah.</li>
+                <li>1 lembar kertas kecil terlipat untuk menulis angka rahasia.</li>
+                <li>1 buah pulpen atau pensil.</li>
+              </ul>
+            </div>
+
+            <!-- PERAN PEMAIN -->
+            <div class="section-block">
+              <h3 class="section-title">Peran Pemain</h3>
+              <ul class="point-list">
+                <li><strong>Pemain A (Penyimpan Angka):</strong> Memikirkan satu angka rahasia antara 1 sampai 100 di dalam hati.</li>
+                <li><strong>Pemain B (Mesin Penebak Pikiran):</strong> Selalu menebak angka tepat di tengah-tengah dan menciutkan rentang angka.</li>
+              </ul>
+            </div>
+
+            <!-- LANGKAH-LANGKAH PERMAINAN -->
+            <div class="section-block">
+              <h3 class="section-title">Langkah-Langkah Permainan</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 1</span>
+                    <span>Tentukan Angka Rahasia</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain A memilih satu angka rahasia antara 1 sampai 100 (misalnya angka <strong>73</strong>) dan menuliskannya di kertas tertutup agar tidak bisa diubah-ubah.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 2</span>
+                    <span>Tentukan Batas Awal</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain B menulis di kertas: <strong>Batas Bawah = 1</strong> dan <strong>Batas Atas = 100</strong>. Wilayah pencarian awal kita adalah 100 angka.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 3</span>
+                    <span>Hitung Nilai Tengah (Mid)</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain B tidak boleh menebak asal-asalan. Selalu hitung nilai tengah: <code>(Batas Bawah + Batas Atas) dibagi 2</code>, bulatkan ke bawah.<br>
+                    Tebakan ke-1: (1 + 100) / 2 = 50.5 dibulatkan menjadi <strong>50</strong>. Pemain B bertanya: "Apakah angkamu 50?".
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 4</span>
+                    <span>Buang Separuh Wilayah (Decrease)</span>
+                  </div>
+                  <div class="step-desc">
+                    Pemain A melihat angka rahasianya (73). Karena 73 lebih besar dari 50, Pemain A menjawab: <strong>"Terlalu Kecil!"</strong>.<br>
+                    Reaksi Pemain B:
+                    <ul>
+                      <li>Karena 50 saja terlalu kecil, maka angka 1 sampai 50 sudah pasti salah!</li>
+                      <li>Coret angka 1 sampai 50. Ganti batas bawah menjadi <strong>51</strong>. Batas atas tetap 100.</li>
+                      <li>Lihat hasilnya: Masalah kita langsung berkurang 50%, tersisa 50 angka saja [51 sampai 100].</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 5</span>
+                    <span>Ulangi Sampai Tertangkap</span>
+                  </div>
+                  <div class="step-desc">
+                    Hitung tengah lagi:
+                    <ul>
+                      <li>Tebakan ke-2: (51 + 100) / 2 = 75. Respon: "Terlalu Besar!". Maka angka 75 ke atas dibuang. Batas atas jadi 74. Rentang tinggal [51 sampai 74].</li>
+                      <li>Tebakan ke-3: (51 + 74) / 2 = 62. Respon: "Terlalu Kecil!". Batas bawah jadi 63. Rentang tinggal [63 sampai 74].</li>
+                      <li>Tebakan ke-4: (63 + 74) / 2 = 68. Respon: "Terlalu Kecil!". Batas bawah jadi 69. Rentang tinggal [69 sampai 74].</li>
+                      <li>Tebakan ke-5: (69 + 74) / 2 = 71. Respon: "Terlalu Kecil!". Batas bawah jadi 72. Rentang tinggal [72 sampai 74].</li>
+                      <li>Tebakan ke-6: (72 + 74) / 2 = 73. Respon: "Benar Banget!". Angka target tertangkap tepat di tebakan ke-6.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mini Interactive Widget for Binary Search -->
+            <div class="demo-widget">
+              <div class="demo-title">Simulasi Langsung: Uji Langkah Pencarian Biner (1 - 100)</div>
+              <div class="demo-controls">
+                <label for="secretNumberInput" style="font-size:0.875rem; font-weight:600;">Masukkan Angka Rahasia Target:</label>
+                <input type="number" id="secretNumberInput" class="demo-input" value="73" min="1" max="100">
+                <button type="button" class="btn btn-primary" onclick="runBinarySearchSim()">Jalankan Tebakan Komputer</button>
+              </div>
+              <div id="binarySearchOutput" class="demo-output">Hasil langkah tebakan algoritma akan muncul di sini.</div>
+            </div>
+
+            <!-- ANALISIS TEORETIS -->
+            <div class="theory-box">
+              <div class="theory-heading">Pelajaran Penting: Mengapa Dijamin Maksimal 7 Kali?</div>
+              <p class="theory-text">
+                Karena setiap tebakan membelah ruang masalah menjadi setengahnya (100 -> 50 -> 25 -> 12 -> 6 -> 3 -> 1). Hanya butuh maksimal 7 kali pembagian sampai tersisa 1 angka pasti! Bahkan jika kamu memikirkan angka dari 1 sampai 1.000.000 (satu juta angka), komputer hanya butuh maksimal 20 kali tebakan saja untuk menebaknya dengan akurat.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- KELOMPOK 5: DYNAMIC PROGRAMMING -->
+        <article class="group-card" id="kelompok-5">
+          <header class="group-header">
+            <div>
+              <span class="group-number">Kelompok 05</span>
+              <h2 class="group-title">Dynamic Programming: Potong Cokelat Batang (Buku Contekan Cerdas)</h2>
+            </div>
+            <div class="group-meta">
+              <span class="pill-tag">Waktu: 25 Menit</span>
+              <span class="pill-tag">Pemain: Tim 2-3 Orang</span>
+              <span class="pill-tag">Prinsip: Catat Jawaban Biar Gak Kerja Dua Kali</span>
+            </div>
+          </header>
+          <div class="group-body">
+            <!-- LANDASAN TEORI RAMAH SISWA -->
+            <div class="section-block">
+              <h3 class="section-title">Konsep Dasar Algoritma</h3>
+              <div class="theory-card">
+                <p>
+                  <strong>Apa itu Dynamic Programming?</strong> Sederhananya, ini adalah strategi <strong>"Membuat Buku Contekan"</strong>. Waktu kita memecahkan masalah besar, sering kali ada sub-masalah kecil yang berulang-ulang dihitung. Daripada menghitung hal yang sama berulang kali, kita simpan jawaban masalah kecil itu di sebuah tabel catatan (memo). Saat butuh lagi, tinggal lirik catatan!
+                </p>
+                <div class="analogy-highlight">
+                  <strong>Analogi Sehari-hari:</strong> Kalau guru menulis di papan tulis "1 + 1 + 1 + 1 + 1 berapa?", kamu hitung dan jawab: "5!". Lalu guru menambahkan "+ 1 lagi di belakangnya, sekarang berapa?". Kamu pasti langsung jawab "6!", bukan menghitung ulang dari angka satu lagi. Kenapa? Karena kamu ingat hasil hitungan sebelumnya adalah 5. Itulah ide dasar Dynamic Programming!
+                </div>
+                <div class="theory-grid">
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Keunggulan</div>
+                    <div class="theory-stat-val">Menghemat waktu ribuan kali lipat dengan menyimpan memori</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Cara Kerja (Bottom-Up)</div>
+                    <div class="theory-stat-val">Selesaikan dari ukuran paling kecil lalu bangun ke ukuran besar</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Contoh di Dunia Nyata</div>
+                    <div class="theory-stat-val">Fitur auto-correct keyboard HP dan penghitung rute tercepat dengan transit</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KONSEP & TUJUAN AKTIVITAS -->
+            <div class="section-block">
+              <h3 class="section-title">Tujuan Permainan</h3>
+              <p class="section-content">
+                Mencari cara memotong batangan cokelat 5 kotak agar total uang hasil penjualannya paling mahal. Siswa akan membuktikan bahwa membangun catatan dari ukuran 1 kotak sampai 4 kotak membuat keputusan untuk ukuran 5 kotak menjadi sangat mudah dan pasti maksimal.
+              </p>
+            </div>
+
+            <!-- ALAT DAN BAHAN -->
+            <div class="section-block">
+              <h3 class="section-title">Alat dan Bahan</h3>
+              <ul class="point-list">
+                <li>1 lembar kertas bergambar batangan cokelat panjang 5 kotak berurutan.</li>
+                <li>1 buah gunting kertas untuk memotong cokelat sesuai hasil terbaik.</li>
+                <li>1 lembar kartu daftar harga toko:
+                  <ul style="margin-top:0.25rem;">
+                    <li>Potongan 1 kotak = Rp 2.000</li>
+                    <li>Potongan 2 kotak = Rp 6.000</li>
+                    <li>Potongan 3 kotak = Rp 8.000</li>
+                    <li>Potongan 4 kotak = Rp 9.000</li>
+                    <li>Potongan utuh 5 kotak = Rp 10.000</li>
+                  </ul>
+                </li>
+                <li>1 lembar kertas "Buku Contekan Keuntungan" untuk mencatat rekor tiap ukuran.</li>
+              </ul>
+            </div>
+
+            <!-- LANGKAH-LANGKAH PERMAINAN -->
+            <div class="section-block">
+              <h3 class="section-title">Langkah-Langkah Permainan</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 1</span>
+                    <span>Aturan Utama: Jangan Tebak Ukuran 5 Dulu</span>
+                  </div>
+                  <div class="step-desc">
+                    Kamu ingin menjual cokelat 5 kotak dengan uang terbanyak. Aturan main: Jangan langsung coba-coba potong 5 kotak. Kita wajib mengisi "Buku Contekan" dari ukuran paling kecil terlebih dahulu.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 2</span>
+                    <span>Catat Rekor Ukuran 1 Kotak</span>
+                  </div>
+                  <div class="step-desc">
+                    Kalau kita punya cokelat 1 kotak, cuma bisa dijual langsung seharga Rp 2.000. Tulis di buku contekan: <strong>Rekor[1] = Rp 2.000</strong>.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 3</span>
+                    <span>Catat Rekor Ukuran 2 Kotak</span>
+                  </div>
+                  <div class="step-desc">
+                    Ada 2 pilihan:
+                    <ul>
+                      <li>Pilihan A: Jual utuh 2 kotak seharga Rp 6.000.</li>
+                      <li>Pilihan B: Potong jadi 1 + 1 kotak. Lihat contekan: Rekor[1] + Rekor[1] = 2.000 + 2.000 = Rp 4.000.</li>
+                      <li>Mana yang lebih untung? Tentu Rp 6.000! Tulis di buku contekan: <strong>Rekor[2] = Rp 6.000</strong>.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 4</span>
+                    <span>Catat Rekor Ukuran 3 Kotak</span>
+                  </div>
+                  <div class="step-desc">
+                    Bandingkan:
+                    <ul>
+                      <li>Jual utuh 3 kotak = Rp 8.000.</li>
+                      <li>Potong 1 kotak + sisa ukuran 2 kotak = 2.000 + Rekor[2] = 2.000 + 6.000 = Rp 8.000.</li>
+                      <li>Paling untung adalah Rp 8.000. Tulis di buku contekan: <strong>Rekor[3] = Rp 8.000</strong>.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 5</span>
+                    <span>Catat Rekor Ukuran 4 Kotak</span>
+                  </div>
+                  <div class="step-desc">
+                    Bandingkan:
+                    <ul>
+                      <li>Jual utuh 4 kotak = Rp 9.000.</li>
+                      <li>Potong 1 kotak + Rekor[3] = 2.000 + 8.000 = Rp 10.000.</li>
+                      <li>Potong 2 kotak + Rekor[2] = 6.000 + 6.000 = Rp 12.000 (Paling untung!).</li>
+                      <li>Tulis di buku contekan: <strong>Rekor[4] = Rp 12.000</strong>.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 6</span>
+                    <span>Panen Jawaban untuk Ukuran 5 Kotak</span>
+                  </div>
+                  <div class="step-desc">
+                    Sekarang saatnya menentukan nasib cokelat 5 kotak. Tinggal lirik buku contekan kita:
+                    <ul>
+                      <li>Jual utuh 5 kotak = Rp 10.000</li>
+                      <li>Potong 1 kotak + Rekor[4] = 2.000 + 12.000 = Rp 14.000</li>
+                      <li>Potong 2 kotak + Rekor[3] = 6.000 + 8.000 = Rp 14.000</li>
+                    </ul>
+                    Kesimpulan: Keuntungan maksimal adalah <strong>Rp 14.000</strong>! Gunting cokelat menjadi ukuran 2 kotak + 3 kotak. Kamu berhasil mendapatkan keuntungan terbanyak tanpa pernah bingung menghitung ulang.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANALISIS TEORETIS -->
+            <div class="theory-box">
+              <div class="theory-heading">Pelajaran Penting: Mengapa Dynamic Programming Sangat Sakti?</div>
+              <p class="theory-text">
+                Kalau kita mencoba memotong secara acak tanpa buku contekan, untuk batang yang panjangnya 20 kotak ada lebih dari 500.000 kemungkinan potongan yang bikin kita pusing kepala. Dengan Dynamic Programming, setiap ukuran batang cuma kita hitung satu kali saja dari bawah ke atas. Sisa perhitungannya tinggal melihat catatan sebelumnya. Inilah cara komputer menghemat waktu miliaran detik.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- KELOMPOK 6: BACKTRACKING -->
+        <article class="group-card" id="kelompok-6">
+          <header class="group-header">
+            <div>
+              <span class="group-number">Kelompok 06</span>
+              <h2 class="group-title">Backtracking: Tantangan Catur 4 Ratu Damai</h2>
+            </div>
+            <div class="group-meta">
+              <span class="pill-tag">Waktu: 20 Menit</span>
+              <span class="pill-tag">Pemain: 1-2 Orang</span>
+              <span class="pill-tag">Prinsip: Kalau Mentok, Mundur Satu Langkah</span>
+            </div>
+          </header>
+          <div class="group-body">
+            <!-- LANDASAN TEORI RAMAH SISWA -->
+            <div class="section-block">
+              <h3 class="section-title">Konsep Dasar Algoritma</h3>
+              <div class="theory-card">
+                <p>
+                  <strong>Apa itu Backtracking?</strong> Artinya "Mundur ke Belakang". Ini adalah strategi ketika kita sedang mencoba memecahkan teka-teki yang memiliki banyak aturan. Kita coba jalan setapak demi setapak. <strong>Kalau ternyata langkah kita salah atau menemui jalan buntu, kita tidak menyerah, tapi mundur satu langkah ke belakang</strong> untuk membatalkan langkah terakhir dan mencoba jalan lain.
+                </p>
+                <div class="analogy-highlight">
+                  <strong>Analogi Sehari-hari:</strong> Bayangkan kamu sedang bermain di wahana labirin lorong kaca. Kamu jalan terus ke depan. Tiba-tiba di ujung lorong ada tembok buntu! Kamu tidak akan diam menangis di situ, kan? Kamu pasti berjalan mundur beberapa langkah ke persimpangan terakhir, lalu mencoba belok ke lorong satunya lagi.
+                </div>
+                <div class="theory-grid">
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Keunggulan</div>
+                    <div class="theory-stat-val">Tidak buang waktu menelusuri jalan yang sudah jelas-jelas buntu</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Ciri Khas</div>
+                    <div class="theory-stat-val">Maju selangkah demi selangkah, kalau salah segera mundur</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Contoh di Dunia Nyata</div>
+                    <div class="theory-stat-val">Aplikasi game pemecah Sudoku otomatis dan bot pencari jalan labirin</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KONSEP & TUJUAN AKTIVITAS -->
+            <div class="section-block">
+              <h3 class="section-title">Tujuan Permainan</h3>
+              <p class="section-content">
+                Menaruh 4 bidak ratu pada papan catur mini 4x4 sedemikian rupa sehingga semua ratu hidup damai dan tidak ada dua ratu yang saling bertengkar (tidak saling serang).
+              </p>
+            </div>
+
+            <!-- ALAT DAN BAHAN -->
+            <div class="section-block">
+              <h3 class="section-title">Alat dan Bahan</h3>
+              <ul class="point-list">
+                <li>1 lembar kertas bergambar papan catur mini 4x4 (4 baris mendatar dan 4 kolom tegak).</li>
+                <li>4 buah keping koin atau tutup botol sebagai bidak Ratu.</li>
+                <li>1 buah pensil untuk mencatat kotak yang sudah dicoba.</li>
+              </ul>
+            </div>
+
+            <!-- ATURAN KESELAMATAN RATU -->
+            <div class="section-block">
+              <h3 class="section-title">Aturan Keselamatan Ratu</h3>
+              <p class="section-content">
+                Di permainan catur, ratu bisa menyerang ke segala arah: mendatar, tegak lurus, dan miring diagonal. Maka syaratnya: <strong>Dua ratu tidak boleh berada pada satu baris yang sama, satu kolom yang sama, atau satu garis miring (diagonal) yang sama!</strong>
+              </p>
+            </div>
+
+            <!-- LANGKAH-LANGKAH PERMAINAN -->
+            <div class="section-block">
+              <h3 class="section-title">Langkah-Langkah Permainan</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 1</span>
+                    <span>Letakkan Ratu Pertama di Baris 1</span>
+                  </div>
+                  <div class="step-desc">
+                    Ambil koin Ratu 1. Letakkan di pojok kiri atas: <strong>Baris 1, Kolom 1</strong>.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 2</span>
+                    <span>Maju ke Baris 2 & Cari Kotak Aman</span>
+                  </div>
+                  <div class="step-desc">
+                    Sekarang kita harus menaruh Ratu 2 di Baris 2:
+                    <ul>
+                      <li>Kolom 1: Terancam Ratu 1 (satu kolom lurus). Tidak boleh!</li>
+                      <li>Kolom 2: Terancam Ratu 1 (garis diagonal miring). Tidak boleh!</li>
+                      <li>Kolom 3: Aman! Letakkan Ratu 2 di <strong>Baris 2, Kolom 3</strong>.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 3</span>
+                    <span>Maju ke Baris 3 & Menemui Jalan Buntu</span>
+                  </div>
+                  <div class="step-desc">
+                    Sekarang giliran menaruh Ratu 3 di Baris 3. Cek kotaknya:
+                    <ul>
+                      <li>Kolom 1: Terancam kolom Ratu 1.</li>
+                      <li>Kolom 2: Terancam diagonal Ratu 2.</li>
+                      <li>Kolom 3: Terancam kolom Ratu 2.</li>
+                      <li>Kolom 4: Terancam diagonal Ratu 2.</li>
+                    </ul>
+                    <strong>Jalan Buntu!</strong> Tidak ada satu pun kotak yang aman di Baris 3. Kita tidak boleh memaksakan diri maju ke Baris 4!
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 4</span>
+                    <span>Mundur Satu Langkah (Backtrack)</span>
+                  </div>
+                  <div class="step-desc">
+                    Inilah aksi Backtracking:
+                    <ul>
+                      <li>Tarik mundur ke Baris 2. Angkat kembali koin Ratu 2 dari Kolom 3.</li>
+                      <li>Cari posisi aman lainnya di Baris 2. Cek Kolom 4.</li>
+                      <li>Ternyata Kolom 4 aman dari Ratu 1! Pindahkan Ratu 2 ke <strong>Baris 2, Kolom 4</strong>.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 5</span>
+                    <span>Maju Kembali Sampai Selesai</span>
+                  </div>
+                  <div class="step-desc">
+                    Sekarang coba maju lagi ke Baris 3. Dengan posisi baru ini, ternyata Kolom 2 di Baris 3 sekarang berstatus aman! Letakkan Ratu 3 di Kolom 2. Lanjutkan langkah terakhir ke Baris 4 dan taruh Ratu 4 di kotak yang aman. Semua 4 ratu berhasil hidup damai di papan catur!
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANALISIS TEORETIS -->
+            <div class="theory-box">
+              <div class="theory-heading">Pelajaran Penting: Lebih Pintar dari Coba-Coba Buta</div>
+              <p class="theory-text">
+                Kalau kita menaruh 4 ratu secara acak (Brute Force), ada 256 kemungkinan penempatan yang bikin pusing. Dengan Backtracking, begitu kita tahu Baris 3 buntu, kita langsung membatalkan langkah dan tidak membuang waktu mengutak-atik Baris 4. Algoritma ini memotong jalan buntu lebih awal. Cara ini digunakan oleh game di komputer saat memecahkan teka-teki Sudoku atau catur.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- KELOMPOK 7: BRANCH AND BOUND -->
+        <article class="group-card" id="kelompok-7">
+          <header class="group-header">
+            <div>
+              <span class="group-number">Kelompok 07</span>
+              <h2 class="group-title">Branch and Bound: Kurir Paket Rute Paling Hemat</h2>
+            </div>
+            <div class="group-meta">
+              <span class="pill-tag">Waktu: 25 Menit</span>
+              <span class="pill-tag">Pemain: Tim 2-3 Orang</span>
+              <span class="pill-tag">Prinsip: Coret Rute yang Boros di Tengah Jalan</span>
+            </div>
+          </header>
+          <div class="group-body">
+            <!-- LANDASAN TEORI RAMAH SISWA -->
+            <div class="section-block">
+              <h3 class="section-title">Konsep Dasar Algoritma</h3>
+              <div class="theory-card">
+                <p>
+                  <strong>Apa itu Branch and Bound?</strong> Artinya "Bercabang dan Diberi Batas". Strategi ini khusus dipakai untuk <strong>mencari rute termurah atau keuntungan terbanyak</strong>. Caranya: kita pecah jalur pilihan menjadi beberapa cabang (Branch). Di setiap cabang, kita perkirakan batas biayanya (Bound). <strong>Kalau ada cabang yang baru separuh jalan tapi sudah kelihatan lebih boros dari rekor terbaik kita, cabang itu langsung dicoret dan dibatalkan!</strong>
+                </p>
+                <div class="analogy-highlight">
+                  <strong>Analogi Sehari-hari:</strong> Kamu ingin naik ojek keliling 4 tempat dan kembali ke rumah. Kamu sudah menemukan satu jalur dengan total ongkos Rp 80.000 (ini rekor terbaikmu). Lalu kamu mencoba jalur lain. Baru sampai di tempat kedua, argo ojek sudah tembus Rp 95.000! Apakah kamu perlu menyelesaikan sisa perjalanan jalur itu? Tentu tidak! Langsung batalkan jalur itu saat itu juga karena sudah pasti lebih mahal dari Rp 80.000.
+                </div>
+                <div class="theory-grid">
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Beda dengan Backtracking</div>
+                    <div class="theory-stat-val">Backtracking mundur karena melanggar aturan (nabrak); Branch and Bound memotong rute karena hitungan biayanya sudah kalah dari rekor</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Keunggulan</div>
+                    <div class="theory-stat-val">Membuang jutaan rute boros tanpa harus keliling sampai selesai</div>
+                  </div>
+                  <div class="theory-stat">
+                    <div class="theory-stat-label">Contoh di Dunia Nyata</div>
+                    <div class="theory-stat-val">Aplikasi kurir J&T / SiCepat / Shopee Xpress mengatur rute mobil pengantar barang</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KONSEP & TUJUAN AKTIVITAS -->
+            <div class="section-block">
+              <h3 class="section-title">Tujuan Permainan</h3>
+              <p class="section-content">
+                Membantu kurir paket mengunjungi 4 kota (A, B, C, D) masing-masing satu kali lalu kembali ke kota asal A dengan jarak tempuh paling pendek, menggunakan teknik memotong rute yang boros.
+              </p>
+            </div>
+
+            <!-- ALAT DAN BAHAN -->
+            <div class="section-block">
+              <h3 class="section-title">Alat dan Bahan</h3>
+              <ul class="point-list">
+                <li>1 lembar kertas bergambar peta 4 kota (Kota A, B, C, D) dengan garis jarak di antara kota-kota tersebut.</li>
+                <li>1 lembar kertas "Papan Rekor Terhemat" untuk mencatat jarak terbaik yang sudah pernah ditemukan.</li>
+                <li>1 buah spidol merah untuk mencoret rute yang dipangkas.</li>
+                <li>Daftar jarak antar kota:
+                  <ul style="margin-top:0.25rem;">
+                    <li>Kota A ke B = 10 km | Kota A ke C = 15 km | Kota A ke D = 20 km</li>
+                    <li>Kota B ke C = 35 km | Kota B ke D = 25 km | Kota C ke D = 30 km</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <!-- LANGKAH-LANGKAH PERMAINAN -->
+            <div class="section-block">
+              <h3 class="section-title">Langkah-Langkah Permainan</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 1</span>
+                    <span>Tentukan Rekor Awal (Patokan Batas)</span>
+                  </div>
+                  <div class="step-desc">
+                    Kurir harus berangkat dari A, mendatangi B, C, dan D, lalu pulang kembali ke A.<br>
+                    Coba satu rute acak lengkap sebagai rekor awal kita:
+                    <ul>
+                      <li>Rute: A -> B -> D -> C -> A.</li>
+                      <li>Hitung jaraknya: A-B (10) + B-D (25) + D-C (30) + C-A (15) = <strong>80 km</strong>.</li>
+                      <li>Tulis di papan rekor: <strong>Rekor Terhemat Saat Ini = 80 km</strong>. Rute lain harus bisa mengalahkan angka ini!</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 2</span>
+                    <span>Buka Cabang Alternatif (Branching)</span>
+                  </div>
+                  <div class="step-desc">
+                    Sekarang kita uji rute lain yang mulai dari A ke C:
+                    <ul>
+                      <li>Dari A pergi ke C (jarak tempuh = 15 km).</li>
+                      <li>Dari C, kurir mencoba jalan ke B: Jalur menjadi A -> C -> B.</li>
+                      <li>Jarak yang sudah dilewati: 15 km + 35 km = <strong>50 km</strong>.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 3</span>
+                    <span>Perkirakan Sisa Jarak (Bounding)</span>
+                  </div>
+                  <div class="step-desc">
+                    Sebelum kurir jalan lebih jauh, hitung sisa jarak minimal untuk menyelesaikan perjalanan ini:
+                    Dari kota B, kurir masih harus mengunjungi kota D, lalu dari D wajib pulang ke kota asal A.
+                    Jarak B ke D adalah 25 km, dan jarak D ke A adalah 20 km.
+                    Total perkiraan jarak rute ini: 50 km (yang sudah jalan) + 25 km + 20 km = <strong>95 km</strong>.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 4</span>
+                    <span>Coret dan Batalkan Cabang (Pruning)</span>
+                  </div>
+                  <div class="step-desc">
+                    Bandingkan perkiraan jarak rute ini (95 km) dengan Rekor Terhemat yang sudah kita pegang (80 km):
+                    Karena 95 km sudah jelas lebih boros daripada 80 km, cabang perjalanan A -> C -> B <strong>langsung dicoret spidol merah dan dibatalkan saat itu juga!</strong> Kurir tidak perlu membuang bensin atau waktu untuk melanjutkan rute tersebut.
+                  </div>
+                </div>
+
+                <div class="step-item">
+                  <div class="step-header">
+                    <span class="step-badge">Langkah 5</span>
+                    <span>Temukan Rute Juara</span>
+                  </div>
+                  <div class="step-desc">
+                    Coba cabang potensial lainnya: Rute A -> C -> D -> B -> A menghasilkan jarak 15 + 30 + 25 + 10 = 80 km. Tim menyimpulkan bahwa rekor jarak terpendek keliling 4 kota tersebut adalah 80 km.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ANALISIS TEORETIS -->
+            <div class="theory-box">
+              <div class="theory-heading">Pelajaran Penting: Mengapa Branch and Bound Sangat Membantu?</div>
+              <p class="theory-text">
+                Kalau ada 20 kota yang harus dikunjungi kurir, total kemungkinan rute keliling mencapai miliaran kombinasi. Mustahil dihitung satu-satu. Dengan Branch and Bound, komputer bisa membatalkan jutaan rute boros di tengah jalan sebelum rute itu selesai dihitung, cukup dengan membandingkan estimasi biayanya terhadap rekor terbaik yang sudah ada.
+              </p>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: COMPARISON MATRIX -->
+    <section id="pane-matrix" class="tab-pane" role="tabpanel" aria-labelledby="tab-matrix">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Nama Strategi</th>
+              <th scope="col">Cara Pikir Sederhana</th>
+              <th scope="col">Analogi Permainan di Kelas</th>
+              <th scope="col">Kapan Bagus Digunakan?</th>
+              <th scope="col">Kapan Bikin Masalah?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Brute Force</strong></td>
+              <td>Coba semua kemungkinan satu per satu tanpa ada yang terlewat.</td>
+              <td>Mencoba semua angka sandi koper dari 000 sampai 999.</td>
+              <td>Bagus jika pilihannya sedikit dan kita butuh kepastian 100%.</td>
+              <td>Sangat lambat jika kemungkinannya bertambah banyak.</td>
+            </tr>
+            <tr>
+              <td><strong>Greedy</strong></td>
+              <td>Pilih yang paling menguntungkan saat ini tanpa mikir panjang.</td>
+              <td>Kasir selalu memilih uang koin terbesar terlebih dahulu.</td>
+              <td>Sangat cepat dan praktis untuk keputusan kilat sehari-hari.</td>
+              <td>Bisa terjebak dan gagal memberi hasil terbaik pada kondisi tidak lazim.</td>
+            </tr>
+            <tr>
+              <td><strong>Divide &amp; Conquer</strong></td>
+              <td>Pecah tugas besar jadi bagian kecil, bereskan, lalu gabungkan kembali.</td>
+              <td>Balap menyusun gelas Merge Sort (pecah jadi 1-1, lalu gabung rapi).</td>
+              <td>Sangat cepat dan rapi untuk mengurutkan ribuan data.</td>
+              <td>Butuh tempat ekstra untuk proses menggabungkan tumpukan.</td>
+            </tr>
+            <tr>
+              <td><strong>Decrease &amp; Conquer</strong></td>
+              <td>Buang separuh masalah di setiap langkah dan fokus ke satu arah.</td>
+              <td>Menebak angka di pikiran teman dengan selalu potong tengah (1-100).</td>
+              <td>Paling cepat untuk mencari data yang sudah tersusun rapi.</td>
+              <td>Datanya harus sudah terurut rapi sejak awal.</td>
+            </tr>
+            <tr>
+              <td><strong>Dynamic Programming</strong></td>
+              <td>Catat jawaban masalah kecil di buku contekan agar tidak dihitung dua kali.</td>
+              <td>Memotong cokelat batang panjang dengan bantuan tabel keuntungan ukuran kecil.</td>
+              <td>Sangat hemat waktu untuk masalah yang hitungannya berulang-ulang.</td>
+              <td>Butuh buku catatan atau memori ekstra untuk menyimpan tabel contekan.</td>
+            </tr>
+            <tr>
+              <td><strong>Backtracking</strong></td>
+              <td>Maju terus; kalau mentok jalan buntu, segera mundur satu langkah.</td>
+              <td>Tantangan menaruh 4 ratu catur tanpa saling bertengkar di papan 4x4.</td>
+              <td>Sangat bagus untuk teka-teki labirin, Sudoku, dan catur.</td>
+              <td>Bisa memakan waktu lama jika jalur buntu sangat dalam.</td>
+            </tr>
+            <tr>
+              <td><strong>Branch &amp; Bound</strong></td>
+              <td>Cari rute terbaik dan langsung coret rute yang biayanya melebihi rekor.</td>
+              <td>Kurir mengantar paket antar kota dengan membatalkan rute yang boros.</td>
+              <td>Sangat ampuh mencari rute perjalanan paling hemat biaya atau jarak.</td>
+              <td>Membutuhkan rumus perkiraan batas biaya yang tepat dan teliti.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Tab switching logic
+    function switchTab(tabId) {
+      const panes = document.querySelectorAll('.tab-pane');
+      const tabs = document.querySelectorAll('.tab-btn');
+
+      panes.forEach(pane => {
+        pane.classList.remove('active');
+      });
+
+      tabs.forEach(tab => {
+        tab.classList.remove('active');
+        tab.setAttribute('aria-selected', 'false');
+      });
+
+      const targetPane = document.getElementById(tabId);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+
+      const activeBtn = Array.from(tabs).find(btn => btn.getAttribute('aria-controls') === tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.setAttribute('aria-selected', 'true');
+      }
+    }
+
+    // Light / Dark Theme toggle logic with accessible state
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeLabel = document.getElementById('themeLabel');
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeLabel.textContent = 'Mode Terang';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeLabel.textContent = 'Mode Gelap';
+      }
+    }
+
+    let isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(isDarkMode);
+
+    themeToggleBtn.addEventListener('click', () => {
+      isDarkMode = !isDarkMode;
+      applyTheme(isDarkMode);
+    });
+
+    // Greedy vs Optimal coin simulation demo
+    function runGreedySim() {
+      const targetInput = document.getElementById('coinTargetInput');
+      const output = document.getElementById('coinSimOutput');
+      const amount = parseInt(targetInput.value, 10);
+
+      if (isNaN(amount) || amount <= 0) {
+        output.textContent = 'Masukkan nominal kembalian yang valid (kelipatan 100).';
+        return;
+      }
+
+      // Koin jebakan: 400, 300, 100
+      const coins = [400, 300, 100];
+      
+      // Hitung Greedy
+      let remGreedy = amount;
+      const greedyPicked = [];
+      for (let c of coins) {
+        while (remGreedy >= c) {
+          greedyPicked.push(c);
+          remGreedy -= c;
+        }
+      }
+
+      // Hitung Solusi Optimal (DP / BFS)
+      function getOptimalCoins(target) {
+        const dp = new Array(target + 1).fill(Infinity);
+        const parent = new Array(target + 1).fill(-1);
+        dp[0] = 0;
+
+        for (let i = 1; i <= target; i++) {
+          for (let c of coins) {
+            if (i >= c && dp[i - c] + 1 < dp[i]) {
+              dp[i] = dp[i - c] + 1;
+              parent[i] = c;
+            }
+          }
+        }
+
+        if (dp[target] === Infinity) return null;
+        const result = [];
+        let curr = target;
+        while (curr > 0) {
+          result.push(parent[curr]);
+          curr -= parent[curr];
+        }
+        return result;
+      }
+
+      const optimalPicked = getOptimalCoins(amount);
+
+      let text = `Tantangan Kembalian: Rp ${amount}\nPecahan Tersedia: [Rp 400, Rp 300, Rp 100]\n\n`;
+      text += `1. Hasil Cara Greedy (Kasir Serakah):\n`;
+      if (remGreedy === 0) {
+        text += `   - Koin yang diambil: [${greedyPicked.join(', ')}]\n`;
+        text += `   - Total Koin: ${greedyPicked.length} buah\n\n`;
+      } else {
+        text += `   - Gagal memberikan kembalian pas (sisa Rp ${remGreedy})\n\n`;
+      }
+
+      text += `2. Hasil Cara Cerdas (Solusi Optimal):\n`;
+      if (optimalPicked) {
+        text += `   - Koin yang diambil: [${optimalPicked.join(', ')}]\n`;
+        text += `   - Total Koin: ${optimalPicked.length} buah\n\n`;
+      }
+
+      if (greedyPicked.length > (optimalPicked ? optimalPicked.length : 0)) {
+        text += `KESIMPULAN: Kasir Greedy kena jebakan! Cara serakah membutuhkan ${greedyPicked.length} koin, padahal cara cerdas cuma butuh ${optimalPicked.length} koin.`;
+      } else {
+        text += `KESIMPULAN: Pada nominal ini, pilihan kasir greedy kebetulan sama bagusnya dengan solusi terbaik.`;
+      }
+
+      output.textContent = text;
+    }
+
+    // Binary Search Simulation Demo
+    function runBinarySearchSim() {
+      const input = document.getElementById('secretNumberInput');
+      const output = document.getElementById('binarySearchOutput');
+      const secret = parseInt(input.value, 10);
+
+      if (isNaN(secret) || secret < 1 || secret > 100) {
+        output.textContent = 'Harap masukkan angka rahasia antara 1 sampai 100.';
+        return;
+      }
+
+      let low = 1;
+      let high = 100;
+      let step = 1;
+      let logs = `Angka Rahasia Target: ${secret}\nRentang Awal: [1 - 100]\n-----------------------------------------\n`;
+
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        logs += `Langkah ${step}: Komputer menebak ${mid} (Rentang: ${low} - ${high})\n`;
+
+        if (mid === secret) {
+          logs += `-> HORE TEPAT! Angka ${secret} berhasil ditebak pas pada langkah ke-${step}!\n`;
+          logs += `Maksimal tebakan yang dibutuhkan dijamin tidak lebih dari 7 kali.`;
+          break;
+        } else if (mid < secret) {
+          logs += `-> Respon: Terlalu Kecil. Buang separuh bawah [${low} - ${mid}].\n`;
+          low = mid + 1;
+        } else {
+          logs += `-> Respon: Terlalu Besar. Buang separuh atas [${mid} - ${high}].\n`;
+          high = mid - 1;
+        }
+        step++;
+      }
+
+      output.textContent = logs;
+    }
+  </script>
+</body>
+</html>
